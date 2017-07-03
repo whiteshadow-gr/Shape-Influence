@@ -1,5 +1,5 @@
 PODS:
-  - Alamofire (4.4.0)
+  - Alamofire (4.5.0)
   - BEMCheckBox (1.4.1)
   - Crashlytics (3.8.4):
     - Fabric (~> 1.6.3)
@@ -19,16 +19,17 @@ PODS:
     - URITemplate (~> 2.0)
   - Mockingjay/XCTest (2.0.0):
     - Mockingjay/Core
-  - Realm (2.7.0):
-    - Realm/Headers (= 2.7.0)
-  - Realm/Headers (2.7.0)
-  - RealmSwift (2.7.0):
-    - Realm (= 2.7.0)
+  - Realm (2.8.3):
+    - Realm/Headers (= 2.8.3)
+  - Realm/Headers (2.8.3)
+  - RealmSwift (2.8.3):
+    - Realm (= 2.8.3)
+  - SwiftLint (0.20.1)
   - SwiftyJSON (3.1.4)
   - SwiftyRSA (1.2.0):
     - SwiftyRSA/ObjC (= 1.2.0)
   - SwiftyRSA/ObjC (1.2.0)
-  - Toaster (2.0.3)
+  - Toaster (2.0.4)
   - URITemplate (2.0.1)
   - zxcvbn-ios (1.0.4)
 
@@ -43,6 +44,7 @@ DEPENDENCIES:
   - KeychainSwift
   - Mockingjay
   - RealmSwift
+  - SwiftLint
   - SwiftyJSON
   - SwiftyRSA
   - Toaster
@@ -60,27 +62,28 @@ CHECKOUT OPTIONS:
     :commit: cc3b6524156f8e0d8653688423fba2fdf0944bc8
     :git: https://github.com/ribl/FBAnnotationClusteringSwift/
   HatForIOS:
-    :commit: 033ce6bcf0494f79cdc2d2bb7410068f4aa7db3a
+    :commit: 589a6fe8adb8276be26382769f812b988e7ab60b
     :git: https://github.com/whiteshadow-gr/HatForIOS.git
 
 SPEC CHECKSUMS:
-  Alamofire: dc44b1600b800eb63da6a19039a0083d62a6a62d
+  Alamofire: f28cdffd29de33a7bfa022cbd63ae95a27fae140
   BEMCheckBox: 5ba6e37ade3d3657b36caecc35c8b75c6c2b1a4e
   Crashlytics: 79e236942ca1e7fc641df1feb9a275360a78ab6a
   Fabric: 5911403591946b8228ab1c51d98f1d7137e863c6
-  FBAnnotationClusteringSwift: '0698ddcee46d1c28f14336909b2b0af4906b213f'
+  FBAnnotationClusteringSwift: 0698ddcee46d1c28f14336909b2b0af4906b213f
   HatForIOS: 741a6aa226fb96e93042b6b31d5429b89671f49e
   JWTDecode: 178e47e5d28d3abcff778bacced8342858cd6cb5
   KeychainSwift: 213db04dfe7244988e61f77c72a2afb2f775954a
   Mockingjay: 7122a3fc0597aa63438e4cd9b71b7bc8aac05b87
-  Realm: 07e5d3a9e0e41d65fd5f9f05150ed6295d0f093b
-  RealmSwift: 6d06425d3900c86473c4f323bf6949b43fca22bc
+  Realm: 3601ef091c8c499a31101d8563b991e75546cdce
+  RealmSwift: 8183818515471b01a99abdd2970f8e4fd52b6f4a
+  SwiftLint: f60095dc173a3f3ec505bb34f5229c3dfd779a54
   SwiftyJSON: c2842d878f95482ffceec5709abc3d05680c0220
   SwiftyRSA: 29221dba76837bf09e965ba7584e5919ea153c6f
-  Toaster: 77c0b03d78e680bbbab0071c9c7ee392b0034010
+  Toaster: f13031c636ef065281bc11857be9a16c7659e04f
   URITemplate: 720b8a56a281494d7c2d31ee33183986eaed2c67
   zxcvbn-ios: fef98b7c80f1512ff0eec47ac1fa399fc00f7e3c
 
-PODFILE CHECKSUM: 728713676a9d3417892e2749597a0559a49e9d1f
+PODFILE CHECKSUM: 89ef8e840b4f2b650569161bc5765c4b86c82bb9
 
-COCOAPODS: 1.2.1
+COCOAPODS: 1.3.0.beta.2

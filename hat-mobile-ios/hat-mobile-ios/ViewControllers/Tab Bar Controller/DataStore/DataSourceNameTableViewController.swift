@@ -15,7 +15,7 @@ import HatForIOS
 // MARK: Class
 
 /// A class responsible for the profile name, in dataStore ViewController
-class DataSourceNameTableViewController: UITableViewController, UserCredentialsProtocol {
+internal class DataSourceNameTableViewController: UITableViewController, UserCredentialsProtocol {
     
     // MARK: - Variables
     
@@ -30,7 +30,7 @@ class DataSourceNameTableViewController: UITableViewController, UserCredentialsP
     private var darkView: UIView = UIView()
     
     /// The profile, used in PHATA table
-    var profile: HATProfileObject? = nil
+    var profile: HATProfileObject?
     
     // MARK: - IBAction
     
@@ -47,65 +47,77 @@ class DataSourceNameTableViewController: UITableViewController, UserCredentialsP
         
         self.view.addSubview(self.darkView)
         
-        self.loadingView = UIView.createLoadingView(with: CGRect(x: (self.view?.frame.midX)! - 70, y: (self.view?.frame.midY)! - 15, width: 140, height: 30), color: .teal, cornerRadius: 15, in: self.view, with: "Updating profile...", textColor: .white, font: UIFont(name: "OpenSans", size: 12)!)
+        self.loadingView = UIView.createLoadingView(with: CGRect(x: (self.view?.frame.midX)! - 70, y: (self.view?.frame.midY)! - 15, width: 140, height: 30), color: .teal, cornerRadius: 15, in: self.view, with: "Updating profile...", textColor: .white, font: UIFont(name: Constants.FontNames.openSans, size: 12)!)
         
-        for (index, _) in self.headers.enumerated() {
+        for index in self.headers.indices {
             
             var cell = self.tableView.cellForRow(at: IndexPath(row: 0, section: index)) as? PhataTableViewCell
             
             if cell == nil {
                 
                 let indexPath = IndexPath(row: 0, section: index)
-                cell = tableView.dequeueReusableCell(withIdentifier: "nameCell", for: indexPath) as? PhataTableViewCell
+                cell = tableView.dequeueReusableCell(withIdentifier: Constants.CellReuseIDs.nameCell, for: indexPath) as? PhataTableViewCell
                 cell = self.setUpCell(cell: cell!, indexPath: indexPath) as? PhataTableViewCell
             }
             
             // first name
             if index == 0 {
                 
-                profile?.data.personal.firstName = cell!.textField.text!
+                profile?.data.personal.firstName = cell!.getTextFromTextField()
             // Middle name
             } else if index == 1 {
                 
-                profile?.data.personal.middleName = cell!.textField.text!
+                profile?.data.personal.middleName = cell!.getTextFromTextField()
             // Last name
             } else if index == 2 {
                 
-                profile?.data.personal.lastName = cell!.textField.text!
+                profile?.data.personal.lastName = cell!.getTextFromTextField()
             // Preffered name
-            }
-            else if index == 3 {
+            } else if index == 3 {
                 
-                profile?.data.personal.prefferedName = cell!.textField.text!
+                profile?.data.personal.prefferedName = cell!.getTextFromTextField()
             // Title
             } else if index == 4 {
                 
-                profile?.data.personal.title = cell!.textField.text!
+                profile?.data.personal.title = cell!.getTextFromTextField()
             }
         }
         
         func tableExists(dict: Dictionary<String, Any>, renewedUserToken: String?) {
             
-            HATPhataService.postProfile(userDomain: userDomain, userToken: userToken, hatProfile: self.profile!, successCallBack: {
+            HATPhataService.postProfile(
+                userDomain: userDomain,
+                userToken: userToken,
+                hatProfile: self.profile!,
+                successCallBack: {
                 
-                self.loadingView.removeFromSuperview()
-                self.darkView.removeFromSuperview()
+                    self.loadingView.removeFromSuperview()
+                    self.darkView.removeFromSuperview()
+                    
+                    _ = self.navigationController?.popViewController(animated: true)
+                },
+                errorCallback: { error in
                 
-                _ = self.navigationController?.popViewController(animated: true)
-            }, errorCallback: {error in
-                
-                self.loadingView.removeFromSuperview()
-                self.darkView.removeFromSuperview()
-                
-                _ = CrashLoggerHelper.hatTableErrorLog(error: error)
-            })
+                    self.loadingView.removeFromSuperview()
+                    self.darkView.removeFromSuperview()
+                    
+                    _ = CrashLoggerHelper.hatTableErrorLog(error: error)
+                }
+            )
         }
         
-        HATAccountService.checkHatTableExistsForUploading(userDomain: userDomain, tableName: "profile", sourceName: "rumpel", authToken: userToken, successCallback: tableExists, errorCallback: {_ in
+        HATAccountService.checkHatTableExistsForUploading(
+            userDomain: userDomain,
+            tableName: Constants.HATTableName.Profile.name,
+            sourceName: Constants.HATTableName.Profile.source,
+            authToken: userToken,
+            successCallback: tableExists,
+            errorCallback: {_ in
             
-            self.loadingView.removeFromSuperview()
-            self.darkView.removeFromSuperview()
-        })
+                self.loadingView.removeFromSuperview()
+                self.darkView.removeFromSuperview()
+            }
+        )
     }
     
     // MARK: - View Controller methods
@@ -136,9 +148,12 @@ class DataSourceNameTableViewController: UITableViewController, UserCredentialsP
     
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         
-        let cell = tableView.dequeueReusableCell(withIdentifier: "dataStoreNameCell", for: indexPath) as! PhataTableViewCell
+        if let cell = tableView.dequeueReusableCell(withIdentifier: Constants.CellReuseIDs.dataStoreNameCell, for: indexPath) as? PhataTableViewCell {
+            
+            return setUpCell(cell: cell, indexPath: indexPath)
+        }
         
-        return setUpCell(cell: cell, indexPath: indexPath)
+        return tableView.dequeueReusableCell(withIdentifier: Constants.CellReuseIDs.dataStoreNameCell, for: indexPath)
     }
     
     override func tableView(_ tableView: UITableView, titleForHeaderInSection section: Int) -> String? {
@@ -158,6 +173,7 @@ class DataSourceNameTableViewController: UITableViewController, UserCredentialsP
      
      - parameter cell: The cell to set up
      - parameter indexPath: The index path of the cell
+     
      - returns: The set up cell
      */
     func setUpCell(cell: PhataTableViewCell, indexPath: IndexPath) -> UITableViewCell {
@@ -166,21 +182,21 @@ class DataSourceNameTableViewController: UITableViewController, UserCredentialsP
         
         if indexPath.section == 0 && self.profile != nil {
             
-            cell.textField.text = self.profile?.data.personal.firstName
+            cell.setTextToTextField(text: self.profile!.data.personal.firstName)
         } else if indexPath.section == 1 && self.profile != nil {
             
-            cell.textField.text = self.profile?.data.personal.middleName
+            cell.setTextToTextField(text: self.profile!.data.personal.middleName)
         } else if indexPath.section == 2 && self.profile != nil {
             
-            cell.textField.text = self.profile?.data.personal.lastName
+            cell.setTextToTextField(text: self.profile!.data.personal.lastName)
         } else if indexPath.section == 3 && self.profile != nil {
             
-            cell.textField.text = self.profile?.data.personal.prefferedName
+            cell.setTextToTextField(text: self.profile!.data.personal.prefferedName)
         } else if indexPath.section == 4 && self.profile != nil {
             
-            cell.textField.tag = 15
+            cell.setTagInTextField(tag: 15)
             cell.dataSourceForPickerView = ["", "Mr.", "Mrs.", "Miss", "Dr."]
-            cell.textField.text = self.profile?.data.personal.title
+            cell.setTextToTextField(text: self.profile!.data.personal.title)
         }
         
         return cell

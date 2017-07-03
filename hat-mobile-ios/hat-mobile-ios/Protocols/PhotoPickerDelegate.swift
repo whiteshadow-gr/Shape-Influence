@@ -15,7 +15,7 @@ import UIKit
 // MARK: Protocol
 
 /// Provides delegate methods of the picker view
-protocol PhotoPickerDelegate: class {
+internal protocol PhotoPickerDelegate: class {
     
     // MARK: - Protocol's functions
 

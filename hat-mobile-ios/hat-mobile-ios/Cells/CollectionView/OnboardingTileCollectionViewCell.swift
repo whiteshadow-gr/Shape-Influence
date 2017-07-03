@@ -15,20 +15,32 @@ import HatForIOS
 // MARK: Class
 
 /// The collection view cell class for onboarding screen
-class OnboardingTileCollectionViewCell: UICollectionViewCell {
+internal class OnboardingTileCollectionViewCell: UICollectionViewCell, UserCredentialsProtocol {
     
     // MARK: - IBOutlets
     
     /// An IBOutlet for handling the imageview of the hat providen in the cell
-    @IBOutlet weak var hatProviderImage: UIImageView!
+    @IBOutlet private weak var hatProviderImage: UIImageView!
     
     /// An IBOutlet for handling the title label of the cell
-    @IBOutlet weak var titleLabel: UILabel!
+    @IBOutlet private weak var titleLabel: UILabel!
     /// An IBOutlet for handling the info label of the cell
-    @IBOutlet weak var infoLabel: UILabel!
+    @IBOutlet private weak var infoLabel: UILabel!
     
     /// An IBOutlet for handling the sign up button
-    @IBOutlet weak var signUpButton: UIButton!
+    @IBOutlet private weak var signUpButton: UIButton!
+    
+    // MARK: - Get Image
+    
+    /**
+     Returns provider image, if any
+     
+     - returns: An optional UIImage
+     */
+    func getProviderImage() -> UIImage? {
+        
+        return self.hatProviderImage.image
+    }
     
     // MARK: - Set up cell
     
@@ -38,12 +50,11 @@ class OnboardingTileCollectionViewCell: UICollectionViewCell {
      - parameter cell: The UICollectionViewCell to set up
      - parameter indexPath: The index path of the cell
      - parameter hatProvider: The object to take the values from
-
+     - parameter orientation: The current orientation of the phone
+     
      - returns: An UICollectionViewCell
      */
     class func setUp(cell: OnboardingTileCollectionViewCell, indexPath: IndexPath, hatProvider: HATProviderObject, orientation: UIInterfaceOrientation) -> UICollectionViewCell {
-        
-        let userToken = HATAccountService.getUsersTokenFromKeychain()
         
         // set cell's color
         cell.backgroundColor = self.backgroundColorOfCellForIndexPath(indexPath, in: orientation)
@@ -85,6 +96,7 @@ class OnboardingTileCollectionViewCell: UICollectionViewCell {
      Creates the info string based on the price availability and purchased hats
      
      - parameter hatProvider: The hatProvider object containing the values we need
+     
      - returns: String containing the info to show
      */
     private class func createInfoStringFromData(hatProvider: HATProviderObject) -> String {
@@ -117,6 +129,7 @@ class OnboardingTileCollectionViewCell: UICollectionViewCell {
      
      - parameter indexPath: The index path of the cell
      - parameter orientation: The device current orientation
+     
      - returns: The color of the cell based on the index path and the device orientation
      */
     private class func backgroundColorOfCellForIndexPath(_ indexPath: IndexPath, in orientation: UIInterfaceOrientation) -> UIColor {
@@ -125,14 +138,14 @@ class OnboardingTileCollectionViewCell: UICollectionViewCell {
         if orientation.isPortrait {
             
             // set the color of the cell accordingly based on the indexPath.row
-            if (indexPath.row % 4 == 0 || indexPath.row % 3 == 0) {
+            if indexPath.row % 4 == 0 || indexPath.row % 3 == 0 {
                 
                 return .rumpelVeryLightGray
             }
         } else {
             
             // set the color of the cell accordingly based on the indexPath.row
-            if (indexPath.row % 2 == 0) {
+            if indexPath.row % 2 == 0 {
                 
                 return .rumpelVeryLightGray
             }

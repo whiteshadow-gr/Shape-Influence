@@ -12,8 +12,15 @@
 
 import UIKit
 
-extension UITableView {
+// MARK: Extension
 
+extension UITableView {
+    
+    // MARK: - Add background tap recogniser
+
+    /**
+     Adds background tap recogniser on UITableView
+     */
     func addBackgroundTapRecogniser() {
         
         let tapGesture = UITapGestureRecognizer(target: self, action: #selector(hideKeyboard))
@@ -21,7 +28,13 @@ extension UITableView {
         self.addGestureRecognizer(tapGesture)
     }
     
-    @objc private func hideKeyboard() {
+    // MARK: - Hide keyboard
+    
+    /**
+     Hides keyboard
+     */
+    @objc
+    private func hideKeyboard() {
         
         self.endEditing(true)
     }

@@ -15,23 +15,23 @@ import UIKit
 // MARK: Class
 
 /// The first onboarding view controller class
-class FirstOnboardingViewController: UIViewController {
+internal class FirstOnboardingViewController: UIViewController {
     
     // MARK: - Variables
     
     /// The current page index, used to load the correct content
-    var pageIndex = 0
+    var pageIndex: Int = 0
     
     // MARK: - IBOutlets
 
     /// An IBOutlet for handling the image view
-    @IBOutlet weak var image: UIImageView!
+    @IBOutlet private weak var image: UIImageView!
     
     /// An IBOutlet for handling the message label
-    @IBOutlet weak var messages: UILabel!
+    @IBOutlet private weak var messages: UILabel!
     
     /// An IBOutlet for handling the learn more button
-    @IBOutlet weak var learnMoreButton: UIButton!
+    @IBOutlet private weak var learnMoreButton: UIButton!
     
     // MARK: - IBActions
     
@@ -42,21 +42,23 @@ class FirstOnboardingViewController: UIViewController {
      */
     @IBAction func clearButtonAction(_ sender: Any) {
         
-        AnimationHelper.animateView(self.view,
-                                    duration: 0.2,
-                                    animations: {[weak self] () -> Void in
+        AnimationHelper.animateView(
+            self.view,
+            duration: 0.2,
+            animations: {[weak self] () -> Void in
 
-                                        if let weakSelf = self {
-                                            
-                                            weakSelf.view.frame = CGRect(x: weakSelf.view.frame.origin.x, y: weakSelf.view.frame.maxY, width: weakSelf.view.frame.width, height: weakSelf.view.frame.height)
-                                        }
-                                }, completion: {[weak self] (bool: Bool) -> Void in
+                if let weakSelf = self {
+                    
+                    weakSelf.view.frame = CGRect(x: weakSelf.view.frame.origin.x, y: weakSelf.view.frame.maxY, width: weakSelf.view.frame.width, height: weakSelf.view.frame.height)
+                }
+            },
+            completion: {[weak self] (_: Bool) -> Void in
 
-                                    if let weakSelf = self {
-                                        
-                                        weakSelf.removeViewController()
-                                        NotificationCenter.default.post(name: NSNotification.Name(Constants.NotificationNames.hideDataServicesInfo.rawValue), object: nil)
-                                    }
+                if let weakSelf = self {
+                    
+                    weakSelf.removeViewController()
+                    NotificationCenter.default.post(name: NSNotification.Name(Constants.NotificationNames.hideDataServicesInfo), object: nil)
+                }
         })
         
     }
@@ -68,7 +70,7 @@ class FirstOnboardingViewController: UIViewController {
      */
     @IBAction func learnMoreButtonAction(_ sender: Any) {
         
-        NotificationCenter.default.post(name: NSNotification.Name(Constants.NotificationNames.hideDataServicesInfo.rawValue), object: nil)
+        NotificationCenter.default.post(name: NSNotification.Name(Constants.NotificationNames.hideDataServicesInfo), object: nil)
     }
     
     // MARK: - View controller methods

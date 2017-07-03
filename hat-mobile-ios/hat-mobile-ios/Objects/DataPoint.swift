@@ -15,7 +15,7 @@ import RealmSwift
 // MARK: Class
 
 /// The DataPoint object representation
-class DataPoint : Object {
+internal class DataPoint: Object {
     
     // MARK: - Variables
     
@@ -26,7 +26,7 @@ class DataPoint : Object {
     /// The accuracy of the point
     dynamic var accuracy: Double = 0
     
-    /// The added point date of the point
+    /// The adhttps://www.facebook.com/rsrc.php/v3/y4/r/-PAXP-deijE.gifded point date of the point
     dynamic var dateAdded: Date = Date()
     /// The last sync date of the point
     dynamic var lastSynced: Date? = nil // optional..can be nil

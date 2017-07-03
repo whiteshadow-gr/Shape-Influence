@@ -15,7 +15,7 @@ import UIKit
 // MARK: Class
 
 /// The class responsible for the text pop up view controller
-class TextPopUpViewController: UIViewController {
+internal class TextPopUpViewController: UIViewController {
     
     // MARK: - Variables
     
@@ -25,7 +25,7 @@ class TextPopUpViewController: UIViewController {
     // MARK: - IBOutlets
     
     /// An IBOutlet for controlling the UILabel in order to show the text
-    @IBOutlet weak var textLabel: UILabel!
+    @IBOutlet private weak var textLabel: UILabel!
     
     // MARK: - IBActions
     
@@ -46,14 +46,13 @@ class TextPopUpViewController: UIViewController {
                     
                     self!.view.frame = CGRect(x: self!.view.frame.origin.x, y: self!.view.frame.height, width: self!.view.frame.width, height: self!.view.frame.height)
                 }
-            },completion: {[weak self] (bool: Bool) -> Void in
+            },
+            completion: {[weak self] (_: Bool) -> Void in
                 
-                if self != nil {
-                    
-                    self!.removeViewController()
-                }
-                NotificationCenter.default.post(name: NSNotification.Name("hideDataServicesInfo"), object: nil)
-        })
+                self?.removeViewController()
+                NotificationCenter.default.post(name: NSNotification.Name(Constants.NotificationNames.hideDataServicesInfo), object: nil)
+            }
+        )
     }
     
     // MARK: - View controller methods
@@ -77,6 +76,7 @@ class TextPopUpViewController: UIViewController {
      
      - parameter stringToShow: The string to show to the pop up
      - parameter storyBoard: The storyboard to init the view from
+     
      - returns: An optional instance of TextPopUpViewController ready to present from a view controller
      */
     class func customInit(stringToShow: String, from storyBoard: UIStoryboard) -> TextPopUpViewController? {

@@ -15,23 +15,23 @@ import UIKit
 // MARK: Class
 
 /// The class responsible for notifying the user about the purchase and giving some info
-class CompletePurchaseViewController: UIViewController {
+internal class CompletePurchaseViewController: UIViewController {
     
     // MARK: - Variables
     
     /// The UIImage to show the user, passed from the previous view controller
-    var image: UIImage? = nil
+    var image: UIImage?
     
     // MARK: - IBOutlets
     
     /// An IBOutlet for handling the hat provider image
-    @IBOutlet weak var hatProviderImage: UIImageView!
+    @IBOutlet private weak var hatProviderImage: UIImageView!
     
     /// An IBOutlet for handling the hat button
-    @IBOutlet weak var homeButton: UIButton!
+    @IBOutlet private weak var homeButton: UIButton!
     
     /// An IBOutlet for handling the arrow bar image on top
-    @IBOutlet weak var arrowbar: UIImageView!
+    @IBOutlet private weak var arrowbar: UIImageView!
     
     // MARK: - IBActions
     

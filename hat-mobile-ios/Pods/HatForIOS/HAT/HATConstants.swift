@@ -22,12 +22,12 @@ import Foundation
  - serviceName: Cannot split token. Includes a description(String)
  */
 public enum Twitter {
-    
-    static let statusURL = "https://twitter-plug.hubofallthings.com/api/status"
-    static let dataPlugURL = "https://twitter-plug.hubofallthings.com"
-    static let tableName = "tweets"
-    static let sourceName = "twitter"
-    static let serviceName = "Twitter"
+
+    static let statusURL: String = "https://twitter-plug.hubofallthings.com/api/status"
+    static let dataPlugURL: String = "https://twitter-plug.hubofallthings.com"
+    static let tableName: String = "tweets"
+    static let sourceName: String = "twitter"
+    static let serviceName: String = "Twitter"
 }
 
 /**
@@ -40,12 +40,12 @@ public enum Twitter {
  - serviceName: Cannot split token. Includes a description(String)
  */
 public enum Facebook {
-    
-    static let statusURL = "https://social-plug.hubofallthings.com/api/user/token/status"
-    static let dataPlugURL = "https://social-plug.hubofallthings.com"
-    static let tableName = "posts"
-    static let sourceName = "facebook"
-    static let serviceName = "Facebook"
+
+    static let statusURL: String = "https://social-plug.hubofallthings.com/api/user/token/status"
+    static let dataPlugURL: String = "https://social-plug.hubofallthings.com"
+    static let tableName: String = "posts"
+    static let sourceName: String = "facebook"
+    static let serviceName: String = "Facebook"
 }
 
 /**
@@ -55,9 +55,9 @@ public enum Facebook {
  - sourceName: No issuer of the token detected. Includes a description(String)
  */
 public enum Notables {
-    
-    static let tableName = "notablesv1"
-    static let sourceName = "rumpel"
+
+    static let tableName: String = "notablesv1"
+    static let sourceName: String = "rumpel"
 }
 
 /**
@@ -66,8 +66,8 @@ The request headers
  - xAuthToken: No token detected
  */
 public enum RequestHeaders {
-    
-    static let xAuthToken = "X-Auth-Token"
+
+    static let xAuthToken: String = "X-Auth-Token"
 }
 
 /**
@@ -77,9 +77,9 @@ public enum RequestHeaders {
  - Text: No issuer of the token detected. Includes a description(String)
  */
 public enum ContentType {
-    
-    static let JSON = "application/json"
-    static let Text = "text/plain"
+
+    static let JSON: String = "application/json"
+    static let Text: String = "text/plain"
 }
 
 /**
@@ -92,7 +92,7 @@ public enum ContentType {
  - TokenParamName: Cannot split token. Includes a description(String)
  */
 public enum Auth {
-    
+
     /// The name of the declared in the bundle identifier
     static let URLScheme: String = "rumpellocationtrackerapp"
     /// The name of the service, RumpelLite
@@ -114,13 +114,13 @@ public enum Auth {
  - Market_AccessToken: Cannot decode token. Includes a description(String)
  */
 public enum HATDataPlugCredentials {
-    
+
     /// hat username used for location data plug
-    static let HAT_Username = "location"
+    static let locationDataPlugUsername: String = "location"
     /// hat password used for location data plug
-    static let HAT_Password = "MYl06ati0n"
+    static let locationDataPlugPassword: String = "MYl06ati0n"
     /// market data plug id used for location data plug
-    static let Market_DataPlugID = "c532e122-db4a-44b8-9eaf-18989f214262"
+    static let dataPlugID: String = "c532e122-db4a-44b8-9eaf-18989f214262"
     /// market access token used for location data plug
-    static let Market_AccessToken: String = "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJzdWIiOiIxLVZTUDcrb0RleldPejBTOFd6MHhWM0J2eVNOYzViNnRcLzRKXC85TVlIWTQrVDdsSHdUSDRXMVVEWGFSVnVQeTFPZmtNajNSNDBjeTVERFRhQjZBNE44c3FGSTJmMUE1NzZUYjhiYmhhUT0iLCJpc3MiOiJoYXQtbWFya2V0IiwiZXhwIjoxNTI2OTc4OTkyLCJpYXQiOjE0OTYyMjA1OTIsImp0aSI6ImY0NTQ4NzI5MGRlZTA3NDI5YmQxMGViMWZmNzJkZjZmODdiYzhhZDE0ZThjOGE3NmMyZGJlMjVhNDlmODNkOTNiMDJhMzg3NGI4NTI0NDhlODU0Y2ZmZmE0ZWQyZGY1MTYyZTBiYzRhNDk2NGRhYTlhOTc1M2EyMjA1ZjIzMzc5NWY3N2JiODhlYzQwNjQxZjM4MTk4NTgwYWY0YmExZmJkMDg5ZTlhNmU3NjJjN2NhODlkMDdhOTg3MmY1OTczNjdjYWQyYzA0NTdjZDhlODlmM2FlMWQ2MmRmODY3NTcwNTc3NTdiZDJjYzgzNTgyOTU4ZmZlMDVhNjI2NzBmNGMifQ.TvFs6Zp0E24ChFqn3rBP-cpqxZbvkhph91UILGJvM6U"
+    static let locationDataPlugToken: String = "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJzdWIiOiIxLVZTUDcrb0RleldPejBTOFd6MHhWM0J2eVNOYzViNnRcLzRKXC85TVlIWTQrVDdsSHdUSDRXMVVEWGFSVnVQeTFPZmtNajNSNDBjeTVERFRhQjZBNE44c3FGSTJmMUE1NzZUYjhiYmhhUT0iLCJpc3MiOiJoYXQtbWFya2V0IiwiZXhwIjoxNTI2OTc4OTkyLCJpYXQiOjE0OTYyMjA1OTIsImp0aSI6ImY0NTQ4NzI5MGRlZTA3NDI5YmQxMGViMWZmNzJkZjZmODdiYzhhZDE0ZThjOGE3NmMyZGJlMjVhNDlmODNkOTNiMDJhMzg3NGI4NTI0NDhlODU0Y2ZmZmE0ZWQyZGY1MTYyZTBiYzRhNDk2NGRhYTlhOTc1M2EyMjA1ZjIzMzc5NWY3N2JiODhlYzQwNjQxZjM4MTk4NTgwYWY0YmExZmJkMDg5ZTlhNmU3NjJjN2NhODlkMDdhOTg3MmY1OTczNjdjYWQyYzA0NTdjZDhlODlmM2FlMWQ2MmRmODY3NTcwNTc3NTdiZDJjYzgzNTgyOTU4ZmZlMDVhNjI2NzBmNGMifQ.TvFs6Zp0E24ChFqn3rBP-cpqxZbvkhph91UILGJvM6U"
 }

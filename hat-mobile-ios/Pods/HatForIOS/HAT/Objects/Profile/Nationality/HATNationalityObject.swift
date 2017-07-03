@@ -15,9 +15,9 @@ import SwiftyJSON
 // MARK: Struct
 
 public struct HATNationalityObject: Comparable {
-    
+
     // MARK: - Comparable protocol
-    
+
     /// Returns a Boolean value indicating whether two values are equal.
     ///
     /// Equality is the inverse of inequality. For any values `a` and `b`,
@@ -26,11 +26,11 @@ public struct HATNationalityObject: Comparable {
     /// - Parameters:
     ///   - lhs: A value to compare.
     ///   - rhs: Another value to compare.
-    public static func ==(lhs: HATNationalityObject, rhs: HATNationalityObject) -> Bool {
-        
+    public static func == (lhs: HATNationalityObject, rhs: HATNationalityObject) -> Bool {
+
         return (lhs.nationality == rhs.nationality && lhs.passportNumber == rhs.passportNumber && lhs.unixTimeStamp == rhs.unixTimeStamp)
     }
-    
+
     /// Returns a Boolean value indicating whether the value of the first
     /// argument is less than that of the second argument.
     ///
@@ -41,13 +41,13 @@ public struct HATNationalityObject: Comparable {
     /// - Parameters:
     ///   - lhs: A value to compare.
     ///   - rhs: Another value to compare.
-    public static func <(lhs: HATNationalityObject, rhs: HATNationalityObject) -> Bool {
-        
+    public static func < (lhs: HATNationalityObject, rhs: HATNationalityObject) -> Bool {
+
         return lhs.unixTimeStamp! < rhs.unixTimeStamp!
     }
-    
+
     // MARK: - Variables
-    
+
     /// Indicates if the object, HATProfileDataProfilePrimaryEmailObject, is private
     public var nationality: String = ""
     public var passportHeld: String = ""
@@ -55,16 +55,16 @@ public struct HATNationalityObject: Comparable {
     public var placeOfBirth: String = ""
     public var language: String = ""
     public var recordID: String = ""
-    
-    public var unixTimeStamp: Int? = nil
-    
+
+    public var unixTimeStamp: Int?
+
     // MARK: - Initialisers
-    
+
     /**
      The default initialiser. Initialises everything to default values.
      */
     public init() {
-        
+
         nationality = ""
         passportHeld = ""
         passportNumber = ""
@@ -73,47 +73,47 @@ public struct HATNationalityObject: Comparable {
         recordID = ""
         unixTimeStamp = nil
     }
-    
+
     /**
      It initialises everything from the received JSON file from the HAT
      */
     public init(from dict: JSON) {
-        
+
         if let data = (dict["data"].dictionary) {
-            
+
             nationality = (data["nationality"]!.stringValue)
             passportHeld = (data["passportHeld"]!.stringValue)
             passportNumber = (data["passportNumber"]!.stringValue)
             placeOfBirth = (data["placeOfBirth"]!.stringValue)
             language = (data["language"]!.stringValue)
             if let time = (data["unixTimeStamp"]?.stringValue) {
-                
+
                 unixTimeStamp = Int(time)
             }
         }
-        
+
         recordID = (dict["recordId"].stringValue)
     }
-    
+
     // MARK: - JSON Mapper
-    
+
     /**
      Returns the object as Dictionary, JSON
      
      - returns: Dictionary<String, String>
      */
     public func toJSON() -> Dictionary<String, Any> {
-        
+
         return [
-        
-            "nationality" : self.nationality,
-            "passportHeld" : self.passportHeld,
-            "passportNumber" : self.passportNumber,
-            "placeOfBirth" : self.placeOfBirth,
-            "language" : self.language,
-            "unixTimeStamp" : Int(HATFormatterHelper.formatDateToEpoch(date: Date())!)!
+
+            "nationality": self.nationality,
+            "passportHeld": self.passportHeld,
+            "passportNumber": self.passportNumber,
+            "placeOfBirth": self.placeOfBirth,
+            "language": self.language,
+            "unixTimeStamp": Int(HATFormatterHelper.formatDateToEpoch(date: Date())!)!
         ]
-        
+
     }
 
 }

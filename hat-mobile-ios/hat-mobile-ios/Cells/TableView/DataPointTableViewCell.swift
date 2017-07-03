@@ -15,14 +15,43 @@ import UIKit
 // MARK: Class
 
 /// The data points table view cell class
-class DataPointTableViewCell: UITableViewCell {
+internal class DataPointTableViewCell: UITableViewCell {
     
     // MARK: - IBOutlets
 
     /// An IBOutlet for handling the latitude label of the cell
-    @IBOutlet weak var labelLatitude: UILabel!
+    @IBOutlet private weak var labelLatitude: UILabel!
     /// An IBOutlet for handling the date label of the cell
-    @IBOutlet weak var labelDateAdded: UILabel!
+    @IBOutlet private weak var labelDateAdded: UILabel!
     /// An IBOutlet for handling the sync label of the cell
-    @IBOutlet weak var labelSyncDate: UILabel!
+    @IBOutlet private weak var labelSyncDate: UILabel!
+    
+    // MARK: - Set up cell
+    
+    /**
+     Sets up the cell according to the DataPoint object passed in as parameter
+     
+     - parameter dataPoint: The object to use in order to get the data needed to show to the cell
+     - parameter lastSynced: The last sync date, optional
+     
+     - returns: Returns an already set up cell
+     */
+    func setUpCell(dataPoint: DataPoint, lastSynced: Date?) -> UITableViewCell {
+        
+        self.labelLatitude.text = String(dataPoint.lat) + ", " + String(dataPoint.lng) + ", " + String(dataPoint.accuracy)
+        self.labelDateAdded.text = "Added " + FormatterHelper.getDateString(dataPoint.dateAdded)
+        
+        // last sync date
+        if lastSynced != nil {
+            
+            self.labelSyncDate.text = "Synced " + FormatterHelper.getDateString(lastSynced!)
+            self.labelSyncDate.textColor = .appBase
+        } else {
+            
+            self.labelSyncDate.text = NSLocalizedString("not_synced_label", comment:  "")
+            self.labelSyncDate.textColor = .red
+        }
+        
+        return self
+    }
 }

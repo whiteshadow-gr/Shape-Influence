@@ -15,7 +15,7 @@ import HatForIOS
 // MARK: Class
 
 /// A class responsible for the emergency contact UITableViewController of the PHATA section
-class EmergencyContactTableViewController: UITableViewController, UserCredentialsProtocol {
+internal class EmergencyContactTableViewController: UITableViewController, UserCredentialsProtocol {
     
     // MARK: - Variables
 
@@ -29,7 +29,7 @@ class EmergencyContactTableViewController: UITableViewController, UserCredential
     private var darkView: UIView = UIView()
     
     /// User's profile passed on from previous view controller
-    var profile: HATProfileObject? = nil
+    var profile: HATProfileObject?
     
     // MARK: - IBActions
     
@@ -46,40 +46,40 @@ class EmergencyContactTableViewController: UITableViewController, UserCredential
         
         self.view.addSubview(self.darkView)
         
-        self.loadingView = UIView.createLoadingView(with: CGRect(x: (self.view?.frame.midX)! - 70, y: (self.view?.frame.midY)! - 15, width: 140, height: 30), color: .teal, cornerRadius: 15, in: self.view, with: "Updating profile...", textColor: .white, font: UIFont(name: "OpenSans", size: 12)!)
+        self.loadingView = UIView.createLoadingView(with: CGRect(x: (self.view?.frame.midX)! - 70, y: (self.view?.frame.midY)! - 15, width: 140, height: 30), color: .teal, cornerRadius: 15, in: self.view, with: "Updating profile...", textColor: .white, font: UIFont(name: Constants.FontNames.openSans, size: 12)!)
         
-        for (index, _) in self.headers.enumerated() {
+        for index in self.headers.indices {
             
             var cell = self.tableView.cellForRow(at: IndexPath(row: 0, section: index)) as? PhataTableViewCell
             
             if cell == nil {
                 
                 let indexPath = IndexPath(row: 0, section: index)
-                cell = tableView.dequeueReusableCell(withIdentifier: "emergencyContactCell", for: indexPath) as? PhataTableViewCell
+                cell = tableView.dequeueReusableCell(withIdentifier: Constants.CellReuseIDs.emergencyContactCell, for: indexPath) as? PhataTableViewCell
                 cell = self.setUpCell(cell: cell!, indexPath: indexPath) as? PhataTableViewCell
             }
             
             // first name
             if index == 0 {
                 
-                profile?.data.emergencyContact.firstName = cell!.textField.text!
+                profile?.data.emergencyContact.firstName = cell!.getTextFromTextField()
             // last name
             } else if index == 1 {
                 
-                profile?.data.emergencyContact.lastName = cell!.textField.text!
+                profile?.data.emergencyContact.lastName = cell!.getTextFromTextField()
             // relationship
             } else if index == 2 {
                 
-                profile?.data.emergencyContact.relationship = cell!.textField.text!
+                profile?.data.emergencyContact.relationship = cell!.getTextFromTextField()
             // phone number
             } else if index == 3 {
                 
-                profile?.data.emergencyContact.mobile = cell!.textField.text!
+                profile?.data.emergencyContact.mobile = cell!.getTextFromTextField()
             // privacy
             } else if index == 4 {
                 
-                profile?.data.emergencyContact.isPrivate = !(cell!.privateSwitch.isOn)
-                if (profile?.data.isPrivate)! && cell!.privateSwitch.isOn {
+                profile?.data.emergencyContact.isPrivate = !cell!.getSwitchValue()
+                if (profile?.data.isPrivate)! && cell!.getSwitchValue() {
                     
                     profile?.data.isPrivate = false
                 }
@@ -88,31 +88,44 @@ class EmergencyContactTableViewController: UITableViewController, UserCredential
         
         func tableExists(dict: Dictionary<String, Any>, renewedUserToken: String?) {
             
-            HATPhataService.postProfile(userDomain: userDomain, userToken: userToken, hatProfile: self.profile!, successCallBack: {
+            HATPhataService.postProfile(
+                userDomain: userDomain,
+                userToken: userToken,
+                hatProfile: self.profile!,
+                successCallBack: {
+                    
+                    self.loadingView.removeFromSuperview()
+                    self.darkView.removeFromSuperview()
+                    
+                    _ = self.navigationController?.popViewController(animated: true)
+                },
+                errorCallback: {error in
                 
-                self.loadingView.removeFromSuperview()
-                self.darkView.removeFromSuperview()
-                
-                _ = self.navigationController?.popViewController(animated: true)
-            }, errorCallback: {error in
-                
-                self.loadingView.removeFromSuperview()
-                self.darkView.removeFromSuperview()
-                
-                self.createClassicOKAlertWith(alertMessage: "There was an error posting profile", alertTitle: "Error", okTitle: "OK", proceedCompletion: {})
-                _ = CrashLoggerHelper.hatTableErrorLog(error: error)
-            })
+                    self.loadingView.removeFromSuperview()
+                    self.darkView.removeFromSuperview()
+                    
+                    self.createClassicOKAlertWith(alertMessage: "There was an error posting profile", alertTitle: "Error", okTitle: "OK", proceedCompletion: {})
+                    _ = CrashLoggerHelper.hatTableErrorLog(error: error)
+                }
+            )
         }
         
-        HATAccountService.checkHatTableExistsForUploading(userDomain: userDomain, tableName: "profile", sourceName: "rumpel", authToken: userToken, successCallback: tableExists, errorCallback: {error in
+        HATAccountService.checkHatTableExistsForUploading(
+            userDomain: userDomain,
+            tableName: Constants.HATTableName.Profile.name,
+            sourceName: Constants.HATTableName.Profile.source,
+            authToken: userToken,
+            successCallback: tableExists,
+            errorCallback: {error in
             
-            self.loadingView.removeFromSuperview()
-            self.darkView.removeFromSuperview()
-            
-            self.createClassicOKAlertWith(alertMessage: "There was an error checking if it's possible to post the data", alertTitle: "Error", okTitle: "OK", proceedCompletion: {})
-            
-            _ = CrashLoggerHelper.hatTableErrorLog(error: error)
-        })
+                self.loadingView.removeFromSuperview()
+                self.darkView.removeFromSuperview()
+                
+                self.createClassicOKAlertWith(alertMessage: "There was an error checking if it's possible to post the data", alertTitle: "Error", okTitle: "OK", proceedCompletion: {})
+                
+                _ = CrashLoggerHelper.hatTableErrorLog(error: error)
+            }
+        )
     }
     
     // MARK: - View controller methods
@@ -148,9 +161,12 @@ class EmergencyContactTableViewController: UITableViewController, UserCredential
     
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         
-        let cell = tableView.dequeueReusableCell(withIdentifier: "emergencyContactCell", for: indexPath) as! PhataTableViewCell
+        if let cell = tableView.dequeueReusableCell(withIdentifier: Constants.CellReuseIDs.emergencyContactCell, for: indexPath) as? PhataTableViewCell {
+            
+            return self.setUpCell(cell: cell, indexPath: indexPath)
+        }
         
-        return self.setUpCell(cell: cell, indexPath: indexPath)
+        return tableView.dequeueReusableCell(withIdentifier: Constants.CellReuseIDs.emergencyContactCell, for: indexPath)
     }
     
     override func tableView(_ tableView: UITableView, titleForHeaderInSection section: Int) -> String? {
@@ -170,28 +186,31 @@ class EmergencyContactTableViewController: UITableViewController, UserCredential
      */
     private func setUpCell(cell: PhataTableViewCell, indexPath: IndexPath) -> UITableViewCell {
         
-        if indexPath.section == 0 {
+        if self.profile != nil {
             
-            cell.textField.text = self.profile?.data.emergencyContact.firstName
-            cell.privateSwitch.isHidden = true
-        } else if indexPath.section == 1 {
-            
-            cell.textField.text = self.profile?.data.emergencyContact.lastName
-            cell.privateSwitch.isHidden = true
-        } else if indexPath.section == 2 {
-            
-            cell.textField.text = self.profile?.data.emergencyContact.relationship
-            cell.privateSwitch.isHidden = true
-        } else if indexPath.section == 3 {
-            
-            cell.textField.text = self.profile?.data.emergencyContact.mobile
-            cell.textField.keyboardType = .phonePad
-            cell.privateSwitch.isHidden = true
-        } else if indexPath.section == 4 {
-            
-            cell.textField.text = self.sections[indexPath.section][indexPath.row]
-            cell.privateSwitch.isHidden = false
-            cell.privateSwitch.isOn = !(self.profile?.data.emergencyContact.isPrivate)!
+            if indexPath.section == 0 {
+                
+                cell.setTextToTextField(text: self.profile!.data.emergencyContact.firstName)
+                cell.isSwitchHidden(true)
+            } else if indexPath.section == 1 {
+                
+                cell.setTextToTextField(text: self.profile!.data.emergencyContact.lastName)
+                cell.isSwitchHidden(true)
+            } else if indexPath.section == 2 {
+                
+                cell.setTextToTextField(text: self.profile!.data.emergencyContact.relationship)
+                cell.isSwitchHidden(true)
+            } else if indexPath.section == 3 {
+                
+                cell.setTextToTextField(text: self.profile!.data.emergencyContact.mobile)
+                cell.isSwitchHidden(true)
+                cell.setKeyboardType(.phonePad)
+            } else if indexPath.section == 4 {
+                
+                cell.setTextToTextField(text: self.sections[indexPath.section][indexPath.row])
+                cell.isSwitchHidden(false)
+                cell.setSwitchValue(isOn: !self.profile!.data.emergencyContact.isPrivate)
+            }
         }
         
         return cell

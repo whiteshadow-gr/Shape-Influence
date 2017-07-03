@@ -15,7 +15,7 @@ import UIKit
 // MARK: Class
 
 /// A class representing the tiles in the home screen
-class HomeScreenObject: NSObject {
+internal class HomeScreenObject: NSObject {
     
     // MARK: - Variables
 
@@ -60,10 +60,10 @@ class HomeScreenObject: NSObject {
      */
     class func setUpTilesForHomeScreen() -> [HomeScreenObject] {
         
-        let notables = HomeScreenObject(name: "Notes", description: "Take notes, write lists or create life logs", image: UIImage(named: "notes")!)
-        let locations = HomeScreenObject(name: "Locations", description: "Track your movements over the day or week", image: UIImage(named: "gps outlined")!)
-        let socialData = HomeScreenObject(name: "Social Data", description: "Social media posts stored in your HAT", image: UIImage(named: "SocialFeed")!)
-        let chat = HomeScreenObject(name: "Photo Viewer", description: "Show the images you have uploaded in your HAT", image: UIImage(named: "Photo Viewer")!)
+        let notables = HomeScreenObject(name: "Notes", description: "Take notes, write lists or create life logs", image: UIImage(named: Constants.ImageNames.notesImage)!)
+        let locations = HomeScreenObject(name: "Locations", description: "Track your movements over the day or week", image: UIImage(named: Constants.ImageNames.gpsOutlinedImage)!)
+        let socialData = HomeScreenObject(name: "Social Data", description: "Social media posts stored in your HAT", image: UIImage(named: Constants.ImageNames.socialFeedImage)!)
+        let chat = HomeScreenObject(name: "Photo Viewer", description: "Show the images you have uploaded in your HAT", image: UIImage(named: Constants.ImageNames.photoViewerImage)!)
         
         return [notables, locations, socialData, chat]
     }

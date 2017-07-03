@@ -11,13 +11,13 @@
  */
 
 import Alamofire
-import SwiftyJSON
 import HatForIOS
+import SwiftyJSON
 
 // MARK: Class
 
 /// All network related methods
-class NetworkHelper {
+internal class NetworkHelper {
     
     // MARK: - Friendly exception message
     
@@ -29,7 +29,7 @@ class NetworkHelper {
      
      - returns: A message as a String
      */
-    class func ExceptionFriendlyMessage(_ errorCode: Int!, defaultMessage: String) -> String {
+    class func exceptionFriendlyMessage(_ errorCode: Int?, defaultMessage: String) -> String {
         
         if let errorCodeCheck: Int = errorCode {
             
@@ -66,10 +66,15 @@ class NetworkHelper {
      
      - returns: [String: String]
      */
-    class func ConstructRequestHeaders(_ xAuthToken: String) -> [String: String] {
+    class func constructRequestHeaders(_ xAuthToken: String) -> [String: String] {
         
-        return ["Accept": Constants.ContentType.JSON, "Content-Type": Constants.ContentType.JSON, "X-Auth-Token": xAuthToken]
+        return [Constants.Headers.accept: Constants.ContentType.json,
+                Constants.Headers.contentType: Constants.ContentType.json,
+                Constants.Headers.authToken: xAuthToken]
     }
+    
+    // MARK: - Async Request
+    
     /**
      Makes ansychronous data request
      used to POST data TO HAT
@@ -84,7 +89,7 @@ class NetworkHelper {
      - parameter userHATAccessToken: The HAT access token
      - parameter completion: The completion handler to execute upon completing the request
      */
-    class func AsynchronousRequestData(
+    class func asynchronousRequestData(
         
         _ url: String,
         method: HTTPMethod,
@@ -93,36 +98,29 @@ class NetworkHelper {
         parameters: [AnyObject],
         headers: Dictionary<String, String>,
         userHATAccessToken: String,
-        completion: @escaping (_ r: HATNetworkHelper.ResultType) -> Void) -> Void {
+        completion: @escaping (_ r: HATNetworkHelper.ResultType) -> Void) {
         
         UIApplication.shared.isNetworkActivityIndicatorVisible = true
-        
-        let nsURL = NSURL(string: url)
-
-        let request = NSMutableURLRequest(url: nsURL! as URL)
-        request.httpMethod = method.rawValue
-        request.allHTTPHeaderFields = headers
-        request.httpBody = try! JSONSerialization.data(withJSONObject: parameters, options: [])
         
         let url = URL(string: url)
         var urlRequest = URLRequest(url: url!)
         urlRequest.httpMethod = method.rawValue
         urlRequest.allHTTPHeaderFields = headers
-        urlRequest.httpBody = try! JSONSerialization.data(withJSONObject: parameters, options: [])
+        urlRequest.httpBody = try? JSONSerialization.data(withJSONObject: parameters, options: [])
         
         Alamofire.request(urlRequest).responseJSON { response in
             
             switch response.result {
-            case .success(_):
+            case .success:
                 
                 let headers = response.response?.allHeaderFields
-                let tokenHeader = headers?["X-Auth-Token"] as? String
+                let tokenHeader = headers?[Constants.Headers.authToken] as? String
                 if tokenHeader != nil {
                     
                     let result = AuthenticationHelper.decodeToken(token: tokenHeader!, networkResponse: "")
                     if result.message == "refreshToken" && result.scope == "owner" {
                         
-                        _ = KeychainHelper.SetKeychainValue(key: "UserToken", value: tokenHeader!)
+                        _ = KeychainHelper.setKeychainValue(key: Constants.Keychain.userToken, value: tokenHeader!)
                     }
                 }
                 
@@ -143,6 +141,46 @@ class NetworkHelper {
             }
           
             UIApplication.shared.isNetworkActivityIndicatorVisible = false
+        }
+    }
+    
+    // MARK: - Stop Background Newtwork Tasks
+    
+    /**
+     Stops all background networks tasks
+     */
+    class func stopBackgroundNetworkTasks() {
+        
+        Alamofire.SessionManager.default.session.getTasksWithCompletionHandler { (sessionDataTask, uploadData, downloadData) in
+            sessionDataTask.forEach { $0.cancel() }
+            uploadData.forEach { $0.cancel() }
+            downloadData.forEach { $0.cancel() }
+        }
+    }
+    
+    /**
+     Pauses all background networks tasks
+     */
+    class func pauseBackgroundNetworkTasks(completion: @escaping () -> Void) {
+        
+        Alamofire.SessionManager.default.session.getTasksWithCompletionHandler { (sessionDataTask, uploadData, downloadData) in
+            sessionDataTask.forEach { $0.suspend() }
+            uploadData.forEach { $0.suspend() }
+            downloadData.forEach { $0.suspend() }
+            
+            completion()
+        }
+    }
+    
+    /**
+     Resumes all background networks tasks
+     */
+    class func resumeBackgroundNetworkTasks() {
+        
+        Alamofire.SessionManager.default.session.getTasksWithCompletionHandler { (sessionDataTask, uploadData, downloadData) in
+            sessionDataTask.forEach { $0.resume() }
+            uploadData.forEach { $0.resume() }
+            downloadData.forEach { $0.resume() }
         }
     }
 }

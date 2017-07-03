@@ -10,52 +10,52 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/
  */
 
-import MapKit
 import FBAnnotationClusteringSwift
-import SwiftyJSON
 import HatForIOS
+import MapKit
+import SwiftyJSON
 
 // MARK: Class
 
 /// The MapView to render the DataPoints
-class MapViewController: UIViewController, MKMapViewDelegate, MapSettingsDelegate {
+internal class MapViewController: UIViewController, MKMapViewDelegate, MapSettingsDelegate {
 
     // MARK: - IBOutlets
     
     /// An IBOutlet for handling the mapView MKMapView
-    @IBOutlet weak var mapView: MKMapView!
+    @IBOutlet private weak var mapView: MKMapView!
     
     /// An IBOutlet for handling the buttonYesterday UIButton
-    @IBOutlet weak var buttonYesterday: UIButton!
+    @IBOutlet private weak var buttonYesterday: UIButton!
     /// An IBOutlet for handling the buttonToday UIButton
-    @IBOutlet weak var buttonToday: UIButton!
+    @IBOutlet private weak var buttonToday: UIButton!
     /// An IBOutlet for handling the buttonLastWeek UIButton
-    @IBOutlet weak var buttonLastWeek: UIButton!
+    @IBOutlet private weak var buttonLastWeek: UIButton!
     
     /// An IBOutlet for handling the calendarImageView UIImageView
-    @IBOutlet weak var calendarImageView: UIImageView!
+    @IBOutlet private weak var calendarImageView: UIImageView!
     
     /// An IBOutlet for handling the hidden textField UITextField
-    @IBOutlet weak var textField: UITextField!
+    @IBOutlet private weak var textField: UITextField!
     
     // MARK: - Variables
     
     /// The FBClusteringManager object constant
-    private let clusteringManager = FBClusteringManager()
+    private let clusteringManager: FBClusteringManager = FBClusteringManager()
     
     /// The selected enum category of Helper.TimePeriodSelected object
     private var timePeriodSelectedEnum: TimePeriodSelected = TimePeriodSelected.none
     
     /// The uidatepicker used in toolbar
-    private var datePicker: UIDatePicker? = nil
+    private var datePicker: UIDatePicker?
     
     /// The uidatepicker used in toolbar
-    private var segmentControl: UISegmentedControl? = nil
+    private var segmentControl: UISegmentedControl?
     
     /// The start date to filter for points
-    private var filterDataPointsFrom: Date? = nil
+    private var filterDataPointsFrom: Date?
     /// The end date to filter for points
-    private var filterDataPointsTo: Date? = nil
+    private var filterDataPointsTo: Date?
     
     // MARK: - Auto generated methods
     
@@ -67,7 +67,7 @@ class MapViewController: UIViewController, MKMapViewDelegate, MapSettingsDelegat
         self.title = "Location"
         
         // add notification observer for refreshUI
-        NotificationCenter.default.addObserver(self, selector: #selector(goToSettings), name: NSNotification.Name("goToSettings"), object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(goToSettings), name: NSNotification.Name(Constants.NotificationNames.goToSettings), object: nil)
         
         // add gesture recognizers to today button
         buttonTodayTouchUp(UIBarButtonItem())
@@ -84,11 +84,15 @@ class MapViewController: UIViewController, MKMapViewDelegate, MapSettingsDelegat
         
         super.viewDidAppear(animated)
         
-        let result = KeychainHelper.GetKeychainValue(key: "trackDevice")
+        let result = KeychainHelper.getKeychainValue(key: Constants.Keychain.trackDeviceKey)
         
         if result != "true" {
             
-            self.createClassicOKAlertWith(alertMessage: "You have disabled location tracking. To enable location tracking go to settings", alertTitle: "Location tracking disabled", okTitle: "OK", proceedCompletion: {})
+            self.createClassicOKAlertWith(
+                alertMessage: "You have disabled location tracking. To enable location tracking go to settings",
+                alertTitle: "Location tracking disabled",
+                okTitle: "OK",
+                proceedCompletion: {})
         }
     }
     
@@ -147,7 +151,7 @@ class MapViewController: UIViewController, MKMapViewDelegate, MapSettingsDelegat
         let toolBar = UIToolbar()
         toolBar.barStyle = UIBarStyle.default
         toolBar.isTranslucent = true
-        toolBar.tintColor = UIColor(red: 76/255, green: 217/255, blue: 100/255, alpha: 1)
+        toolBar.tintColor = .toolbarColor
         toolBar.sizeToFit()
         
         toolBar.setItems([cancelButton, spaceButton, barButtonSegmentedControll, spaceButton2, doneButton], animated: false)
@@ -190,12 +194,20 @@ class MapViewController: UIViewController, MKMapViewDelegate, MapSettingsDelegat
         
         self.textField.resignFirstResponder()
         let userToken = HATAccountService.getUsersTokenFromKeychain()
-        let userDomain = HATAccountService.TheUserHATDomain()
+        let userDomain = HATAccountService.theUserHATDomain()
         
         let view = UIView()
-        view.createFloatingView(frame: CGRect(x: self.view.frame.midX - 60, y: self.view.frame.midY - 15, width: 120, height: 30), color: .teal, cornerRadius: 15)
+        view.createFloatingView(
+            frame: CGRect(x: self.view.frame.midX - 60, y: self.view.frame.midY - 15, width: 120, height: 30),
+            color: .teal,
+            cornerRadius: 15)
         
-        let label = UILabel().createLabel(frame: CGRect(x: 0, y: 0, width: 120, height: 30), text: "Getting locations...", textColor: .white, textAlignment: .center, font: UIFont(name: "OpenSans", size: 12))
+        let label = UILabel().createLabel(
+            frame: CGRect(x: 0, y: 0, width: 120, height: 30),
+            text: "Getting locations...",
+            textColor: .white,
+            textAlignment: .center,
+            font: UIFont(name: Constants.FontNames.openSans, size: 12))
         
         view.addSubview(label)
         
@@ -212,58 +224,69 @@ class MapViewController: UIViewController, MKMapViewDelegate, MapSettingsDelegat
                     array.append(HATLocationsObject(dict: item.dictionaryValue))
                 }
                 
-                if array.count == 0 {
+                if array.isEmpty {
                     
                     if self.filterDataPointsTo! > Date() {
                         
-                        self.createClassicOKAlertWith(alertMessage: "There are no points for the selected dates, time travelling mode is deactivated", alertTitle: "No points found", okTitle: "OK", proceedCompletion: {})
+                        self.createClassicOKAlertWith(
+                            alertMessage: "There are no points for the selected dates, time travelling mode is deactivated",
+                            alertTitle: "No points found",
+                            okTitle: "OK",
+                            proceedCompletion: {})
                     }
-                    self.createClassicOKAlertWith(alertMessage: "There are no points for the selected dates", alertTitle: "No points found", okTitle: "OK", proceedCompletion: {})
+                    self.createClassicOKAlertWith(
+                        alertMessage: "There are no points for the selected dates",
+                        alertTitle: "No points found",
+                        okTitle: "OK",
+                        proceedCompletion: {})
                 }
                 
                 let pins = clusteringManager.createAnnotationsFrom(objects: array)
                 clusteringManager.addPointsToMap(annottationArray: pins, mapView: self.mapView)
                 
                 // refresh user token
-                if renewedUserToken != nil {
-                    
-                    _ = KeychainHelper.SetKeychainValue(key: "UserToken", value: renewedUserToken!)
-                }
+                _ = KeychainHelper.setKeychainValue(key: Constants.Keychain.userToken, value: renewedUserToken)
                 
                 view.removeFromSuperview()
             }
             
-            func requestLocations(token: String, renewedUserToken: String?) {
+            if self.filterDataPointsFrom != nil && self.filterDataPointsTo != nil {
                 
-                if self.filterDataPointsFrom != nil && self.filterDataPointsTo != nil {
+                let starttime = HATFormatterHelper.formatDateToEpoch(date: self.filterDataPointsFrom!)
+                let endtime = HATFormatterHelper.formatDateToEpoch(date: self.filterDataPointsTo!)
+                
+                if starttime != nil && endtime != nil {
                     
-                    let starttime = HATFormatterHelper.formatDateToEpoch(date: self.filterDataPointsFrom!)
-                    let endtime = HATFormatterHelper.formatDateToEpoch(date: self.filterDataPointsTo!)
+                    let parameters: Dictionary<String, String> = ["starttime": starttime!, "endtime": endtime!, "limit": "2000"]
                     
-                    if starttime != nil && endtime != nil {
+                    HATAccountService.getHatTableValues(
+                        token: userToken,
+                        userDomain: userDomain,
+                        tableID: tableID,
+                        parameters: parameters,
+                        successCallback: receivedLocations,
+                        errorCallback: {(error) in
                         
-                        let parameters: Dictionary<String, String> = ["starttime" : starttime!, "endtime" : endtime!, "limit" : "2000"]
-                        
-                        HATAccountService.getHatTableValues(token: token, userDomain: userDomain, tableID: tableID, parameters: parameters, successCallback: receivedLocations, errorCallback: {(error) in
-                            
                             view.removeFromSuperview()
                             _ = CrashLoggerHelper.hatTableErrorLog(error: error)
-                        })
-                    }
+                        }
+                    )
                 }
             }
-            HATService.getApplicationTokenFor(serviceName: "locations", userDomain: userDomain, token: userToken, resource: "iphone", succesfulCallBack: requestLocations, failCallBack: {(error) in
-                
-                view.removeFromSuperview()
-                CrashLoggerHelper.JSONParsingErrorLogWithoutAlert(error: error)
-            })
         }
         
-        HATAccountService.checkHatTableExists(userDomain: userDomain, tableName: "locations", sourceName: "iphone", authToken: userToken, successCallback: getLocationsFromTable, errorCallback: {(error) in
-            
-            view.removeFromSuperview()
-            _ = CrashLoggerHelper.hatTableErrorLog(error: error)
-        })
+        HATAccountService.checkHatTableExists(
+            userDomain: userDomain,
+            tableName: Constants.HATTableName.Location.name,
+            sourceName: Constants.HATTableName.Location.source,
+            authToken: userToken,
+            successCallback: getLocationsFromTable,
+            errorCallback: {(error) in
+                
+                view.removeFromSuperview()
+                _ = CrashLoggerHelper.hatTableErrorLog(error: error)
+            }
+        )
     }
     
     /**
@@ -325,9 +348,10 @@ class MapViewController: UIViewController, MKMapViewDelegate, MapSettingsDelegat
     /**
      Presents the settings view controller
      */
-    @objc private func goToSettings() {
+    @objc
+    private func goToSettings() {
         
-        self.performSegue(withIdentifier: "SettingsSequeID", sender: self)
+        self.performSegue(withIdentifier: Constants.Segue.settingsSequeID, sender: self)
     }
     
     // MARK: - IBActions

@@ -15,12 +15,12 @@ import UIKit
 // MARK: Class
 
 /// The second PageViewController. Responsible for showing a view controller with info about the HAT
-class HATCapabilitiesPageViewController: UIPageViewController, UIPageViewControllerDataSource {
+internal class HATCapabilitiesPageViewController: UIPageViewController, UIPageViewControllerDataSource {
     
     // MARK: - Variables
     
     /// the number of pages array.
-    private let numberOfPages = [0, 1, 2, 3, 4]
+    private let numberOfPages: [Int] = [0, 1, 2, 3, 4]
 
     // MARK: - View controller delegate methods
     
@@ -59,7 +59,7 @@ class HATCapabilitiesPageViewController: UIPageViewController, UIPageViewControl
         self.dataSource = self
         
         // if we have pages to show init them and add them to the page view controller
-        if numberOfPages.count > 0 {
+        if !numberOfPages.isEmpty {
             
             let firstController = getItemController(itemIndex: 0)!
             let startingViewControllers = [firstController]
@@ -71,6 +71,7 @@ class HATCapabilitiesPageViewController: UIPageViewController, UIPageViewControl
      Create the view controller to present
      
      - parameter itemIndex: The number of the page to create
+     
      - returns: An optional HATCapabilitiesViewController
      */
     private func getItemController(itemIndex: Int) -> HATCapabilitiesViewController? {
@@ -79,9 +80,11 @@ class HATCapabilitiesPageViewController: UIPageViewController, UIPageViewControl
         if itemIndex < numberOfPages.count {
             
             // create the view controller and return it
-            let pageItemController = self.storyboard!.instantiateViewController(withIdentifier: "CapabilitiesViewController") as! HATCapabilitiesViewController
-            pageItemController.pageIndex = itemIndex
-            return pageItemController
+            if let pageItemController = self.storyboard!.instantiateViewController(withIdentifier: "CapabilitiesViewController") as? HATCapabilitiesViewController {
+                
+                pageItemController.pageIndex = itemIndex
+                return pageItemController
+            }
         }
         
         return nil
@@ -92,12 +95,13 @@ class HATCapabilitiesPageViewController: UIPageViewController, UIPageViewControl
     func pageViewController(_ pageViewController: UIPageViewController, viewControllerBefore viewController: UIViewController) -> UIViewController? {
         
         // create the view controller for the previous page
-        let itemController = viewController as! HATCapabilitiesViewController
-        
-        // check if we are out of bounds and return the view controller
-        if itemController.pageIndex > 0 {
+        if let itemController = viewController as? HATCapabilitiesViewController {
             
-            return getItemController(itemIndex: itemController.pageIndex - 1)
+            // check if we are out of bounds and return the view controller
+            if itemController.pageIndex > 0 {
+                
+                return getItemController(itemIndex: itemController.pageIndex - 1)
+            }
         }
         
         // reached first page return nil
@@ -107,12 +111,13 @@ class HATCapabilitiesPageViewController: UIPageViewController, UIPageViewControl
     func pageViewController(_ pageViewController: UIPageViewController, viewControllerAfter viewController: UIViewController) -> UIViewController? {
         
         // create the view controller for the next page
-        let itemController = viewController as! HATCapabilitiesViewController
-        
-        // check if we are out of bounds and return the view controller
-        if itemController.pageIndex + 1 < numberOfPages.count {
+        if let itemController = viewController as? HATCapabilitiesViewController {
             
-            return getItemController(itemIndex: itemController.pageIndex + 1)
+            // check if we are out of bounds and return the view controller
+            if itemController.pageIndex + 1 < numberOfPages.count {
+                
+                return getItemController(itemIndex: itemController.pageIndex + 1)
+            }
         }
         
         // reached final page, return nil

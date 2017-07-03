@@ -16,9 +16,9 @@ import SwiftyJSON
 
 /// A class representing the locations actual data
 public struct HATLocationsDataLocationsObject: Equatable {
-    
+
     // MARK: - Equatable protocol
-    
+
     /// Returns a Boolean value indicating whether two values are equal.
     ///
     /// Equality is the inverse of inequality. For any values `a` and `b`,
@@ -27,11 +27,11 @@ public struct HATLocationsDataLocationsObject: Equatable {
     /// - Parameters:
     ///   - lhs: A value to compare.
     ///   - rhs: Another value to compare.
-    public static func ==(lhs: HATLocationsDataLocationsObject, rhs: HATLocationsDataLocationsObject) -> Bool {
-        
+    public static func == (lhs: HATLocationsDataLocationsObject, rhs: HATLocationsDataLocationsObject) -> Bool {
+
         return (lhs.latitude == rhs.latitude && lhs.longitude == rhs.longitude && lhs.accuracy == rhs.accuracy && lhs.timeStamp == rhs.timeStamp)
     }
-    
+
     // MARK: - Variables
 
     /// The latitude of the location
@@ -41,47 +41,65 @@ public struct HATLocationsDataLocationsObject: Equatable {
     /// The accuracy of the location
     public var accuracy: String = ""
     /// The date of the location
-    public var timeStamp: Date? = nil
-    
+    public var timeStamp: Date?
+
     // MARK: - Initialisers
-    
+
     /**
      The default initialiser. Initialises everything to default values.
      */
     public init() {
-        
+
         latitude = ""
         longitude = ""
         accuracy = ""
         timeStamp = nil
     }
-    
+
     /**
      It initialises everything from the received JSON file from the HAT
      */
     public init(dict: Dictionary<String, JSON>) {
-        
+
         self.init()
-        
+
         // this field will always have a value no need to use if let
         if let tempLatitude = dict["latitude"]?.stringValue {
-            
+
             latitude = tempLatitude
         }
-        
+
         if let tempLongitude = dict["longitude"]?.stringValue {
-            
+
             longitude = tempLongitude
         }
-        
+
         if let tempAccuracy = dict["accuracy"]?.stringValue {
-            
+
             accuracy = tempAccuracy
         }
-        
+
         if let tempTimeStamp = dict["timestamp"]?.stringValue {
-            
+
             timeStamp = HATFormatterHelper.formatStringToDate(string: tempTimeStamp)
         }
+    }
+
+    // MARK: - JSON Mapper
+
+    /**
+     Returns the object as Dictionary, JSON
+     
+     - returns: Dictionary<String, String>
+     */
+    public func toJSON() -> Dictionary<String, Any> {
+
+        return [
+
+            "latitude": self.latitude,
+            "longitude": self.longitude,
+            "accuracy": self.accuracy,
+            "timestamp": Int(HATFormatterHelper.formatDateToEpoch(date: Date())!)!
+        ]
     }
 }

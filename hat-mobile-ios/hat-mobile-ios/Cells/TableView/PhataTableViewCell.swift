@@ -15,7 +15,7 @@ import UIKit
 // MARK: Class
 
 /// A class responsible for handling the phata table view cell
-class PhataTableViewCell: UITableViewCell, UITextFieldDelegate, UITextViewDelegate, UIPickerViewDelegate, UIPickerViewDataSource {
+internal class PhataTableViewCell: UITableViewCell, UITextFieldDelegate, UITextViewDelegate, UIPickerViewDelegate, UIPickerViewDataSource {
     
     // MARK: - Variables
     
@@ -25,13 +25,13 @@ class PhataTableViewCell: UITableViewCell, UITextFieldDelegate, UITextViewDelega
     // MARK: - IBOutlets
     
     /// An IBOutlet for handling the switch
-    @IBOutlet weak var privateSwitch: CustomSwitch!
+    @IBOutlet private weak var privateSwitch: CustomSwitch!
     
     /// An IBOutlet for handling the textField
-    @IBOutlet weak var textField: UITextField!
+    @IBOutlet private weak var textField: UITextField!
     
     /// An IBOutlet for handling the textView
-    @IBOutlet weak var textView: UITextView!
+    @IBOutlet private weak var textView: UITextView!
     
     // MARK: - IBActions
     
@@ -41,7 +41,6 @@ class PhataTableViewCell: UITableViewCell, UITextFieldDelegate, UITextViewDelega
      - parameter sender: The object that called this function
      */
     @IBAction func valueDidChange(_ sender: Any) {
-        
     }
     
     // MARK: - PickerView methods
@@ -125,26 +124,29 @@ class PhataTableViewCell: UITableViewCell, UITextFieldDelegate, UITextViewDelega
                 datePickerView.setDate(date!, animated: true)
             }
             textField.text = FormatterHelper.formatDateStringToUsersDefinedDate(date: datePickerView.date, dateStyle: .short, timeStyle: .none)
-        } 
+        }
         
         return true
     }
     
     // MARK: - Find Row in picker view for this item
     
+    /**
+     Searches and returns the position of a string in the data source of the picker view
+     
+     - parameter item: The item we are looking for
+     - returns: 0 if not found else the index of the string in the array
+     */
     private func getRowForItemInDataSource(item: String?) -> Int {
         
         var isFound = false
 
-        if item != nil {
+        for (index, dataItem) in self.dataSourceForPickerView.enumerated() where item != nil {
             
-            for (index, dataItem) in self.dataSourceForPickerView.enumerated() {
+            if item!.lowercased() == dataItem.lowercased() {
                 
-                if item!.lowercased() == dataItem.lowercased() {
-                    
-                    isFound = true
-                    return index
-                }
+                isFound = true
+                return index
             }
         }
         
@@ -152,5 +154,129 @@ class PhataTableViewCell: UITableViewCell, UITextFieldDelegate, UITextViewDelega
             
             return 0
         }
+    }
+    
+    // MARK: - Get text from textField
+    
+    /**
+     Returns the text in the UITextField or empty string if there is no text
+     
+     - returns: A Sting the text in the UITextField
+     */
+    func getTextFromTextField() -> String {
+        
+        if let text = self.textField.text {
+            
+            return text
+        }
+        return ""
+    }
+    
+    // MARK: - Get switch value
+    
+    /**
+     Returns the UISwitch position state as a Bool
+     
+     - returns: Returns the UISwitch position state as a Bool
+     */
+    func getSwitchValue() -> Bool {
+        
+        return self.privateSwitch.isOn
+    }
+    
+    // MARK: - Set text from textField
+    
+    /**
+     Sets the text passed as paramter to the UITextField
+     
+     - parameter text: The text to insert in the UITextField
+     */
+    func setTextToTextField(text: String) {
+        
+        self.textField.text = text
+    }
+    
+    // MARK: - Set switch value
+    
+    /**
+     Sets the state of thw switch
+     
+     - parameter isOn: A Bool value indicating if the switch is on or not
+     */
+    func setSwitchValue(isOn: Bool) {
+        
+        return self.privateSwitch.isOn = isOn
+    }
+    
+    // MARK: - Hide switch
+    
+    /**
+     Hides the UISwitch
+     
+     - parameter isHidden: A Bool value indicating if the switch is hidden or not
+     */
+    func isSwitchHidden(_ isHidden: Bool) {
+        
+        self.privateSwitch.isHidden = isHidden
+    }
+    
+    // MARK: - Set delegate
+    
+    /**
+     Sets the delegate to the UITextField
+     
+     - parameter delegate: The delegate viewController
+     */
+    func setDelegate(delegate: UITextFieldDelegate) {
+        
+        self.textField.delegate = delegate
+    }
+    
+    // MARK: - Set Action
+    
+    /**
+     Sets an action to the UIViewController passed in the parameter
+     
+     - parameter viewController: The UIViewController to set up the action to
+     */
+    func setActionOn(viewController: AddressTableViewController) {
+        
+        self.textField.addTarget(viewController, action: #selector(viewController.textFieldValueChanged(textField:)), for: UIControlEvents.allEditingEvents)
+    }
+    
+    // MARK: - Set Keyboard Type
+    
+    /**
+     Sets the keyboard type in the UITextField
+     
+     - parameter keyboardType: The type of the keyboard for the UITextField
+     */
+    func setKeyboardType(_ keyboardType: UIKeyboardType) {
+        
+        self.textField.keyboardType = keyboardType
+    }
+    
+    // MARK: - Set Tag in textfield
+    
+    /**
+     Sets the tag number in the UITextField
+     
+     - parameter tag: The tag to add to the UITextField
+     */
+    func setTagInTextField(tag: Int) {
+        
+        self.textField.tag = tag
+    }
+    
+    // MARK: - Set text color in textField
+    
+    /**
+     Sets the text color in the UITextField
+     
+     - parameter color: The color to set for the text
+     */
+    func setTextColorInTextField(color: UIColor) {
+        
+        self.textField.textColor = color
     }
 }

@@ -15,7 +15,7 @@ import HatForIOS
 // MARK: Class
 
 /// A class responsible for the reset password UITableViewController of the PHATA section
-class ResetPasswordTableViewController: UITableViewController, UITextFieldDelegate {
+internal class ResetPasswordTableViewController: UITableViewController, UserCredentialsProtocol {
     
     // MARK: - Variables
 
@@ -49,32 +49,34 @@ class ResetPasswordTableViewController: UITableViewController, UITextFieldDelega
         
         self.view.addSubview(self.darkView)
         
-        self.loadingView = UIView.createLoadingView(with: CGRect(x: (self.view?.frame.midX)! - 70, y: (self.view?.frame.midY)! - 15, width: 140, height: 30), color: .teal, cornerRadius: 15, in: self.view, with: "Changing password...", textColor: .white, font: UIFont(name: "OpenSans", size: 12)!)
+        self.loadingView = UIView.createLoadingView(with: CGRect(x: (self.view?.frame.midX)! - 70, y: (self.view?.frame.midY)! - 15, width: 140, height: 30), color: .teal, cornerRadius: 15, in: self.view, with: "Changing password...", textColor: .white, font: UIFont(name: Constants.FontNames.openSans, size: 12)!)
 
-        for (index, _) in self.headers.enumerated() {
+        for index in self.headers.indices {
             
             // old password
             if index == 0 {
                 
-                let cell = self.tableView.cellForRow(at: IndexPath(row: 0, section: index)) as! ResetPasswordTableViewCell
-                oldPassword = cell.textField.text!
+                if let cell = self.tableView.cellForRow(at: IndexPath(row: 0, section: index)) as? ResetPasswordTableViewCell {
+                    
+                    oldPassword = cell.getPassword()
+                }
             // new password
             } else if index == 1 {
                 
-                let cell1 = self.tableView.cellForRow(at: IndexPath(row: 0, section: index)) as! ResetPasswordTableViewCell
-                let cell2 = self.tableView.cellForRow(at: IndexPath(row: 1, section: index)) as! ResetPasswordTableViewCell
+                let cell1 = self.tableView.cellForRow(at: IndexPath(row: 0, section: index)) as? ResetPasswordTableViewCell
+                let cell2 = self.tableView.cellForRow(at: IndexPath(row: 1, section: index)) as? ResetPasswordTableViewCell
 
-                newPassword1 = cell1.textField.text!
-                newPassword2 = cell2.textField.text!
+                if cell1 != nil && cell2 != nil {
+                    
+                    newPassword1 = cell1!.getPassword()
+                    newPassword2 = cell2!.getPassword()
+                }
             }
         }
         
         if newPassword1 == newPassword2 {
             
             if score > 2 {
-                
-                let userDomain = HATAccountService.TheUserHATDomain()
-                let userToken = HATAccountService.getUsersTokenFromKeychain()
                 
                 HATAccountService.changePassword(userDomain: userDomain, userToken: userToken, oldPassword: oldPassword, newPassword: newPassword1, successCallback: passwordChangedResult, failCallback: passwordErrorResult)
             } else {
@@ -144,46 +146,17 @@ class ResetPasswordTableViewController: UITableViewController, UITextFieldDelega
     
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         
-        let cell = tableView.dequeueReusableCell(withIdentifier: "resetPasswordCell", for: indexPath) as! ResetPasswordTableViewCell
+        if let cell = tableView.dequeueReusableCell(withIdentifier: Constants.CellReuseIDs.resetPasswordCell, for: indexPath) as? ResetPasswordTableViewCell {
+            
+            return cell.setUpCell(cell: cell, indexPath: indexPath)
+        }
         
-        return self.setUpCell(cell: cell, indexPath: indexPath)
+        return tableView.dequeueReusableCell(withIdentifier: Constants.CellReuseIDs.resetPasswordCell, for: indexPath)
     }
     
     override func tableView(_ tableView: UITableView, titleForHeaderInSection section: Int) -> String? {
         
         return self.headers[section]
-    }
-    
-    // MARK: - Set up cell
-    
-    /**
-     Updates and formats the cell accordingly
-     
-     - parameter cell: The ResetPasswordTableViewCell to update and format
-     - parameter indexPath: The indexPath of the cell
-     
-     - returns: A UITableViewCell cell already updated and formatted accordingly
-     */
-    private func setUpCell(cell: ResetPasswordTableViewCell, indexPath: IndexPath) -> UITableViewCell {
-        
-        if indexPath.section == 0 {
-            
-            cell.textField.delegate = nil
-        } else if indexPath.section == 1 {
-            
-            cell.textField.delegate = self
-        }
-        
-        return cell
-    }
-    
-    // MARK: - Text field methods
-    
-    func textField(_ textField: UITextField, shouldChangeCharactersIn range: NSRange, replacementString string: String) -> Bool {
-        
-        self.score = ZXCVBNHelper.showPasswordMeterOn(textField: textField)
-        
-        return true
     }
 
 }

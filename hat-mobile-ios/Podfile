@@ -18,6 +18,7 @@ target 'hat-mobile-ios' do
     pod 'BEMCheckBox'
     pod 'zxcvbn-ios'
     pod 'HatForIOS', :git => 'https://github.com/whiteshadow-gr/HatForIOS.git'
+    pod 'SwiftLint'
     
 end
 

@@ -15,7 +15,7 @@ import UIKit
 // MARK: Class
 
 /// The UITabBarViewController
-class TabBarViewController: UITabBarController {
+internal class TabBarViewController: UITabBarController {
     
     // MARK: - View controller functions
     
@@ -34,7 +34,7 @@ class TabBarViewController: UITabBarController {
         // change navigation bar title
         self.navigationController?.navigationBar.titleTextAttributes =
             [NSForegroundColorAttributeName: UIColor.white,
-             NSFontAttributeName: UIFont(name: "OpenSans-Bold", size: 21)!]
+             NSFontAttributeName: UIFont(name: Constants.FontNames.openSansBold, size: 21)!]
     }
 
     override func didReceiveMemoryWarning() {
@@ -45,24 +45,26 @@ class TabBarViewController: UITabBarController {
     /**
      Logout procedure
      */
-    class func logoutUser(from viewController: UIViewController) -> Void {
+    class func logoutUser(from viewController: UIViewController) {
         
         let yesAction = {() -> Void in
             
             // delete keys from keychain
-            _ = KeychainHelper.ClearKeychainKey(key: "UserToken")
-            _ = KeychainHelper.SetKeychainValue(key: "logedIn", value: "false")
+            _ = KeychainHelper.clearKeychainKey(key: "UserToken")
+            _ = KeychainHelper.setKeychainValue(key: "logedIn", value: "false")
             
             // reset the stack to avoid allowing back
             let storyboard = UIStoryboard.init(name: "Main", bundle: nil)
-            let loginViewController = storyboard.instantiateViewController(withIdentifier: "LoginViewController") as! LoginViewController
-            let navigation = viewController.navigationController
-            _ = viewController.navigationController?.popToRootViewController(animated: false)
-            navigation?.pushViewController(loginViewController, animated: false)
-            
-            UpdateLocations.shared.stopUpdatingLocation()
-            UpdateLocations.shared.stopMonitoringAllRegions()
-            UpdateLocations.shared.stopMonitoringSignificantLocationChanges()
+            if let loginViewController = storyboard.instantiateViewController(withIdentifier: "LoginViewController") as? LoginViewController {
+                
+                let navigation = viewController.navigationController
+                _ = viewController.navigationController?.popToRootViewController(animated: false)
+                navigation?.pushViewController(loginViewController, animated: false)
+                
+                UpdateLocations.shared.stopUpdatingLocation()
+                UpdateLocations.shared.stopMonitoringAllRegions()
+                UpdateLocations.shared.stopMonitoringSignificantLocationChanges()
+            }
         }
         
         viewController.createClassicAlertWith(alertMessage: NSLocalizedString("logout_message_label", comment:  "logout message"), alertTitle: NSLocalizedString("logout_label", comment:  "logout"), cancelTitle: NSLocalizedString("no_label", comment:  "no"), proceedTitle: NSLocalizedString("yes_label", comment:  "yes"), proceedCompletion: yesAction, cancelCompletion: {})

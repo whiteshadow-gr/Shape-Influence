@@ -15,22 +15,22 @@ import UIKit
 // MARK: Class
 
 /// The settings view controller
-class SettingsViewController: UIViewController {
+internal class SettingsViewController: UIViewController {
     
     // MARK: - Variables
     
     /// An UpdateLocations instance to resume location services if the switch changes position
-    let locationUpdate = UpdateLocations.shared
+    let locationUpdate: UpdateLocations = UpdateLocations.shared
     
     // MARK: - IBOutlets
     
     /// An IBOutlet for handling the location UISwitch
-    @IBOutlet weak var locationSwitchOutlet: UISwitch!
+    @IBOutlet private weak var locationSwitchOutlet: UISwitch!
     
     /// An IBOutlet for handling the location tracking UILabel
-    @IBOutlet weak var locationTrackingLabel: UILabel!
+    @IBOutlet private weak var locationTrackingLabel: UILabel!
     
-    //MARK: - IBActions 
+    // MARK: - IBActions
     
     /**
      This method is called with the switch changes state
@@ -41,11 +41,11 @@ class SettingsViewController: UIViewController {
         
         if self.locationSwitchOutlet.isOn {
             
-            _ = KeychainHelper.SetKeychainValue(key: "trackDevice", value: "true")
+            _ = KeychainHelper.setKeychainValue(key: Constants.Keychain.trackDeviceKey, value: Constants.Keychain.Values.setTrue)
             self.locationTrackingLabel.text = "Location upload to HAT enabled"
         } else {
             
-            _ = KeychainHelper.SetKeychainValue(key: "trackDevice", value: "false")
+            _ = KeychainHelper.setKeychainValue(key: Constants.Keychain.trackDeviceKey, value: Constants.Keychain.Values.setFalse)
             self.locationTrackingLabel.text = "Location upload to HAT disabled"
         }
         
@@ -62,7 +62,7 @@ class SettingsViewController: UIViewController {
         // change view controller title
         self.title = NSLocalizedString("settings_label", comment: "settings title")
         
-        if let result = KeychainHelper.GetKeychainValue(key: "trackDevice") {
+        if let result = KeychainHelper.getKeychainValue(key: Constants.Keychain.trackDeviceKey) {
             
             if result == "true" {
                 
@@ -75,7 +75,7 @@ class SettingsViewController: UIViewController {
             }
         } else {
             
-            _ = KeychainHelper.SetKeychainValue(key: "trackDevice", value: "true")
+            _ = KeychainHelper.setKeychainValue(key: Constants.Keychain.trackDeviceKey, value: Constants.Keychain.Values.setTrue)
             self.locationSwitchOutlet.isOn = true
             self.locationTrackingLabel.text = "location upload to HAT enabled"
         }

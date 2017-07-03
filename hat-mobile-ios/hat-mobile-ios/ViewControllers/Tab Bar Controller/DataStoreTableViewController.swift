@@ -15,17 +15,17 @@ import HatForIOS
 // MARK: Class
 
 /// A class responsible for the data store, profile, view controller
-class DataStoreTableViewController: UITableViewController, UserCredentialsProtocol {
+internal class DataStoreTableViewController: UITableViewController, UserCredentialsProtocol {
     
     // MARK: - Variables
 
     /// The sections of the table view
-    private let sections: [[String]] = [["Name", "Info", "Contact Info"]]// ["Nationality"], ["Relationship and Household"], ["Education"]]
+    private let sections: [[String]] = [["Name", "Info", "Contact Info"], ["Nationality"], ["Relationship and Household"], ["Education"]]
     /// The headers of the table view
     private let headers: [String] = ["My Profile"]
     
     /// The profile, used in PHATA table
-    private var profile: HATProfileObject? = nil
+    private var profile: HATProfileObject?
     
     // MARK: - View Controller methods
     
@@ -41,16 +41,32 @@ class DataStoreTableViewController: UITableViewController, UserCredentialsProtoc
         HATPhataService.getProfileFromHAT(userDomain: userDomain, userToken: userToken, successCallback: getProfile, failCallback: logError)
     }
     
+    /**
+     If the profile table has been created get the profile values from HAT
+     
+     - parameter dictionary: The dictionary returned from hat
+     - parameter renewedToken: The new token returned from hat
+     */
     func tableCreated(dictionary: Dictionary<String, Any>, renewedToken: String?) {
         
         HATPhataService.getProfileFromHAT(userDomain: userDomain, userToken: userToken, successCallback: getProfile, failCallback: logError)
     }
     
+    /**
+     Gets profile from hat and saves it to a local variable
+     
+     - parameter receivedProfile: The received HATProfileObject from HAT
+     */
     private func getProfile(receivedProfile: HATProfileObject) {
         
         self.profile = receivedProfile
     }
     
+    /**
+     Logs the error occured
+     
+     - parameter error: The HATTableError occured
+     */
     private func logError(error: HATTableError) {
         
         self.profile = HATProfileObject()
@@ -64,7 +80,7 @@ class DataStoreTableViewController: UITableViewController, UserCredentialsProtoc
                 _ = CrashLoggerHelper.hatTableErrorLog(error: error)
             })(
                 
-                HATAccountService.checkHatTableExistsForUploading(userDomain: userDomain, tableName: "profile", sourceName: "rumpel", authToken: userToken, successCallback: tableCreated, errorCallback: logError)
+                HATAccountService.checkHatTableExistsForUploading(userDomain: userDomain, tableName: Constants.HATTableName.Profile.name, sourceName: Constants.HATTableName.Profile.source, authToken: userToken, successCallback: tableCreated, errorCallback: logError)
             )
         default:
             _ = CrashLoggerHelper.hatTableErrorLog(error: error)
@@ -90,7 +106,7 @@ class DataStoreTableViewController: UITableViewController, UserCredentialsProtoc
     
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         
-        let cell = tableView.dequeueReusableCell(withIdentifier: "DataStoreCell", for: indexPath)
+        let cell = tableView.dequeueReusableCell(withIdentifier: Constants.CellReuseIDs.dataStoreCell, for: indexPath)
         
         return setUpCell(cell: cell, indexPath: indexPath)
     }
@@ -111,31 +127,31 @@ class DataStoreTableViewController: UITableViewController, UserCredentialsProtoc
             
             if indexPath.row == 0 {
                 
-                self.performSegue(withIdentifier: "dataStoreToName", sender: self)
+                self.performSegue(withIdentifier: Constants.Segue.dataStoreToName, sender: self)
             } else if indexPath.row == 1 {
                 
-                self.performSegue(withIdentifier: "dataStoreToInfoSegue", sender: self)
+                self.performSegue(withIdentifier: Constants.Segue.dataStoreToInfoSegue, sender: self)
             } else if indexPath.row == 2 {
                 
-                self.performSegue(withIdentifier: "dataStoreToContactInfoSegue", sender: self)
+                self.performSegue(withIdentifier: Constants.Segue.dataStoreToContactInfoSegue, sender: self)
             }
         } else if indexPath.section == 1 {
             
             if indexPath.row == 0 {
                 
-                self.performSegue(withIdentifier: "dataStoreToNationalitySegue", sender: self)
+                self.performSegue(withIdentifier: Constants.Segue.dataStoreToNationalitySegue, sender: self)
             }
         } else if indexPath.section == 2 {
             
             if indexPath.row == 0 {
                 
-                self.performSegue(withIdentifier: "dataStoreToHouseholdSegue", sender: self)
+                self.performSegue(withIdentifier: Constants.Segue.dataStoreToHouseholdSegue, sender: self)
             }
         } else if indexPath.section == 3 {
             
             if indexPath.row == 0 {
                 
-                self.performSegue(withIdentifier: "dataStoreToEducationSegue", sender: self)
+                self.performSegue(withIdentifier: Constants.Segue.dataStoreToEducationSegue, sender: self)
             }
         }
     }
@@ -147,6 +163,7 @@ class DataStoreTableViewController: UITableViewController, UserCredentialsProtoc
      
      - parameter cell: The cell to set up
      - parameter indexPath: The index path of the cell
+     
      - returns: The set up cell
      */
     func setUpCell(cell: UITableViewCell, indexPath: IndexPath) -> UITableViewCell {
@@ -169,7 +186,7 @@ class DataStoreTableViewController: UITableViewController, UserCredentialsProtoc
                 
                 weak var destinationVC = segue.destination as? DataSourceNameTableViewController
                 
-                if segue.identifier == "dataStoreToName" {
+                if segue.identifier == Constants.Segue.dataStoreToName {
                     
                     destinationVC?.profile = self.profile
                 }
@@ -177,7 +194,7 @@ class DataStoreTableViewController: UITableViewController, UserCredentialsProtoc
                 
                 weak var destinationVC = segue.destination as? DataStoreInfoTableViewController
                 
-                if segue.identifier == "dataStoreToInfoSegue" {
+                if segue.identifier == Constants.Segue.dataStoreToInfoSegue {
                     
                     destinationVC?.profile = self.profile
                 }
@@ -185,7 +202,7 @@ class DataStoreTableViewController: UITableViewController, UserCredentialsProtoc
                 
                 weak var destinationVC = segue.destination as? DataStoreContactInfoTableViewController
                 
-                if segue.identifier == "dataStoreToContactInfoSegue" {
+                if segue.identifier == Constants.Segue.dataStoreToContactInfoSegue {
                     
                     destinationVC?.profile = self.profile
                 }

@@ -15,12 +15,12 @@ import RealmSwift
 // MARK: Class
 
 /// The data points to upload or that has been uploaded view controller
-class DataViewController: UIViewController {
+internal class DataViewController: UIViewController {
     
     // MARK: - IBOutlet
 
     /// An IBOutlet for handling the table view
-    @IBOutlet weak var dataTableView: DataPointsTableView!
+    @IBOutlet private weak var dataTableView: DataPointsTableView!
     
     // MARK: - IBAction
     
@@ -32,18 +32,19 @@ class DataViewController: UIViewController {
     @IBAction func buttonPurge(_ sender: UIBarButtonItem) {
         
         // create alert
-        self.createClassicAlertWith(alertMessage: NSLocalizedString("purge_message_label", comment:  "purge message"),
-                                    alertTitle: NSLocalizedString("purge_label", comment:  "purge"),
-                                    cancelTitle: NSLocalizedString("no_label", comment:  "no"),
-                                    proceedTitle: NSLocalizedString("yes_label", comment:  "yes"),
-                                    proceedCompletion: {[unowned self] () -> Void in
+        self.createClassicAlertWith(
+            alertMessage: NSLocalizedString("purge_message_label", comment:  "purge message"),
+            alertTitle: NSLocalizedString("purge_label", comment:  "purge"),
+            cancelTitle: NSLocalizedString("no_label", comment:  "no"),
+            proceedTitle: NSLocalizedString("yes_label", comment:  "yes"),
+            proceedCompletion: {[unowned self] () -> Void in
                                                             
-                                                            if (RealmHelper.purge(nil)) {
-                                                                
-                                                                self.dataTableView.reloadData()
-                                                            }
-                                                        },
-                                    cancelCompletion: {})}
+                if RealmHelper.purge(nil) {
+                    
+                    self.dataTableView.reloadData()
+                }
+            },
+            cancelCompletion: {})}
     
     // MARK: - View controller functions
     

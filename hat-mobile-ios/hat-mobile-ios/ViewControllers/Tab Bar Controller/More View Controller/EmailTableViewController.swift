@@ -15,7 +15,7 @@ import HatForIOS
 // MARK: Class
 
 /// A class responsible for the email UITableViewController of the PHATA section
-class EmailTableViewController: UITableViewController, UserCredentialsProtocol {
+internal class EmailTableViewController: UITableViewController, UserCredentialsProtocol {
     
     // MARK: - Variables
 
@@ -30,7 +30,7 @@ class EmailTableViewController: UITableViewController, UserCredentialsProtocol {
     private var darkView: UIView = UIView()
     
     /// User's profile passed on from previous view controller
-    var profile: HATProfileObject? = nil
+    var profile: HATProfileObject?
     
     // MARK: - IBActions
         
@@ -47,34 +47,34 @@ class EmailTableViewController: UITableViewController, UserCredentialsProtocol {
         
         self.view.addSubview(self.darkView)
         
-        self.loadingView = UIView.createLoadingView(with: CGRect(x: (self.view?.frame.midX)! - 70, y: (self.view?.frame.midY)! - 15, width: 140, height: 30), color: .teal, cornerRadius: 15, in: self.view, with: "Updating profile...", textColor: .white, font: UIFont(name: "OpenSans", size: 12)!)
+        self.loadingView = UIView.createLoadingView(with: CGRect(x: (self.view?.frame.midX)! - 70, y: (self.view?.frame.midY)! - 15, width: 140, height: 30), color: .teal, cornerRadius: 15, in: self.view, with: "Updating profile...", textColor: .white, font: UIFont(name: Constants.FontNames.openSans, size: 12)!)
         
-        for (index, _) in self.headers.enumerated() {
+        for index in self.headers.indices {
             
             var cell = self.tableView.cellForRow(at: IndexPath(row: 0, section: index)) as? PhataTableViewCell
             
             if cell == nil {
                 
                 let indexPath = IndexPath(row: 0, section: index)
-                cell = tableView.dequeueReusableCell(withIdentifier: "emailCell", for: indexPath) as? PhataTableViewCell
+                cell = tableView.dequeueReusableCell(withIdentifier: Constants.CellReuseIDs.emailCell, for: indexPath) as? PhataTableViewCell
                 cell = self.setUpCell(cell: cell!, indexPath: indexPath) as? PhataTableViewCell
             }
             
             // primary email
             if index == 0 {
                 
-                profile?.data.primaryEmail.value = cell!.textField.text!
-                profile?.data.primaryEmail.isPrivate = !(cell!.privateSwitch.isOn)
-                if (profile?.data.isPrivate)! && cell!.privateSwitch.isOn {
+                profile?.data.primaryEmail.value = cell!.getTextFromTextField()
+                profile?.data.primaryEmail.isPrivate = !(cell!.getSwitchValue())
+                if (profile?.data.isPrivate)! && cell!.getSwitchValue() {
                     
                     profile?.data.isPrivate = false
                 }
             // alternative email
             } else if index == 1 {
                 
-                profile?.data.alternativeEmail.value = cell!.textField.text!
-                profile?.data.alternativeEmail.isPrivate = !(cell!.privateSwitch.isOn)
-                if (profile?.data.isPrivate)! && cell!.privateSwitch.isOn {
+                profile?.data.alternativeEmail.value = cell!.getTextFromTextField()
+                profile?.data.alternativeEmail.isPrivate = !(cell!.getSwitchValue())
+                if (profile?.data.isPrivate)! && cell!.getSwitchValue() {
                     
                     profile?.data.isPrivate = false
                 }
@@ -83,31 +83,44 @@ class EmailTableViewController: UITableViewController, UserCredentialsProtocol {
         
         func tableExists(dict: Dictionary<String, Any>, renewedUserToken: String?) {
             
-            HATPhataService.postProfile(userDomain: userDomain, userToken: userToken, hatProfile: self.profile!, successCallBack: {
+            HATPhataService.postProfile(
+                userDomain: userDomain,
+                userToken: userToken,
+                hatProfile: self.profile!,
+                successCallBack: {
                 
-                self.loadingView.removeFromSuperview()
-                self.darkView.removeFromSuperview()
-                
-                _ = self.navigationController?.popViewController(animated: true)
-            }, errorCallback: {error in
-                
-                self.loadingView.removeFromSuperview()
-                self.darkView.removeFromSuperview()
-                
-                self.createClassicOKAlertWith(alertMessage: "There was an error posting profile", alertTitle: "Error", okTitle: "OK", proceedCompletion: {})
-                _ = CrashLoggerHelper.hatTableErrorLog(error: error)
-            })
+                    self.loadingView.removeFromSuperview()
+                    self.darkView.removeFromSuperview()
+                    
+                    _ = self.navigationController?.popViewController(animated: true)
+                },
+                errorCallback: {error in
+                    
+                    self.loadingView.removeFromSuperview()
+                    self.darkView.removeFromSuperview()
+                    
+                    self.createClassicOKAlertWith(alertMessage: "There was an error posting profile", alertTitle: "Error", okTitle: "OK", proceedCompletion: {})
+                    _ = CrashLoggerHelper.hatTableErrorLog(error: error)
+                }
+            )
         }
         
-        HATAccountService.checkHatTableExistsForUploading(userDomain: userDomain, tableName: "profile", sourceName: "rumpel", authToken: userToken, successCallback: tableExists, errorCallback: {error in
+        HATAccountService.checkHatTableExistsForUploading(
+            userDomain: userDomain,
+            tableName: Constants.HATTableName.Profile.name,
+            sourceName: Constants.HATTableName.Profile.source,
+            authToken: userToken,
+            successCallback: tableExists,
+            errorCallback: {error in
             
-            self.loadingView.removeFromSuperview()
-            self.darkView.removeFromSuperview()
-            
-            self.createClassicOKAlertWith(alertMessage: "There was an error checking if it's possible to post the data", alertTitle: "Error", okTitle: "OK", proceedCompletion: {})
-            
-            _ = CrashLoggerHelper.hatTableErrorLog(error: error)
-        })
+                self.loadingView.removeFromSuperview()
+                self.darkView.removeFromSuperview()
+                
+                self.createClassicOKAlertWith(alertMessage: "There was an error checking if it's possible to post the data", alertTitle: "Error", okTitle: "OK", proceedCompletion: {})
+                
+                _ = CrashLoggerHelper.hatTableErrorLog(error: error)
+            }
+        )
     }
     
     // MARK: - View controller methods
@@ -143,9 +156,12 @@ class EmailTableViewController: UITableViewController, UserCredentialsProtocol {
 
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         
-        let cell = tableView.dequeueReusableCell(withIdentifier: "emailCell", for: indexPath) as! PhataTableViewCell
+        if let cell = tableView.dequeueReusableCell(withIdentifier: Constants.CellReuseIDs.emailCell, for: indexPath) as? PhataTableViewCell {
+            
+            return self.setUpCell(cell: cell, indexPath: indexPath)
+        }
 
-        return self.setUpCell(cell: cell, indexPath: indexPath)
+        return tableView.dequeueReusableCell(withIdentifier: Constants.CellReuseIDs.emailCell, for: indexPath)
     }
     
     override func tableView(_ tableView: UITableView, titleForHeaderInSection section: Int) -> String? {
@@ -169,15 +185,15 @@ class EmailTableViewController: UITableViewController, UserCredentialsProtocol {
             
             if indexPath.section == 0 {
                 
-                cell.textField.text = self.profile?.data.primaryEmail.value
-                cell.privateSwitch.isOn = !((self.profile?.data.primaryEmail.isPrivate)!)
-                cell.textField.keyboardType = .emailAddress
+                cell.setTextToTextField(text: self.profile!.data.primaryEmail.value)
+                cell.setSwitchValue(isOn: self.profile!.data.primaryEmail.isPrivate)
             } else if indexPath.section == 1 {
                 
-                cell.textField.text = self.profile?.data.alternativeEmail.value
-                cell.privateSwitch.isOn = !((self.profile?.data.alternativeEmail.isPrivate)!)
-                cell.textField.keyboardType = .emailAddress
+                cell.setTextToTextField(text: self.profile!.data.alternativeEmail.value)
+                cell.setSwitchValue(isOn: self.profile!.data.alternativeEmail.isPrivate)
             }
+            
+            cell.setKeyboardType(.emailAddress)
         }
         
         return cell

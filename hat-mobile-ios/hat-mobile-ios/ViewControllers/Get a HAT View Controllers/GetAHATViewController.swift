@@ -11,11 +11,12 @@
  */
 
 import HatForIOS
+import StoreKit
 
 // MARK: Class
 
 /// Get A hat view controller, used in onboarding of new users
-class GetAHATViewController: UIViewController, UICollectionViewDataSource, UICollectionViewDelegate, UICollectionViewDelegateFlowLayout {
+internal class GetAHATViewController: UIViewController, UICollectionViewDataSource, UICollectionViewDelegate, UICollectionViewDelegateFlowLayout {
     
     // MARK: - Variables
     
@@ -23,38 +24,45 @@ class GetAHATViewController: UIViewController, UICollectionViewDataSource, UICol
     private var token: String = ""
     
     /// The hat image
-    private var hatImage: UIImage? = nil
+    private var hatImage: UIImage?
     
     /// the available HAT providers fetched from HAT
     private var hatProviders: [HATProviderObject] = []
     
     /// a dark view pop up to hide the background
-    private var darkView: UIVisualEffectView? = nil
+    private var darkView: UIVisualEffectView?
     
     /// the information of the hat provider cell that the user tapped
-    private var selectedHATProvider: HATProviderObject? = nil
+    private var selectedHATProvider: HATProviderObject?
 
     // MARK: - IBOutlets
 
     /// An IBOutlet for handling the learn more button
-    @IBOutlet weak var learnMoreButton: UIButton!
+    @IBOutlet private weak var learnMoreButton: UIButton!
     
     /// An IBOutlet for handling the arrow bar on top of the view
-    @IBOutlet weak var arrowBarImage: UIImageView!
+    @IBOutlet private weak var arrowBarImage: UIImageView!
     
     /// An IBOutlet for handling the collection view
-    @IBOutlet weak var collectionView: UICollectionView!
+    @IBOutlet private weak var collectionView: UICollectionView!
     
     // MARK: - IBActions
     
+    /**
+     Triggers the sign up sequence
+     
+     - parameter sender: The object that called this method
+     */
     @IBAction func signUpButtonAction(_ sender: Any) {
         
         let indexPath = IndexPath(row: 0, section: 0)
         // create page view controller
-        let cell = self.collectionView.cellForItem(at: indexPath) as! OnboardingTileCollectionViewCell
-        
-        self.registerForHatInfo(cell: cell, indexPath: indexPath)
+        if let cell = self.collectionView.cellForItem(at: indexPath) as? OnboardingTileCollectionViewCell {
+            
+            self.registerForHatInfo(cell: cell, indexPath: indexPath)
+        }
     }
+    
     /**
      Presents a pop up view showing the user more information about HAT
      
@@ -66,16 +74,17 @@ class GetAHATViewController: UIViewController, UICollectionViewDataSource, UICol
         if let popUp = InfoHatProvidersViewController.setUpInfoHatProviderViewControllerPopUp(from: self.storyboard!) {
             
             self.darkView = AnimationHelper.addBlurToView(self.view)
-            AnimationHelper.animateView(popUp.view,
-                                        duration: 0.2,
-                                        animations: { [weak self] () -> Void in
-                                            
-                                            if let weakSelf = self {
-                                                
-                                                popUp.view.frame = CGRect(x: weakSelf.view.frame.origin.x + 15, y: weakSelf.view.bounds.origin.y + 150, width: weakSelf.view.frame.width - 30, height: weakSelf.view.bounds.height)
-                                            }
-                                        },
-                                        completion: {_ in return })
+            AnimationHelper.animateView(
+                popUp.view,
+                duration: 0.2,
+                animations: { [weak self] () -> Void in
+                    
+                    if let weakSelf = self {
+                        
+                        popUp.view.frame = CGRect(x: weakSelf.view.frame.origin.x + 15, y: weakSelf.view.bounds.origin.y + 150, width: weakSelf.view.frame.width - 30, height: weakSelf.view.bounds.height)
+                    }
+                },
+                completion: { _ in return })
             
             // add the page view controller to self
             self.addViewController(popUp)
@@ -95,10 +104,10 @@ class GetAHATViewController: UIViewController, UICollectionViewDataSource, UICol
         self.learnMoreButton.addBorderToButton(width: 1, color: .teal)
         
         // add notification observers
-        NotificationCenter.default.addObserver(self, selector: #selector(hidePopUpView), name: NSNotification.Name(Constants.NotificationNames.hideGetAHATPopUp.rawValue), object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(hidePopUpView), name: NSNotification.Name(Constants.NotificationNames.hideGetAHATPopUp), object: nil)
         
         // fetch available hat providers
-        HATService.getAvailableHATProviders(succesfulCallBack: refreshCollectionView, failCallBack: {(error) -> Void in return})
+        HATService.getAvailableHATProviders(succesfulCallBack: refreshCollectionView, failCallBack: { (_) -> Void in return })
     }
 
     override func didReceiveMemoryWarning() {
@@ -121,16 +130,13 @@ class GetAHATViewController: UIViewController, UICollectionViewDataSource, UICol
      */
     private func refreshCollectionView(dataReceived: [HATProviderObject], renewedUserToken: String?) {
         
-        if dataReceived.count > 0 {
+        if !dataReceived.isEmpty {
             
             self.hatProviders = [dataReceived[0]]
             self.collectionView.reloadData()
             
             // refresh user token
-            if renewedUserToken != nil {
-                
-                _ = KeychainHelper.SetKeychainValue(key: "UserToken", value: renewedUserToken!)
-            }
+            _ = KeychainHelper.setKeychainValue(key: Constants.Keychain.userToken, value: renewedUserToken)
         }
     }
     
@@ -141,17 +147,15 @@ class GetAHATViewController: UIViewController, UICollectionViewDataSource, UICol
      
      - parameter notification: The norification object that called this method
      */
-    @objc private func hidePopUpView(notification: Notification) {
+    @objc
+    private func hidePopUpView(notification: Notification) {
         
         // check if we have an object
-        if (notification.object != nil) {
+        if notification.object != nil && self.selectedHATProvider?.price == 0 {
             
-            if self.selectedHATProvider?.price == 0 {
-                
-                self.token = ""
-                self.dismiss(animated: true, completion: nil)
-                self.performSegue(withIdentifier: "stripeSegue", sender: self)
-            }
+            self.token = ""
+            self.dismiss(animated: true, completion: nil)
+            self.performSegue(withIdentifier: Constants.Segue.stripeSegue, sender: self)
         }
         
         // remove the dark view pop up
@@ -163,7 +167,7 @@ class GetAHATViewController: UIViewController, UICollectionViewDataSource, UICol
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
     
         // create cell
-        let cell = collectionView.dequeueReusableCell(withReuseIdentifier: Constants.CellReuseIDs.onboardingTile.rawValue, for: indexPath) as? OnboardingTileCollectionViewCell
+        let cell = collectionView.dequeueReusableCell(withReuseIdentifier: Constants.CellReuseIDs.onboardingTile, for: indexPath) as? OnboardingTileCollectionViewCell
         
         let orientation = UIInterfaceOrientation(rawValue: UIDevice.current.orientation.rawValue)!
         
@@ -179,37 +183,9 @@ class GetAHATViewController: UIViewController, UICollectionViewDataSource, UICol
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
             
         // create page view controller
-        let cell = collectionView.cellForItem(at: indexPath) as! OnboardingTileCollectionViewCell
-        
-        self.registerForHatInfo(cell: cell, indexPath: indexPath)
-    }
-    
-    private func registerForHatInfo(cell: OnboardingTileCollectionViewCell, indexPath: IndexPath) {
-        
-        // save the data we need for later use
-        self.hatProviders[indexPath.row].hatProviderImage = cell.hatProviderImage.image
-        self.selectedHATProvider = self.hatProviders[indexPath.row]
-        self.hatImage = cell.hatProviderImage.image
-        
-        // set up page controller
-        if let pageItemController = GetAHATInfoViewController.setUpInfoHatProviderViewControllerPopUp(from: self.storyboard!, hatProvider: self.hatProviders[indexPath.row]) {
+        if let cell = collectionView.cellForItem(at: indexPath) as? OnboardingTileCollectionViewCell {
             
-            // present a dark pop up view to darken the background view controller
-            self.darkView = AnimationHelper.addBlurToView(self.view)
-            
-            AnimationHelper.animateView(pageItemController.view,
-                                        duration: 0.2,
-                                        animations: {[weak self] () -> Void in
-                                            
-                                            if let weakSelf = self {
-                                                
-                                                pageItemController.view.frame = CGRect(x: weakSelf.view.frame.origin.x + 15, y: weakSelf.view.bounds.origin.y + 150, width: weakSelf.view.frame.width - 30, height: weakSelf.view.bounds.height - 130)
-                                            }
-                },
-                                        completion: {_ in return})
-            
-            // add the page view controller to self
-            self.addViewController(pageItemController)
+            self.registerForHatInfo(cell: cell, indexPath: indexPath)
         }
     }
     
@@ -217,13 +193,51 @@ class GetAHATViewController: UIViewController, UICollectionViewDataSource, UICol
         
         return CGSize(width: self.collectionView.frame.width, height: self.view.frame.height - self.collectionView.frame.origin.y)
     }
+    
+    // MARK: - Register for hat animation
+    
+    /**
+     Saves image and hat provider for later use and presents an animated View Controller with the info for that HAT provider
+     
+     - parameter cell: The cell to provide the info, image and provider
+     - parameter indexPath: The index path of the tapped cell
+     */
+    private func registerForHatInfo(cell: OnboardingTileCollectionViewCell, indexPath: IndexPath) {
+        
+        // save the data we need for later use
+        self.hatImage = cell.getProviderImage()
+        self.hatProviders[indexPath.row].hatProviderImage = self.hatImage
+        self.selectedHATProvider = self.hatProviders[indexPath.row]
+        
+        // set up page controller
+        if let pageItemController = GetAHATInfoViewController.setUpInfoHatProviderViewControllerPopUp(from: self.storyboard!, hatProvider: self.hatProviders[indexPath.row]) {
+            
+            // present a dark pop up view to darken the background view controller
+            self.darkView = AnimationHelper.addBlurToView(self.view)
+            
+            AnimationHelper.animateView(
+                pageItemController.view,
+                duration: 0.2,
+                animations: {[weak self] () -> Void in
+                    
+                    if let weakSelf = self {
+                        
+                        pageItemController.view.frame = CGRect(x: weakSelf.view.frame.origin.x + 15, y: weakSelf.view.bounds.origin.y + 150, width: weakSelf.view.frame.width - 30, height: weakSelf.view.bounds.height - 130)
+                    }
+                },
+                completion: { _ in return })
+            
+            // add the page view controller to self
+            self.addViewController(pageItemController)
+        }
+    }
 
     // MARK: - Navigation
 
     // In a storyboard-based application, you will often want to do a little preparation before navigation
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
         
-        if segue.identifier == "stripeSegue" {
+        if segue.identifier == Constants.Segue.stripeSegue {
             
             let controller = segue.destination as? StripeViewController
             

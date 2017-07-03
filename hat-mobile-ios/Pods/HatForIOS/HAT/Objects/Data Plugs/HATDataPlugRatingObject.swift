@@ -16,9 +16,9 @@ import SwiftyJSON
 
 /// A class representing the data plug rating from data plug JSON file
 public struct HATDataPlugRatingObject: Comparable {
-    
+
     // MARK: - Comparable protocol
-    
+
     /// Returns a Boolean value indicating whether two values are equal.
     ///
     /// Equality is the inverse of inequality. For any values `a` and `b`,
@@ -27,11 +27,11 @@ public struct HATDataPlugRatingObject: Comparable {
     /// - Parameters:
     ///   - lhs: A value to compare.
     ///   - rhs: Another value to compare.
-    public static func ==(lhs: HATDataPlugRatingObject, rhs: HATDataPlugRatingObject) -> Bool {
-        
-        return (lhs.up == rhs.up && lhs.down == rhs.down)
+    public static func == (lhs: HATDataPlugRatingObject, rhs: HATDataPlugRatingObject) -> Bool {
+
+        return (lhs.possitive == rhs.possitive && lhs.negative == rhs.negative)
     }
-    
+
     /// Returns a Boolean value indicating whether the value of the first
     /// argument is less than that of the second argument.
     ///
@@ -42,41 +42,41 @@ public struct HATDataPlugRatingObject: Comparable {
     /// - Parameters:
     ///   - lhs: A value to compare.
     ///   - rhs: Another value to compare.
-    public static func <(lhs: HATDataPlugRatingObject, rhs: HATDataPlugRatingObject) -> Bool {
-        
-        return lhs.up < rhs.up
+    public static func < (lhs: HATDataPlugRatingObject, rhs: HATDataPlugRatingObject) -> Bool {
+
+        return lhs.possitive < rhs.possitive
     }
-    
+
     // MARK: - Variables
 
     /// The number of the upvotes
-    public var up: Int = -1
+    public var possitive: Int = -1
     /// The number of the downvotes
-    public var down: Int = -1
-    
+    public var negative: Int = -1
+
     // MARK: - Initializers
-    
+
     /**
      The default initialiser. Initialises everything to default values.
      */
     public init() {
-        
-        up = -1
-        down = -1
+
+        possitive = -1
+        negative = -1
     }
-    
+
     /**
      It initialises everything from the received JSON file from the HAT
      */
     public init(dict: Dictionary<String, JSON>) {
-                
+
         if let tempUp = (dict["up"]?.intValue) {
-            
-            up = tempUp
+
+            possitive = tempUp
         }
         if let tempDown = (dict["down"]?.intValue) {
-            
-            down = tempDown
+
+            negative = tempDown
         }
     }
 }

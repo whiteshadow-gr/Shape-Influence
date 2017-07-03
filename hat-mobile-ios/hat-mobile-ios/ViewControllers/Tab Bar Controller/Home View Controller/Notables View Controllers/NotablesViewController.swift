@@ -1,4 +1,4 @@
-    /**
+/**
  * Copyright (C) 2017 HAT Data Exchange Ltd
  *
  * SPDX-License-Identifier: MPL2
@@ -10,14 +10,14 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/
  */
 
-import SwiftyJSON
-import SafariServices
 import HatForIOS
+import SafariServices
+import SwiftyJSON
 
 // MARK: Notables ViewController
 
 /// The notables view controller
-class NotablesViewController: UIViewController, UITableViewDataSource, UITableViewDelegate, UITextFieldDelegate, UserCredentialsProtocol {
+internal class NotablesViewController: UIViewController, UITableViewDataSource, UITableViewDelegate, UITextFieldDelegate, UserCredentialsProtocol {
     
     // MARK: - Variables
     
@@ -27,37 +27,37 @@ class NotablesViewController: UIViewController, UITableViewDataSource, UITableVi
     private var notesArray: [HATNotesData] = []
     
     /// the index of the selected note
-    private var selectedIndex: Int? = nil
+    private var selectedIndex: Int?
     
     /// the kind of the note to create
     private var kind: String = ""
     /// the notables fetch items limit
     private var notablesFetchLimit: String = "50"
     /// the notables fetch end date
-    private var notablesFetchEndDate: String? = nil
+    private var notablesFetchEndDate: String?
     
     /// the paramaters to make the request for fetching the notes
-    private var parameters: Dictionary<String, String> = ["starttime" : "0",
-                                                          "limit" : "50"]
+    private var parameters: Dictionary<String, String> = ["starttime": "0",
+                                                          "limit": "50"]
     
     /// a dark view pop up to hide the background
-    private var authorise: AuthoriseUserViewController? = nil
+    private var authorise: AuthoriseUserViewController?
 
     // MARK: - IBOutlets
 
     /// An IBOutlet for handling the table view
-    @IBOutlet weak var tableView: UITableView!
+    @IBOutlet private weak var tableView: UITableView!
     
     /// An IBOutlet for handling the create new notes green view at the bottom of the screen
-    @IBOutlet weak var createNewNoteView: UIView!
+    @IBOutlet private weak var createNewNoteView: UIView!
     
     /// An IBOutlet for handling the create new note button
-    @IBOutlet weak var createNewNoteButton: UIButton!
+    @IBOutlet private weak var createNewNoteButton: UIButton!
     /// An IBOutlet for handling the info label when table view is empty or an error has occured
-    @IBOutlet weak var eptyTableInfoLabel: UILabel!
+    @IBOutlet private weak var eptyTableInfoLabel: UILabel!
     
     /// An IBOutlet for handling the retry connecting button when an error has occured
-    @IBOutlet weak var retryConnectingButton: UIButton!
+    @IBOutlet private weak var retryConnectingButton: UIButton!
 
     // MARK: - IBActions
     
@@ -77,11 +77,15 @@ class NotablesViewController: UIViewController, UITableViewDataSource, UITableVi
         // if something wrong show error
         let failCallBack = { [weak self] () -> Void in
             
-            self?.createClassicOKAlertWith(alertMessage: "There was an error enabling data plugs, please go to web rumpel to enable the data plugs", alertTitle: "Data Plug Error", okTitle: "OK", proceedCompletion: {})
+            self?.createClassicOKAlertWith(
+                alertMessage: "There was an error enabling data plugs, please go to web rumpel to enable the data plugs",
+                alertTitle: "Data Plug Error",
+                okTitle: "OK",
+                proceedCompletion: {})
         }
         
         // check if data plug is ready
-        HATDataPlugsService.ensureOffersReady(succesfulCallBack: {_ in}, tokenErrorCallback: failCallBack, failCallBack: {error in
+        HATDataPlugsService.ensureOffersReady(succesfulCallBack: { _ in }, tokenErrorCallback: failCallBack, failCallBack: {error in
         
             switch error {
                 
@@ -103,7 +107,7 @@ class NotablesViewController: UIViewController, UITableViewDataSource, UITableVi
     @IBAction func newNoteButton(_ sender: Any) {
         
         kind = "note"
-        self.performSegue(withIdentifier: "optionsSegue", sender: self)
+        self.performSegue(withIdentifier: Constants.Segue.optionsSegue, sender: self)
     }
     
     // MARK: - View Methods
@@ -119,8 +123,8 @@ class NotablesViewController: UIViewController, UITableViewDataSource, UITableVi
         self.view.bringSubview(toFront: createNewNoteView)
         
         // register observers for a notifications
-        NotificationCenter.default.addObserver(self, selector: #selector(self.refreshData), name: NSNotification.Name(rawValue: "reloadTable"), object: nil)
-        NotificationCenter.default.addObserver(self, selector: #selector(self.hideTable), name: NSNotification.Name(rawValue: "NetworkMessage"), object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(self.refreshData), name: NSNotification.Name(rawValue: Constants.NotificationNames.reloadTable), object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(self.hideTable), name: NSNotification.Name(rawValue: Constants.NotificationNames.networkMessage), object: nil)
                 
         self.createNewNoteButton.addBorderToButton(width: 0.5, color: .white)
     }
@@ -137,19 +141,24 @@ class NotablesViewController: UIViewController, UITableViewDataSource, UITableVi
             self.connectToServerToGetNotes(result: nil)
         }
         
-        HATDataPlugsService.ensureOffersReady(succesfulCallBack: success, tokenErrorCallback: {
+        HATDataPlugsService.ensureOffersReady(
+            succesfulCallBack: success,
+            tokenErrorCallback: {
         
-            print("error")
-        }, failCallBack: {error in
-        
-            print(error)
-        })
+                print("error")
+            },
+            failCallBack: {error in
+            
+                print(error)
+            }
+        )
 
         // get notes
-        HATAccountService.checkIfTokenExpired(token: userToken,
-                                    expiredCallBack: self.unauthorisedResponse(proceedCompletion: connectToServerToGetNotes),
-                                 tokenValidCallBack: success,
-                                      errorCallBack: self.createClassicOKAlertWith)
+        HATAccountService.checkIfTokenExpired(
+            token: userToken,
+            expiredCallBack: self.unauthorisedResponse(proceedCompletion: connectToServerToGetNotes),
+            tokenValidCallBack: success,
+            errorCallBack: self.createClassicOKAlertWith)
     }
 
     override func didReceiveMemoryWarning() {
@@ -190,7 +199,8 @@ class NotablesViewController: UIViewController, UITableViewDataSource, UITableVi
      
      - parameter notification: The notification object
      */
-    @objc private func refreshData(notification: Notification) {
+    @objc
+    private func refreshData(notification: Notification) {
         
         DispatchQueue.main.async { [weak self] () -> Void in
             
@@ -230,28 +240,25 @@ class NotablesViewController: UIViewController, UITableViewDataSource, UITableVi
                         weakSelf.notablesFetchEndDate = HATFormatterHelper.formatDateToEpoch(date: object.lastUpdated)
                         
                         // change parameters
-                        weakSelf.parameters = ["starttime" : "0",
-                                           "endtime" : weakSelf.notablesFetchEndDate!,
-                                           "limit" : weakSelf.notablesFetchLimit]
+                        weakSelf.parameters = ["starttime": "0",
+                                           "endtime": weakSelf.notablesFetchEndDate!,
+                                           "limit": weakSelf.notablesFetchLimit]
                         
                         // fetch notes
-                        HATNotablesService.fetchNotables(userDomain: weakSelf.userDomain, authToken: weakSelf.userToken, structure: HATJSONHelper.createNotablesTableJSON(), parameters: weakSelf.parameters, success: weakSelf.showNotables, failure: {_ in})
+                        HATNotablesService.fetchNotables(userDomain: weakSelf.userDomain, authToken: weakSelf.userToken, structure: HATJSONHelper.createNotablesTableJSON(), parameters: weakSelf.parameters, success: weakSelf.showNotables, failure: { _ in })
                         
                     } else {
                         
                         // revert parameters to initial values
                         weakSelf.notablesFetchEndDate = nil
-                        weakSelf.parameters = ["starttime" : "0",
-                                           "limit" : weakSelf.notablesFetchLimit]
+                        weakSelf.parameters = ["starttime": "0",
+                                           "limit": weakSelf.notablesFetchLimit]
                     }
                     
                     weakSelf.showReceivedNotesFrom(array: array)
                     
                     // refresh user token
-                    if renewedUserToken != nil {
-                        
-                        _ = KeychainHelper.SetKeychainValue(key: "UserToken", value: renewedUserToken!)
-                    }
+                    _ = KeychainHelper.setKeychainValue(key: Constants.Keychain.userToken, value: renewedUserToken)
                 }
             }
         }
@@ -265,20 +272,22 @@ class NotablesViewController: UIViewController, UITableViewDataSource, UITableVi
         let controller = NotablesTableViewCell()
         controller.notesDelegate = self
         
-        var cell: NotablesTableViewCell
-        
         if self.cachedNotesArray[indexPath.row].data.photoData.link != "" {
             
-            cell = tableView.dequeueReusableCell(withIdentifier: "cellDataWithImage", for: indexPath) as! NotablesTableViewCell
+            if let tempCell = tableView.dequeueReusableCell(withIdentifier: Constants.CellReuseIDs.cellDataWithImage, for: indexPath) as? NotablesTableViewCell {
+                
+                return controller.setUpCell(tempCell, note: self.cachedNotesArray[indexPath.row], indexPath: indexPath)
+            }
         } else {
             
-            cell = tableView.dequeueReusableCell(withIdentifier: "cellData", for: indexPath) as! NotablesTableViewCell
+            if let tempCell = tableView.dequeueReusableCell(withIdentifier: Constants.CellReuseIDs.cellData, for: indexPath) as? NotablesTableViewCell {
+                
+                return controller.setUpCell(tempCell, note: self.cachedNotesArray[indexPath.row], indexPath: indexPath)
+            }
         }
         
-        cell = controller.setUpCell(cell, note: self.cachedNotesArray[indexPath.row], indexPath: indexPath)
-        
         // return cell
-        return cell
+        return tableView.dequeueReusableCell(withIdentifier: Constants.CellReuseIDs.cellDataWithImage, for: indexPath)
     }
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
@@ -295,7 +304,7 @@ class NotablesViewController: UIViewController, UITableViewDataSource, UITableVi
     
     func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCellEditingStyle, forRowAt indexPath: IndexPath) {
         
-        if (editingStyle == UITableViewCellEditingStyle.delete) {
+        if editingStyle == UITableViewCellEditingStyle.delete {
             
             func proceedCompletion(result: String?) {
                 
@@ -309,7 +318,7 @@ class NotablesViewController: UIViewController, UITableViewDataSource, UITableVi
                         
                         unwrappedToken = token!
                     }
-                    HATNotablesService.deleteNote(id: self.cachedNotesArray[indexPath.row].id, tkn: unwrappedToken, userDomain: userDomain)
+                    HATNotablesService.deleteNote(recordID: self.cachedNotesArray[indexPath.row].noteID, tkn: unwrappedToken, userDomain: userDomain)
                     self.cachedNotesArray.remove(at: indexPath.row)
                     tableView.deleteRows(at: [indexPath], with: .fade)
                     self.updateUI()
@@ -318,17 +327,22 @@ class NotablesViewController: UIViewController, UITableViewDataSource, UITableVi
                 }
                 
                 // delete data from hat and remove from table
-                HATAccountService.checkIfTokenExpired(token: userToken,
-                                            expiredCallBack: self.unauthorisedResponse(proceedCompletion: proceedCompletion),
-                                         tokenValidCallBack: success,
-                                              errorCallBack: self.createClassicOKAlertWith)
+                HATAccountService.checkIfTokenExpired(
+                    token: userToken,
+                    expiredCallBack: self.unauthorisedResponse(proceedCompletion: proceedCompletion),
+                    tokenValidCallBack: success,
+                    errorCallBack: self.createClassicOKAlertWith)
             }
             
             // if it is shared show message else delete the row
             if self.cachedNotesArray[indexPath.row].data.shared {
                 
-                self.createClassicAlertWith(alertMessage: "Deleting a note that has already been shared will not delete it at the destination. \n\nTo remove a note from the external site, first make it private. You may then choose to delete it.", alertTitle: "", cancelTitle: "Cancel", proceedTitle: "Proceed",
-                    proceedCompletion: {proceedCompletion(result: nil)},
+                self.createClassicAlertWith(
+                    alertMessage: "Deleting a note that has already been shared will not delete it at the destination. \n\nTo remove a note from the external site, first make it private. You may then choose to delete it.",
+                    alertTitle: "",
+                    cancelTitle: "Cancel",
+                    proceedTitle: "Proceed",
+                    proceedCompletion: { proceedCompletion(result: nil) },
                     cancelCompletion: {})
             } else {
                 
@@ -385,8 +399,10 @@ class NotablesViewController: UIViewController, UITableViewDataSource, UITableVi
         
         if userToken == "" {
             
-            let loginPageView =  self.storyboard?.instantiateViewController(withIdentifier: "LoginViewController") as! LoginViewController
-            self.navigationController?.pushViewController(loginPageView, animated: false)
+            if let loginPageView = self.storyboard?.instantiateViewController(withIdentifier: "LoginViewController") as? LoginViewController {
+                
+                self.navigationController?.pushViewController(loginPageView, animated: false)
+            }
         } else {
             
             self.showEmptyTableLabelWith(message: "Accessing your HAT...")
@@ -443,16 +459,21 @@ class NotablesViewController: UIViewController, UITableViewDataSource, UITableVi
             
             weak var destinationVC = segue.destination as? ShareOptionsViewController
 
-            if segue.identifier == "editNoteSegue" || segue.identifier == "editNoteSegueWithImage" {
+            if segue.identifier == Constants.Segue.editNoteSegue || segue.identifier == Constants.Segue.editNoteSegueWithImage {
                 
-                let cellIndexPath = self.tableView.indexPath(for: sender as! UITableViewCell)
-                destinationVC?.receivedNote = self.cachedNotesArray[(cellIndexPath?.row)!]
-                destinationVC?.isEditingExistingNote = true
-                
-                let cell = self.tableView.cellForRow(at: cellIndexPath!) as! NotablesTableViewCell
-                if cell.fullSizeImage != nil {
+                if let senderAsCell = sender as? UITableViewCell {
                     
-                    destinationVC?.selectedImage = cell.fullSizeImage
+                    let cellIndexPath = self.tableView.indexPath(for: senderAsCell)
+                    destinationVC?.receivedNote = self.cachedNotesArray[(cellIndexPath?.row)!]
+                    destinationVC?.isEditingExistingNote = true
+                    
+                    if let cell = self.tableView.cellForRow(at: cellIndexPath!) as? NotablesTableViewCell {
+                        
+                        if cell.fullSizeImage != nil {
+                            
+                            destinationVC?.selectedImage = cell.fullSizeImage
+                        }
+                    }
                 }
             } else {
                 
@@ -466,7 +487,8 @@ class NotablesViewController: UIViewController, UITableViewDataSource, UITableVi
     /**
      Hides table and shows a label with a message
      */
-    @objc private func hideTable(_ notif: Notification) {
+    @objc
+    private func hideTable(_ notif: Notification) {
         
         guard let message = notif.object as? String else {
             
@@ -487,7 +509,7 @@ class NotablesViewController: UIViewController, UITableViewDataSource, UITableVi
             
             if let weakSelf = self {
                 
-                if weakSelf.cachedNotesArray.count == 0 {
+                if weakSelf.cachedNotesArray.isEmpty {
                     
                     var stringMessage = message
                     
@@ -519,7 +541,7 @@ class NotablesViewController: UIViewController, UITableViewDataSource, UITableVi
             
             if let weakSelf = self {
                 
-                if weakSelf.notesArray.count > 0 {
+                if !weakSelf.notesArray.isEmpty {
                     
                     weakSelf.eptyTableInfoLabel.isHidden = true
                     
@@ -543,7 +565,7 @@ class NotablesViewController: UIViewController, UITableViewDataSource, UITableVi
                     // reload table
                     weakSelf.tableView.reloadData()
                     
-                } else if weakSelf.notesArray.count == 0 {
+                } else if weakSelf.notesArray.isEmpty {
                     
                     weakSelf.showEmptyTableLabelWith(message: "No notables. Keep your words on your HAT. Create your first notable!")
                 }

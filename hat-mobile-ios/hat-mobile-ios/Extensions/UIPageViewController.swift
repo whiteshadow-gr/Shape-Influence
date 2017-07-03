@@ -24,12 +24,9 @@ extension UIPageViewController {
     func makePageControllerFullScreen() {
         
         //corrects scrollview frame to allow for full-screen view controller pages
-        for subView in self.view.subviews {
+        for subView in self.view.subviews where subView is UIScrollView {
             
-            if subView is UIScrollView {
-                
-                subView.frame = self.view.bounds
-            }
+            subView.frame = self.view.bounds
         }
     }
     

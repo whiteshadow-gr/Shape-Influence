@@ -15,7 +15,7 @@ import HatForIOS
 // MARK: Class
 
 /// A class responsible for the profile nationality, in dataStore ViewController
-class DataStoreNationalityTableViewController: UITableViewController, UserCredentialsProtocol {
+internal class DataStoreNationalityTableViewController: UITableViewController, UserCredentialsProtocol {
     
     // MARK: - Variables
 
@@ -47,51 +47,73 @@ class DataStoreNationalityTableViewController: UITableViewController, UserCreden
         
         self.view.addSubview(self.darkView)
         
-        self.loadingView = UIView.createLoadingView(with: CGRect(x: (self.view?.frame.midX)! - 70, y: (self.view?.frame.midY)! - 15, width: 140, height: 30), color: .teal, cornerRadius: 15, in: self.view, with: "Updating profile...", textColor: .white, font: UIFont(name: "OpenSans", size: 12)!)
+        self.loadingView = UIView.createLoadingView(with: CGRect(x: (self.view?.frame.midX)! - 70, y: (self.view?.frame.midY)! - 15, width: 140, height: 30), color: .teal, cornerRadius: 15, in: self.view, with: "Updating profile...", textColor: .white, font: UIFont(name: Constants.FontNames.openSans, size: 12)!)
         
-        for (index, _) in self.headers.enumerated() {
+        for index in self.headers.indices {
             
             var cell = self.tableView.cellForRow(at: IndexPath(row: 0, section: index)) as? PhataTableViewCell
             
             if cell == nil {
                 
                 let indexPath = IndexPath(row: 0, section: index)
-                cell = tableView.dequeueReusableCell(withIdentifier: "dataStoreNationalityCell", for: indexPath) as? PhataTableViewCell
+                cell = tableView.dequeueReusableCell(withIdentifier: Constants.CellReuseIDs.dataStoreNationalityCell, for: indexPath) as? PhataTableViewCell
                 cell = self.setUpCell(cell: cell!, indexPath: indexPath, nationality: self.nationality) as? PhataTableViewCell
             }
             
             if index == 0 {
                 
-                self.nationality.nationality = cell!.textField.text!
+                self.nationality.nationality = cell!.getTextFromTextField()
             } else if index == 1 {
                 
-                self.nationality.passportHeld = cell!.textField.text!
+                self.nationality.passportHeld = cell!.getTextFromTextField()
             } else if index == 2 {
                 
-                self.nationality.passportNumber = cell!.textField.text!
+                self.nationality.passportNumber = cell!.getTextFromTextField()
             } else if index == 3 {
                 
-                self.nationality.placeOfBirth = cell!.textField.text!
+                self.nationality.placeOfBirth = cell!.getTextFromTextField()
             } else if index == 4 {
                 
-                self.nationality.language = cell!.textField.text!
+                self.nationality.language = cell!.getTextFromTextField()
             }
         }
         
-        HATProfileService.postNationalityToHAT(userDomain: userDomain, userToken: userToken, nationality: self.nationality, successCallback: {_ in
+        func gotApplicationToken(appToken: String, newUserToken: String?) {
+            
+            HATProfileService.postNationalityToHAT(
+                userDomain: userDomain,
+                userToken: appToken,
+                nationality: self.nationality,
+                successCallback: {_ in
+                    
+                    self.loadingView.removeFromSuperview()
+                    self.darkView.removeFromSuperview()
+                    
+                    _ = self.navigationController?.popViewController(animated: true)
+                },
+                failCallback: {error in
+                    
+                    self.loadingView.removeFromSuperview()
+                    self.darkView.removeFromSuperview()
+                    
+                    self.createClassicOKAlertWith(alertMessage: "There was an error posting profile", alertTitle: "Error", okTitle: "OK", proceedCompletion: {})
+                    _ = CrashLoggerHelper.hatTableErrorLog(error: error)
+                }
+            )
+        }
         
-            self.loadingView.removeFromSuperview()
-            self.darkView.removeFromSuperview()
+        func gotErrorWhenGettingApplicationToken(error: JSONParsingError) {
             
-            _ = self.navigationController?.popViewController(animated: true)
-        }, failCallback: {error in
-            
-            self.loadingView.removeFromSuperview()
-            self.darkView.removeFromSuperview()
-            
-            self.createClassicOKAlertWith(alertMessage: "There was an error posting profile", alertTitle: "Error", okTitle: "OK", proceedCompletion: {})
-            _ = CrashLoggerHelper.hatTableErrorLog(error: error)
-        })
+            CrashLoggerHelper.JSONParsingErrorLog(error: error)
+        }
+        
+        HATService.getApplicationTokenFor(
+            serviceName: "Rumpel",
+            userDomain: self.userDomain,
+            token: self.userToken,
+            resource: "https://rumpel.hubofallthings.com",
+            succesfulCallBack: gotApplicationToken,
+            failCallBack: gotErrorWhenGettingApplicationToken)
     }
     
     // MARK: - View controller methods
@@ -154,9 +176,12 @@ class DataStoreNationalityTableViewController: UITableViewController, UserCreden
     
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         
-        let cell = tableView.dequeueReusableCell(withIdentifier: "dataStoreNationalityCell", for: indexPath) as! PhataTableViewCell
+        if let cell = tableView.dequeueReusableCell(withIdentifier: Constants.CellReuseIDs.dataStoreNationalityCell, for: indexPath) as? PhataTableViewCell {
+            
+            return setUpCell(cell: cell, indexPath: indexPath, nationality: self.nationality)
+        }
         
-        return setUpCell(cell: cell, indexPath: indexPath, nationality: self.nationality)
+        return tableView.dequeueReusableCell(withIdentifier: Constants.CellReuseIDs.dataStoreNationalityCell, for: indexPath)
     }
     
     override func tableView(_ tableView: UITableView, titleForHeaderInSection section: Int) -> String? {
@@ -177,6 +202,7 @@ class DataStoreNationalityTableViewController: UITableViewController, UserCreden
      - parameter cell: The cell to set up
      - parameter indexPath: The index path of the cell
      - parameter nationality: The nationality object used to set up the cell
+     
      - returns: The set up cell
      */
     func setUpCell(cell: PhataTableViewCell, indexPath: IndexPath, nationality: HATNationalityObject) -> UITableViewCell {
@@ -185,19 +211,19 @@ class DataStoreNationalityTableViewController: UITableViewController, UserCreden
         
         if indexPath.section == 0 {
             
-            cell.textField.text = nationality.nationality
+            cell.setTextToTextField(text: nationality.nationality)
         } else if indexPath.section == 1 {
             
-            cell.textField.text = nationality.passportHeld
+            cell.setTextToTextField(text: nationality.passportHeld)
         } else if indexPath.section == 2 {
             
-            cell.textField.text = nationality.passportNumber
+            cell.setTextToTextField(text: nationality.passportNumber)
         } else if indexPath.section == 3 {
             
-            cell.textField.text = nationality.placeOfBirth
+            cell.setTextToTextField(text: nationality.placeOfBirth)
         } else if indexPath.section == 4 {
             
-            cell.textField.text = nationality.language
+            cell.setTextToTextField(text: nationality.language)
         }
 
         return cell

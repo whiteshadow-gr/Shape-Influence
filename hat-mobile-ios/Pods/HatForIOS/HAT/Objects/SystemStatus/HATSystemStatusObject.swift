@@ -16,9 +16,9 @@ import SwiftyJSON
 
 /// A class representing the system status object
 public struct HATSystemStatusObject: Comparable {
-    
+
     // MARK: - Comparable protocol
-    
+
     /// Returns a Boolean value indicating whether two values are equal.
     ///
     /// Equality is the inverse of inequality. For any values `a` and `b`,
@@ -27,11 +27,11 @@ public struct HATSystemStatusObject: Comparable {
     /// - Parameters:
     ///   - lhs: A value to compare.
     ///   - rhs: Another value to compare.
-    public static func ==(lhs: HATSystemStatusObject, rhs: HATSystemStatusObject) -> Bool {
-        
+    public static func == (lhs: HATSystemStatusObject, rhs: HATSystemStatusObject) -> Bool {
+
         return (lhs.title == rhs.title && lhs.kind == rhs.kind)
     }
-    
+
     /// Returns a Boolean value indicating whether the value of the first
     /// argument is less than that of the second argument.
     ///
@@ -42,42 +42,42 @@ public struct HATSystemStatusObject: Comparable {
     /// - Parameters:
     ///   - lhs: A value to compare.
     ///   - rhs: Another value to compare.
-    public static func <(lhs: HATSystemStatusObject, rhs: HATSystemStatusObject) -> Bool {
-        
+    public static func < (lhs: HATSystemStatusObject, rhs: HATSystemStatusObject) -> Bool {
+
         return lhs.kind < rhs.kind
     }
-    
+
     // MARK: - Variables
-    
+
     /// The title of the object
     public var title: String = ""
     /// The kind object holding the values
     public var kind: HATSystemStatusKindObject = HATSystemStatusKindObject()
-    
+
     // MARK: - Initialisers
-    
+
     /**
      The default initialiser. Initialises everything to default values.
      */
     public init() {
-        
+
         title = ""
         kind = HATSystemStatusKindObject()
     }
-    
+
     /**
      It initialises everything from the received JSON file from the HAT
      */
     public init(from dictionary: Dictionary<String, JSON>) {
-        
+
         self.init()
-        
+
         if let tempTitle = dictionary["title"]?.stringValue {
-            
+
             title = tempTitle
         }
         if let tempKind = dictionary["kind"]?.dictionaryValue {
-            
+
             kind = HATSystemStatusKindObject(from: tempKind)
         }
     }

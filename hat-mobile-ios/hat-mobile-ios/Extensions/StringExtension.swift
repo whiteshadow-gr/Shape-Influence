@@ -25,21 +25,21 @@ extension String {
      
      returns: A Base64 String
      */
-    public func fromBase64URLToBase64(s: String) -> String {
+    func fromBase64URLToBase64(stringToConvert: String) -> String {
         
-        var s = s
-        if (s.characters.count % 4 == 2 ) {
+        var convertedString = stringToConvert
+        if convertedString.characters.count % 4 == 2 {
             
-            s = s + "=="
-        } else if (s.characters.count % 4 == 3 ) {
+            convertedString += "=="
+        } else if convertedString.characters.count % 4 == 3 {
             
-            s = s + "="
+            convertedString += "="
         }
         
-        s = s.replacingOccurrences(of: "-", with: "+")
-        s = s.replacingOccurrences(of: "_", with: "/")
+        convertedString = convertedString.replacingOccurrences(of: "-", with: "+")
+        convertedString = convertedString.replacingOccurrences(of: "_", with: "/")
         
-        return s
+        return convertedString
     }
     
     // MARK: - Split a comma separated string to an Array of String
@@ -67,10 +67,9 @@ extension String {
     /**
      Trims a given String
      
-     - parameter string: the String to trim
      - returns: trimmed String
      */
-    func TrimString() -> String {
+    func trimString() -> String {
         
         return self.trimmingCharacters(in: CharacterSet.whitespacesAndNewlines)
     }
@@ -83,6 +82,7 @@ extension String {
      - parameter foregroundColor: Foreground color of the string
      - parameter strokeColor: stroke color of the string
      - parameter font: the desired font for the string
+     
      - returns: An attributed string formatted according to the parameters
      */
     func createTextAttributes(foregroundColor: UIColor, strokeColor: UIColor, font: UIFont) -> NSAttributedString {

@@ -13,7 +13,7 @@
 // MARK: Struct
 
 /// The PurchaseModel object representation
-struct PurchaseModel {
+internal struct PurchaseModel {
     
     // MARK: - Variables
     

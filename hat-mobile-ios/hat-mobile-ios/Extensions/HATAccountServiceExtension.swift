@@ -22,31 +22,11 @@ extension HATAccountService {
     /**
      Get the Market Access Token for the iOS data plug
      
-     - returns: HATUsername
-     */
-    class func TheHATUsername() -> Constants.HATUsernameAlias {
-        
-        return Constants.HATDataPlugCredentials.HAT_Username
-    }
-    
-    /**
-     Get the Market Access Token for the iOS data plug
-     
-     - returns: HATPassword
-     */
-    class func TheHATPassword() -> Constants.HATPasswordAlias {
-        
-        return Constants.HATDataPlugCredentials.HAT_Password
-    }
-    
-    /**
-     Get the Market Access Token for the iOS data plug
-     
      - returns: UserHATDomainAlias
      */
-    class func TheUserHATDomain() -> Constants.UserHATDomainAlias {
+    class func theUserHATDomain() -> Constants.UserHATDomainAlias {
         
-        if let hatDomain = KeychainHelper.GetKeychainValue(key: Constants.Keychain.HATDomainKey) {
+        if let hatDomain = KeychainHelper.getKeychainValue(key: Constants.Keychain.hatDomainKey) {
             
             return hatDomain
         }
@@ -62,7 +42,7 @@ extension HATAccountService {
     class func getUsersTokenFromKeychain() -> String {
         
         // check if the token has been saved in the keychain and return it. Else return an empty string
-        if let token = KeychainHelper.GetKeychainValue(key: "UserToken") {
+        if let token = KeychainHelper.getKeychainValue(key: "UserToken") {
             
             return token
         }
@@ -76,9 +56,11 @@ extension HATAccountService {
      Checks if token has expired
      
      - parameter token: The token to check if expired
-     - returns: The token if everything ok, 401 if token has expired or error if something went wrong
+     - parameter expiredCallBack: A function to execute if the token has expired
+     - parameter tokenValidCallBack: A function to execute if the token is valid
+     - parameter errorCallBack: A function to execute when something has gone wrong
      */
-    class func checkIfTokenExpired(token: String, expiredCallBack: (Void) -> Void, tokenValidCallBack: (String?) -> Void, errorCallBack: (String, String, String, @escaping (Void) -> Void) -> Void) {
+    class func checkIfTokenExpired(token: String, expiredCallBack: () -> Void, tokenValidCallBack: (String?) -> Void, errorCallBack: (String, String, String, @escaping () -> Void) -> Void) {
         
         do {
             
@@ -103,6 +85,7 @@ extension HATAccountService {
      Verify the domain if it's what we expect
      
      - parameter domain: The formated doamain
+     
      - returns: Bool, true if the domain matches what we expect and false otherwise
      */
     class func verifyDomain(_ domain: String) -> Bool {
@@ -114,114 +97,5 @@ extension HATAccountService {
         
         return false
     }
-    
-    // MARK: - Constructing URLs
-    
-    /**
-     Should be performed before each data post request as token lifetime is short.
-     
-     - returns: UserHATAccessTokenURLAlias
-     */
-    class func TheUserHATAccessTokenURL() -> Constants.UserHATAccessTokenURLAlias {
-        
-        let url: Constants.UserHATAccessTokenURLAlias = "https://" + self.TheUserHATDomain() +
-            "/users/access_token?username=" + self.TheHATUsername() + "&password=" + self.TheHATPassword()
-        
-        return url
-    }
-    
-    /**
-     Constructs the url to access the table we want
-     
-     - parameter tableName: The table name
-     - parameter sourceName: The source name
-     - returns: String
-     */
-    class func TheUserHATCheckIfTableExistsURL(tableName: String, sourceName: String) -> String {
-        
-        return "https://" + self.TheUserHATDomain() + "/data/table?name=" + tableName + "&source=" + sourceName
-    }
-    
-    /**
-     Constructs the URL in order to create new table. Should be performed only if there isn’t an existing data source already.
-     
-     - returns: String
-     */
-    class func TheConfigureNewDataSourceURL() -> String {
-        
-        return "https://" + self.TheUserHATDomain() + "/data/table"
-    }
-    
-    /**
-     Constructs the URL to get a field from a table
-     
-     - parameter fieldID: The fieldID number
-     - returns: String
-     */
-    class func TheGetFieldInformationUsingTableIDURL(_ fieldID: Int) -> String {
-        
-        return "https://" + self.TheUserHATDomain() + "/data/table/" + String(fieldID)
-    }
-    
-    /**
-     Constructs the URL to post data to HAT
-     
-     - returns: String
-     */
-    class func ThePOSTDataToHATURL() -> String {
-        
-        return "https://" + self.TheUserHATDomain() + "/data/record/values"
-    }
-    
-    // MARK: - Upload file to hat
-    
-    /**
-     Uploads a file to HAT
-     
-     - parameter token: The user's token
-     - parameter userDomain: The user's domain
-     - parameter fileToUpload: The image to upload
-     - parameter progressUpdater: A function to execute on the progress of the upload is moving forward
-     - parameter completion: A function to execute on success
-     - parameter errorCallBack: A Function to execute on failure
-     */
-    class func uploadFileToHATWrapper(token: String, userDomain: String, fileToUpload: UIImage, tags: [String], progressUpdater: ((Double) -> Void)?, completion: ((FileUploadObject, String?) -> Void)?, errorCallBack: ((HATTableError) -> Void)?) {
-        
-        HATFileService.uploadFileToHAT(
-            fileName: "rumpelPhoto",
-            token: token,
-            userDomain: userDomain, tags: tags,
-            completion: {(fileObject, renewedUserToken) -> Void in
-                
-                let data = UIImageJPEGRepresentation(fileToUpload, 1.0)
-                HATNetworkHelper.uploadFile(
-                    image: data!,
-                    url: fileObject.contentURL,
-                    progressUpdateHandler: {(progress) -> Void in
-                        
-                        progressUpdater?(progress)
-                },completion: {(result) -> Void in
-                    
-                    HATFileService.completeUploadFileToHAT(fileID: fileObject.fileID, token: token, tags: tags, userDomain: userDomain, completion: {(uploadedFile, renewedUserToken) -> Void in
-                    
-                        // refresh user token
-                        if renewedUserToken != nil {
-                            
-                            completion?(uploadedFile, renewedUserToken!)
-                        } else {
-                            
-                            completion?(uploadedFile, nil)
-                        }
-                    }, errorCallback: {(error) -> Void in
-                    
-                        _ = CrashLoggerHelper.hatTableErrorLog(error: error)
-                        errorCallBack?(error)
-                    })
-                })
-            }, errorCallback: {(error) -> Void in
-                
-                _ = CrashLoggerHelper.hatTableErrorLog(error: error)
-                errorCallBack?(error)
-        })
-    }
+
 }

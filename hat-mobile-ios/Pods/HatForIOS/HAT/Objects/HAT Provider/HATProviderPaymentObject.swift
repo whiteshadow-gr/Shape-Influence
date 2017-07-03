@@ -16,9 +16,9 @@ import SwiftyJSON
 
 /// A class representing the hat provider payment object
 public struct HATProviderPaymentObject: Comparable {
-    
+
     // MARK: - Comparable protocol
-    
+
     /// Returns a Boolean value indicating whether two values are equal.
     ///
     /// Equality is the inverse of inequality. For any values `a` and `b`,
@@ -27,11 +27,11 @@ public struct HATProviderPaymentObject: Comparable {
     /// - Parameters:
     ///   - lhs: A value to compare.
     ///   - rhs: Another value to compare.
-    public static func ==(lhs: HATProviderPaymentObject, rhs: HATProviderPaymentObject) -> Bool {
-        
+    public static func == (lhs: HATProviderPaymentObject, rhs: HATProviderPaymentObject) -> Bool {
+
         return lhs.subscription == rhs.subscription
     }
-    
+
     /// Returns a Boolean value indicating whether the value of the first
     /// argument is less than that of the second argument.
     ///
@@ -42,38 +42,38 @@ public struct HATProviderPaymentObject: Comparable {
     /// - Parameters:
     ///   - lhs: A value to compare.
     ///   - rhs: Another value to compare.
-    public static func <(lhs: HATProviderPaymentObject, rhs: HATProviderPaymentObject) -> Bool {
-        
+    public static func < (lhs: HATProviderPaymentObject, rhs: HATProviderPaymentObject) -> Bool {
+
         return lhs.subscription["period"]! < rhs.subscription["period"]!
     }
-    
+
     // MARK: - Variables
 
     /// The subscription type, Monthly , yearly
-    public var subscription: Dictionary = ["period" : ""]
-    
+    public var subscription: Dictionary = ["period": ""]
+
     // MARK: - Initialisers
-    
+
     /**
      The default initialiser. Initialises everything to default values.
      */
     public init() {
-        
-        subscription = ["period" : ""]
+
+        subscription = ["period": ""]
     }
-    
+
     /**
      It initialises everything from the received JSON file from the HAT
      */
     public init(from dictionary: Dictionary<String, JSON>) {
-        
+
         self.init()
-        
+
         if let tempSubscription = dictionary["Subscription"]?.dictionaryValue {
-            
+
             if let value = tempSubscription["period"]?.stringValue {
-                
-                subscription = ["period" : value]
+
+                subscription = ["period": value]
             }
         }
     }

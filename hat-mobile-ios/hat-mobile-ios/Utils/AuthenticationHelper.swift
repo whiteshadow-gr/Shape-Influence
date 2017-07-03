@@ -10,13 +10,13 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/
  */
 
-import SwiftyRSA
 import JWTDecode
+import SwiftyRSA
 
 // MARK: Class
 
 /// The authenticationHelper is responsible for decoding the token
-class AuthenticationHelper: NSObject {
+internal class AuthenticationHelper: NSObject {
     
     // MARK: - Struct
     
@@ -26,15 +26,15 @@ class AuthenticationHelper: NSObject {
         // MARK: - Struct's variables
         
         /// The type of the error
-        var errorType: String? = nil
+        var errorType: String?
         /// The custom message error
-        var message: String? = nil
+        var message: String?
         /// The scope of the token
-        var scope: String? = nil
+        var scope: String?
         /// The user's domain extracted from the token
-        var domain: String? = nil
+        var domain: String?
         /// The token
-        var token: String? = nil
+        var token: String?
     }
     
     // MARK: - Decode token
@@ -44,63 +44,70 @@ class AuthenticationHelper: NSObject {
      
      - parameter token: The token to validate
      - parameter networkResponse: The response of the network request. If "" then it's a refresh token situation
+     
      - returns: An AuthenticationResponse object
      */
     class func decodeToken(token: String, networkResponse: String) -> AuthenticationResponse {
         
         // decode the token and get the iss out
-        let jwt = try! decode(jwt: token)
-        
-        // get token scope
-        let tokenScope = jwt.body["accessScope"] as? String
-        
-        // guard for the issuer check, “iss” (Issuer)
-        guard let HATDomainFromToken = jwt.issuer else {
-            
-            return AuthenticationResponse(errorType: NSLocalizedString("error_label", comment: "error"), message: NSLocalizedString("auth_error_general", comment: "auth"), scope: nil, domain: nil, token: nil)
-        }
-        
-        /*
-         The token will consist of header.payload.signature
-         To verify the token we use header.payload hashed with signature in base64 format
-         The public PEM string is used to verify also
-         */
-        let tokenAttr: [String] = token.components(separatedBy: ".")
-        
-        // guard for the attr length. Should be 3 [header, payload, signature]
-        guard tokenAttr.count == 3 else {
-            
-            return AuthenticationResponse(errorType: NSLocalizedString("error_label", comment: "error"), message: NSLocalizedString("auth_error_general", comment: "auth"), scope: nil, domain: nil, token: nil)
-        }
-        
-        // And then to access the individual parts of token
-        let header: String = tokenAttr[0]
-        let payload: String = tokenAttr[1]
-        let signature: String = tokenAttr[2]
-        
-        // decode signature from baseUrl64 to base64
-        let decodedSig = signature.fromBase64URLToBase64(s: signature)
-        
-        // data to be verified header.payload
-        let headerAndPayload = header + "." + payload
-        
         do {
             
-            let signature = try Signature(base64Encoded: decodedSig)
-            let privateKey = try PublicKey(pemEncoded: networkResponse)
-            let clear = try ClearMessage(string: headerAndPayload, using: .utf8)
-            let isSuccessful = try clear.verify(with: privateKey, signature: signature, digestType: .sha256)
+            let jwt = try decode(jwt: token)
             
-            if isSuccessful && tokenScope != nil {
+            // get token scope
+            let tokenScope = jwt.body["accessScope"] as? String
+            
+            // guard for the issuer check, “iss” (Issuer)
+            guard let HATDomainFromToken = jwt.issuer else {
                 
-                return AuthenticationResponse(errorType: nil, message: "success", scope: tokenScope!, domain: HATDomainFromToken, token: jwt.string)
+                return AuthenticationResponse(errorType: NSLocalizedString("error_label", comment: "error"), message: NSLocalizedString("auth_error_general", comment: "auth"), scope: nil, domain: nil, token: nil)
             }
-        // if networkResponse == "" it's a refresh token situation
+            
+            /*
+             The token will consist of header.payload.signature
+             To verify the token we use header.payload hashed with signature in base64 format
+             The public PEM string is used to verify also
+             */
+            let tokenAttr: [String] = token.components(separatedBy: ".")
+            
+            // guard for the attr length. Should be 3 [header, payload, signature]
+            guard tokenAttr.count == 3 else {
+                
+                return AuthenticationResponse(errorType: NSLocalizedString("error_label", comment: "error"), message: NSLocalizedString("auth_error_general", comment: "auth"), scope: nil, domain: nil, token: nil)
+            }
+            
+            // And then to access the individual parts of token
+            let header: String = tokenAttr[0]
+            let payload: String = tokenAttr[1]
+            let signature: String = tokenAttr[2]
+            
+            // decode signature from baseUrl64 to base64
+            let decodedSig = signature.fromBase64URLToBase64(stringToConvert: signature)
+            
+            // data to be verified header.payload
+            let headerAndPayload = header + "." + payload
+            
+            do {
+                
+                let signature = try Signature(base64Encoded: decodedSig)
+                let privateKey = try PublicKey(pemEncoded: networkResponse)
+                let clear = try ClearMessage(string: headerAndPayload, using: .utf8)
+                let isSuccessful = try clear.verify(with: privateKey, signature: signature, digestType: .sha256)
+                
+                if isSuccessful && tokenScope != nil {
+                    
+                    return AuthenticationResponse(errorType: nil, message: "success", scope: tokenScope!, domain: HATDomainFromToken, token: jwt.string)
+                }
+                // if networkResponse == "" it's a refresh token situation
+            } catch {
+                
+                return AuthenticationResponse(errorType: nil, message: "refreshToken", scope: tokenScope!, domain: HATDomainFromToken, token: jwt.string)
+            }
+            
+            return AuthenticationResponse(errorType: nil, message: nil, scope: nil, domain: nil, token: nil)
         } catch {
             
-            return AuthenticationResponse(errorType: nil, message: "refreshToken", scope: tokenScope!, domain: HATDomainFromToken, token: jwt.string)
+            return AuthenticationResponse(errorType: nil, message: "Could not decode token", scope: nil, domain: nil, token: nil)
         }
-        
-        return AuthenticationResponse(errorType: nil, message: nil, scope: nil, domain: nil, token: nil)
     }
 }

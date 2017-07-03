@@ -15,7 +15,7 @@ import UIKit
 // MARK: class
 
 /// The terms and conditions view controller class
-class TermsAndConditionsViewController: UIViewController, UIWebViewDelegate {
+internal class TermsAndConditionsViewController: UIViewController, UIWebViewDelegate {
     
     // MARK: - Variables
     
@@ -25,7 +25,7 @@ class TermsAndConditionsViewController: UIViewController, UIWebViewDelegate {
     // MARK: - IBOutlets
 
     /// An IBOutlet to handle the webview
-    @IBOutlet weak var webView: UIWebView!
+    @IBOutlet private weak var webView: UIWebView!
     
     // MARK: - View controller methods
     

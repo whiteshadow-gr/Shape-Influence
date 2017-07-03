@@ -11,12 +11,19 @@
  */
 
 import HatForIOS
-import SwiftyJSON
 
 // MARK: Class
 
 /// A class responsible for the profile picture UIViewController of the PHATA section
-class PhataPictureViewController: UIViewController, UserCredentialsProtocol {
+internal class PhataPictureViewController: UIViewController, UserCredentialsProtocol, UICollectionViewDataSource, UICollectionViewDelegate, UICollectionViewDelegateFlowLayout, PhotoPickerDelegate, SelectedPhotosProtocol {
+
+    // MARK: - Protocol's Variables
+    
+    /// User's selected files
+    var selectedFiles: [FileUploadObject] = []
+    
+    /// User's selected photos
+    var selectedPhotos: [UIImage] = []
     
     // MARK: - Variables
     
@@ -25,15 +32,27 @@ class PhataPictureViewController: UIViewController, UserCredentialsProtocol {
     /// A dark view covering the collection view cell
     private var darkView: UIView = UIView()
     
+    private var images: [FileUploadObject] = []
+    
+    /// The selected image file to view full screen
+    private var selectedFileToView: FileUploadObject?
+    
+    /// The Photo picker used to upload a new photo
+    private let photoPicker: PhotosHelperViewController = PhotosHelperViewController()
+    
     /// User's profile passed on from previous view controller
-    var profile: HATProfileObject? = nil
+    var profile: HATProfileObject?
     
     // MARK: - IBoutlets
 
     /// An IBOutlet for handling the image view
-    @IBOutlet weak var imageView: UIImageView!
+    @IBOutlet private weak var imageView: UIImageView!
+    
     /// An IBOutlet for handling the custom switch
-    @IBOutlet weak var customSwitch: CustomSwitch!
+    @IBOutlet private weak var customSwitch: CustomSwitch!
+    
+    /// An IBOutlet for handling the collectionView
+    @IBOutlet private weak var collectionView: UICollectionView!
     
     // MARK: - IBActions
     
@@ -51,6 +70,40 @@ class PhataPictureViewController: UIViewController, UserCredentialsProtocol {
         }
     }
     
+    @IBAction func addImageButtonAction(_ sender: Any) {
+        
+        let alertController = UIAlertController(title: "Select options", message: "Select from where to upload image", preferredStyle: .actionSheet)
+        
+        // create alert actions
+        let cameraAction = UIAlertAction(title: "Take photo", style: .default, handler: { [unowned self] (_) -> Void in
+            
+            let photoPickerContorller = self.photoPicker.presentPicker(sourceType: .camera)
+            self.present(photoPickerContorller, animated: true, completion: nil)
+        })
+        
+        let libraryAction = UIAlertAction(title: "Choose from library", style: .default, handler: { [unowned self] (_) -> Void in
+            
+            let photoPickerContorller = self.photoPicker.presentPicker(sourceType: .photoLibrary)
+            self.present(photoPickerContorller, animated: true, completion: nil)
+        })
+        
+        let selectFromHATAction = UIAlertAction(title: "Choose from HAT", style: .default, handler: { [unowned self] (_) -> Void in
+            
+            self.performSegue(withIdentifier: Constants.Segue.profileToHATPhotosSegue, sender: self)
+        })
+        
+        let cancel = UIAlertAction(title: "Cancel", style: .cancel, handler: nil)
+        
+        alertController.addActions(actions: [cameraAction, libraryAction, selectFromHATAction, cancel])
+        if let button = sender as? UIButton {
+            
+            alertController.addiPadSupport(sourceRect: button.frame, sourceView: button)
+        }
+        
+        // present alert controller
+        self.navigationController!.present(alertController, animated: true, completion: nil)
+    }
+    
     /**
      Sends the profile data to hat
      
@@ -64,37 +117,102 @@ class PhataPictureViewController: UIViewController, UserCredentialsProtocol {
         
         self.view.addSubview(self.darkView)
         
-        self.loadingView = UIView.createLoadingView(with: CGRect(x: (self.view?.frame.midX)! - 70, y: (self.view?.frame.midY)! - 15, width: 140, height: 30), color: .teal, cornerRadius: 15, in: self.view, with: "Updating profile...", textColor: .white, font: UIFont(name: "OpenSans", size: 12)!)
+        self.loadingView = UIView.createLoadingView(with: CGRect(x: (self.view?.frame.midX)! - 70, y: (self.view?.frame.midY)! - 15, width: 140, height: 30), color: .teal, cornerRadius: 15, in: self.view, with: "Updating profile...", textColor: .white, font: UIFont(name: Constants.FontNames.openSans, size: 12)!)
         
         func tableExists(dict: Dictionary<String, Any>, renewedUserToken: String?) {
             
-            HATPhataService.postProfile(userDomain: userDomain, userToken: userToken, hatProfile: self.profile!, successCallBack: {
+            HATPhataService.postProfile(
+                userDomain: userDomain,
+                userToken: userToken,
+                hatProfile: self.profile!,
+                successCallBack: {
                 
-                self.loadingView.removeFromSuperview()
-                self.darkView.removeFromSuperview()
-                
-                _ = self.navigationController?.popViewController(animated: true)
-            }, errorCallback: {error in
-                
-                self.loadingView.removeFromSuperview()
-                self.darkView.removeFromSuperview()
-                
-                _ = CrashLoggerHelper.hatTableErrorLog(error: error)
-            })
+                    self.loadingView.removeFromSuperview()
+                    self.darkView.removeFromSuperview()
+                    
+                    _ = self.navigationController?.popViewController(animated: true)
+                },
+                errorCallback: {error in
+                    
+                    self.loadingView.removeFromSuperview()
+                    self.darkView.removeFromSuperview()
+                    
+                    _ = CrashLoggerHelper.hatTableErrorLog(error: error)
+                }
+            )
         }
         
-        HATAccountService.checkHatTableExistsForUploading(userDomain: userDomain, tableName: "profile", sourceName: "rumpel", authToken: userToken, successCallback: tableExists, errorCallback: {_ in
+        HATAccountService.checkHatTableExistsForUploading(
+            userDomain: userDomain,
+            tableName: Constants.HATTableName.Profile.name,
+            sourceName: Constants.HATTableName.Profile.source,
+            authToken: userToken,
+            successCallback: tableExists,
+            errorCallback: {[weak self] _ in
             
-            self.loadingView.removeFromSuperview()
-            self.darkView.removeFromSuperview()
-        })
+                if let weakSelf = self {
+                    
+                    weakSelf.loadingView.removeFromSuperview()
+                    weakSelf.darkView.removeFromSuperview()
+                }
+            }
+        )
     }
     
     // MARK: - View controller methods
     
+    func profileImageTapped() {
+        
+        let alertController = UIAlertController(title: "Options", message: "Please select one option", preferredStyle: .actionSheet)
+        
+        // create alert actions
+        let removeAction = UIAlertAction(title: "Remove profile photo", style: .default, handler: { [unowned self] (_) -> Void in
+            
+            self.imageView.image = UIImage(named: Constants.ImageNames.placeholderImage)
+        })
+        
+        let cancel = UIAlertAction(title: "Cancel", style: .cancel, handler: nil)
+        
+        alertController.addActions(actions: [removeAction, cancel])
+        alertController.addiPadSupport(sourceRect: self.imageView.frame, sourceView: self.imageView)
+        
+        // present alert controller
+        self.navigationController!.present(alertController, animated: true, completion: nil)
+    }
+    
+    func handleLongTapGesture(gesture: UILongPressGestureRecognizer) {
+        
+        switch gesture.state {
+            
+        case .began:
+            
+            guard let selectedIndexPath = self.collectionView.indexPathForItem(at: gesture.location(in: self.collectionView)) else {
+                break
+            }
+            self.collectionView.beginInteractiveMovementForItem(at: selectedIndexPath)
+        case .changed:
+            
+            self.collectionView.updateInteractiveMovementTargetPosition(gesture.location(in: gesture.view!))
+        case .ended:
+            
+            self.collectionView.endInteractiveMovement()
+        default:
+            
+            self.collectionView.cancelInteractiveMovement()
+        }
+    }
+    
     override func viewDidLoad() {
         
         super.viewDidLoad()
+        
+        self.imageView.isUserInteractionEnabled = true
+        let recogniser = UITapGestureRecognizer()
+        recogniser.addTarget(self, action: #selector(profileImageTapped))
+        self.imageView.addGestureRecognizer(recogniser)
+        
+        let longPressGesture = UILongPressGestureRecognizer(target: self, action: #selector(handleLongTapGesture(gesture:)))
+        self.collectionView.addGestureRecognizer(longPressGesture)
         
         if self.profile == nil {
             
@@ -109,61 +227,150 @@ class PhataPictureViewController: UIViewController, UserCredentialsProtocol {
             self.imageView.layer.cornerRadius = self.imageView.frame.size.width / 2
         }
         
-        func tableNotFound(error: HATTableError) {
+        func failed(error: HATError) {
             
-            self.createClassicOKAlertWith(alertMessage: "Please enable Facebook data plug to get your Facebook image", alertTitle: "Facebook data plug disabled", okTitle: "Ok", proceedCompletion: {})
+            // log error
+            _ = CrashLoggerHelper.hatErrorLog(error: error)
+            self.collectionView.isHidden = true
         }
         
-        func facebookActive(active: Bool) {
+        func success(filesReceived: [FileUploadObject], newToken: String?) {
             
-            if active {
+            for file in filesReceived {
                 
-                func tableFound(tableID: NSNumber, renewedToken: String?) {
+                if file.tags.contains("photo") {
                     
-                    func tableValues(values: [JSON], refreshedToken: String?) {
-                        
-                        if values.count > 0 {
-                            
-                            if let tempURL = values[0].dictionaryValue["data"]?.dictionaryValue["profile_picture"]?.dictionaryValue["url"]?.stringValue {
-                                
-                                if let url = URL(string: tempURL) {
-                                    
-                                    self.imageView.downloadedFrom(url: url, userToken: userToken, progressUpdater: nil, completion: {
-                                        
-                                        DispatchQueue.main.async {
-                                            
-                                            self.imageView.layer.masksToBounds = true
-                                            self.imageView.layer.cornerRadius = self.imageView.frame.size.width / 2
-                                        }
-                                    })
-                                }
-                            }
-                        }
-                    }
-                    
-                    HATAccountService.getHatTableValues(token: userToken, userDomain: userDomain, tableID: tableID, parameters: ["X-Auth-Token" : userToken], successCallback: tableValues, errorCallback: tableNotFound)
+                    self.images.append(file)
                 }
-                
-                HATAccountService.checkHatTableExists(userDomain: userDomain, tableName: "profile_picture", sourceName: "facebook", authToken: userToken, successCallback: tableFound, errorCallback: tableNotFound)
-            } else {
-                
-                self.createClassicOKAlertWith(alertMessage: "Please enable Facebook data plug to get your Facebook image", alertTitle: "Facebook data plug disabled", okTitle: "Ok", proceedCompletion: {})
             }
+            
+            self.collectionView.reloadData()
         }
         
-        func facebookError(error: DataPlugError) {
-            
-            self.createClassicOKAlertWith(alertMessage: "Please enable Facebook data plug to get your Facebook image", alertTitle: "Facebook data plug disabled", okTitle: "Ok", proceedCompletion: {})
-            
-            _ = CrashLoggerHelper.dataPlugErrorLog(error: error)
-        }
+        // search for available files on hat
+        HATFileService.searchFiles(userDomain: userDomain, token: userToken, successCallback: success, errorCallBack: failed)
+    }
+    
+    override func viewDidAppear(_ animated: Bool) {
         
-        HATFacebookService.isFacebookDataPlugActive(token: userToken, successful: facebookActive, failed: facebookError)
+        super.viewDidAppear(animated)
     }
 
     override func didReceiveMemoryWarning() {
         
         super.didReceiveMemoryWarning()
     }
-
+    
+    // MARK: - Collection view
+    
+    func numberOfSections(in collectionView: UICollectionView) -> Int {
+        
+        return 1
+    }
+    
+    func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
+        
+        return self.images.count
+    }
+    
+    func collectionView(_ collectionView: UICollectionView, viewForSupplementaryElementOfKind kind: String, at indexPath: IndexPath) -> UICollectionReusableView {
+        
+        if let headerView = collectionView.dequeueReusableSupplementaryView(ofKind: kind, withReuseIdentifier: Constants.Segue.profileImageHeader, for: indexPath) as? PhotosHeaderCollectionReusableView {
+            
+            return headerView.setUp(stringToShow: "My Profile Photos")
+        }
+        
+        return collectionView.dequeueReusableSupplementaryView(ofKind: kind, withReuseIdentifier: Constants.Segue.profileImageHeader, for: indexPath)
+    }
+    
+    func collectionView(_ collectionView: UICollectionView, moveItemAt sourceIndexPath: IndexPath, to destinationIndexPath: IndexPath) {
+        
+        let tempItem = self.images[sourceIndexPath.row]
+        
+        self.images.remove(at: sourceIndexPath.row)
+        self.images.insert(tempItem, at: destinationIndexPath.row)
+    }
+    
+    func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
+        
+        let cell = collectionView.dequeueReusableCell(withReuseIdentifier: Constants.Segue.profilePictureCell, for: indexPath) as? PhotosCollectionViewCell
+        
+        return (cell?.setUpCell(userDomain: userDomain, userToken: userToken, files: self.images, indexPath: indexPath, completion: { [weak self] image in
+            
+            cell?.cropImage()
+            
+            self?.images[indexPath.row].image = image
+        }))!
+    }
+    
+    func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
+        
+        self.selectedFileToView = self.images[indexPath.row]
+        self.performSegue(withIdentifier: Constants.Segue.profilePhotoToFullScreenPhotoSegue, sender: self)
+    }
+    
+    // MARK: - Image picker methods
+    
+    func didFinishWithError(_ image: UIImage, didFinishSavingWithError error: Error?, contextInfo: UnsafeRawPointer) {
+    }
+    
+    func didChooseImageWithInfo(_ info: [String : Any]) {
+        
+        func addFileToImages(file: FileUploadObject) {
+            
+            self.images.append(file)
+            
+            self.collectionView.isHidden = false
+        }
+        
+        photoPicker.handleUploadImage(info: info, completion: addFileToImages, callingViewController: self, fromReference: self.photoPicker)
+    }
+    
+    // MARK: - Navigation
+    
+    // In a storyboard-based application, you will often want to do a little preparation before navigation
+    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
+        
+        if segue.destination is PhotoFullScreenViewerViewController {
+            
+            weak var destinationVC = segue.destination as? PhotoFullScreenViewerViewController
+            
+            destinationVC?.file = self.selectedFileToView
+            destinationVC?.image = self.selectedFileToView?.image
+            destinationVC?.isImageForProfile = true
+            destinationVC?.profileViewControllerDelegate = self
+        } else if segue.destination is PhotoViewerViewController {
+            
+            weak var destinationVC = segue.destination as? PhotoViewerViewController
+            
+            destinationVC?.selectedPhotosDelegate = self
+            destinationVC?.allowsMultipleSelection = true
+        }
+    }
+    
+    // MARK: - Delegate functions
+    
+    func setImageAsProfileImage(image: UIImage) {
+        
+        self.imageView.image = image
+    }
+    
+    func setImageAsProfileImage(file: FileUploadObject) {
+        
+        func updateProfileImage() {
+            
+        }
+        
+        if file.image != nil {
+            
+            self.imageView.image = file.image
+            updateProfileImage()
+        } else {
+            
+            if let imageURL: URL = URL(string: Constants.HATEndpoints.fileInfoURL(fileID: file.fileID, userDomain: userDomain)) {
+                
+                self.imageView.downloadedFrom(url: imageURL, userToken: userToken, progressUpdater: nil, completion: updateProfileImage)
+            }
+        }
+    }
 }

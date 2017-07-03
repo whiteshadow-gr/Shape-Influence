@@ -10,13 +10,13 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/
  */
 
-import SafariServices
 import HatForIOS
+import SafariServices
 
 // MARK: Class
 
 /// The data plugs View in the tab bar view controller
-class DataPlugsCollectionViewController: UICollectionViewController, UICollectionViewDelegateFlowLayout, UserCredentialsProtocol {
+internal class DataPlugsCollectionViewController: UICollectionViewController, UICollectionViewDelegateFlowLayout, UserCredentialsProtocol {
     
     // MARK: - Variables
     
@@ -27,7 +27,7 @@ class DataPlugsCollectionViewController: UICollectionViewController, UICollectio
     private var loadingView: UIView = UIView()
     
     /// A reference to safari view controller in order to be able to show or hide it
-    private var safariVC: SFSafariViewController? = nil
+    private var safariVC: SFSafariViewController?
     
     // MARK: - View controller methods
 
@@ -36,7 +36,7 @@ class DataPlugsCollectionViewController: UICollectionViewController, UICollectio
         super.viewDidLoad()
         
         // add notification observer for response from server
-        NotificationCenter.default.addObserver(self, selector: #selector(showAlertForDataPlug), name: Notification.Name(Constants.NotificationNames.dataPlug.rawValue), object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(showAlertForDataPlug), name: Notification.Name(Constants.NotificationNames.dataPlug), object: nil)
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -56,10 +56,7 @@ class DataPlugsCollectionViewController: UICollectionViewController, UICollectio
             self.checkDataPlugsIfActive()
             
             // refresh user token
-            if renewedUserToken != nil {
-                
-                _ = KeychainHelper.SetKeychainValue(key: "UserToken", value: renewedUserToken!)
-            }
+            _ = KeychainHelper.setKeychainValue(key: Constants.Keychain.userToken, value: renewedUserToken)
         }
         
         /// method to execute on a failed callback
@@ -70,7 +67,7 @@ class DataPlugsCollectionViewController: UICollectionViewController, UICollectio
         }
         
         // create loading pop up screen
-        self.loadingView = UIView.createLoadingView(with: CGRect(x: (self.collectionView?.frame.midX)! - 70, y: (self.collectionView?.frame.midY)! - 15, width: 140, height: 30), color: .teal, cornerRadius: 15, in: self.view, with: "Getting data plugs...", textColor: .white, font: UIFont(name: "OpenSans", size: 12)!)
+        self.loadingView = UIView.createLoadingView(with: CGRect(x: (self.collectionView?.frame.midX)! - 70, y: (self.collectionView?.frame.midY)! - 15, width: 140, height: 30), color: .teal, cornerRadius: 15, in: self.view, with: "Getting data plugs...", textColor: .white, font: UIFont(name: Constants.FontNames.openSans, size: 12)!)
         
         // get available data plugs from server
         HATDataPlugsService.getAvailableDataPlugs(succesfulCallBack: successfullCallBack, failCallBack: {(error) -> Void in
@@ -98,7 +95,8 @@ class DataPlugsCollectionViewController: UICollectionViewController, UICollectio
      
      - parameter notif: The notification object sent
      */
-    @objc private func showAlertForDataPlug(notif: Notification) {
+    @objc
+    private func showAlertForDataPlug(notif: Notification) {
         
         // check that safari is not nil, if it's not hide it
         self.safariVC?.dismissSafari(animated: true, completion: nil)
@@ -111,12 +109,12 @@ class DataPlugsCollectionViewController: UICollectionViewController, UICollectio
      */
     private func checkDataPlugsIfActive() {
         
-        func setupCheckMark(on: String, value: Bool) {
+        func setupCheckMark(onDataPlug: String, value: Bool) {
             
             // search in data plugs array for facebook and enable the checkmark
-            for i in 0 ... self.dataPlugs.count - 1 where self.dataPlugs.count > 1 {
+            if !self.dataPlugs.isEmpty {
                 
-                if self.dataPlugs[i].name == on {
+                for i in 0 ... self.dataPlugs.count - 1 where self.dataPlugs[i].name == onDataPlug {
                     
                     self.dataPlugs[i].showCheckMark = value
                     self.collectionView?.reloadData()
@@ -142,11 +140,14 @@ class DataPlugsCollectionViewController: UICollectionViewController, UICollectio
 
     override func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         
-        let cell = collectionView.dequeueReusableCell(withReuseIdentifier: Constants.CellReuseIDs.dataplug.rawValue, for: indexPath) as! DataPlugCollectionViewCell
-    
         let orientation = UIInterfaceOrientation(rawValue: UIDevice.current.orientation.rawValue)!
+
+        if let cell = collectionView.dequeueReusableCell(withReuseIdentifier: Constants.CellReuseIDs.dataplug, for: indexPath) as? DataPlugCollectionViewCell {
+            
+            return DataPlugCollectionViewCell.setUp(cell: cell, indexPath: indexPath, dataPlug: self.dataPlugs[indexPath.row], orientation: orientation)
+        }
         
-        return DataPlugCollectionViewCell.setUp(cell: cell, indexPath: indexPath, dataPlug: self.dataPlugs[indexPath.row], orientation: orientation)
+        return collectionView.dequeueReusableCell(withReuseIdentifier: Constants.CellReuseIDs.dataplug, for: indexPath)
     }
 
     override func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {

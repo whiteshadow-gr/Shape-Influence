@@ -15,17 +15,17 @@ import UIKit
 // MARK: Class
 
 /// The collection view cell class for data plugs screen
-class HomeCollectionViewCell: UICollectionViewCell {
+internal class HomeCollectionViewCell: UICollectionViewCell {
     
     // MARK: - IBOutlets
     
     /// The service's image
-    @IBOutlet weak var serviceImageView: UIImageView!
+    @IBOutlet private weak var serviceImageView: UIImageView!
     
     /// The name of the service
-    @IBOutlet weak var serviceNameLabel: UILabel!
+    @IBOutlet private weak var serviceNameLabel: UILabel!
     /// The description of the service
-    @IBOutlet weak var serviceDescriptionLabel: UILabel!
+    @IBOutlet private weak var serviceDescriptionLabel: UILabel!
     
     // MARK: - Set up cell
     
@@ -34,7 +34,8 @@ class HomeCollectionViewCell: UICollectionViewCell {
      
      - parameter cell: The UICollectionViewCell to set up
      - parameter indexPath: The index path of the cell
-     - parameter hatProvider: The object to take the values from
+     - parameter object: The HomeScreenObject to take the values from
+     - parameter orientation: The current orientation of the phone
      
      - returns: An UICollectionViewCell
      */
@@ -57,6 +58,7 @@ class HomeCollectionViewCell: UICollectionViewCell {
      
      - parameter indexPath: The index path of the cell
      - parameter orientation: The device current orientation
+     
      - returns: The color of the cell based on the index path and the device orientation
      */
     private class func backgroundColorOfCellForIndexPath(_ indexPath: IndexPath, in orientation: UIInterfaceOrientation) -> UIColor {
@@ -65,13 +67,13 @@ class HomeCollectionViewCell: UICollectionViewCell {
         if orientation.isPortrait {
             
             // create this zebra like color based on the index of the cell
-            if (indexPath.row % 4 == 0 ) {
+            if indexPath.row % 4 == 0 {
                 
                 return .rumpelDarkGray
-            } else if (indexPath.row % 4 == 3) {
+            } else if indexPath.row % 4 == 3 {
                 
                 return .rumpelLighterDarkGray
-            } else if (indexPath.row % 4 == 2) {
+            } else if indexPath.row % 4 == 2 {
                 
                 return .tealLight
             }
@@ -80,13 +82,13 @@ class HomeCollectionViewCell: UICollectionViewCell {
         } else {
             
             // create this zebra like color based on the index of the cell
-            if (indexPath.row % 6 == 0) {
+            if indexPath.row % 6 == 0 {
                 
                 return .rumpelDarkGray
-            } else if (indexPath.row % 6 == 3) {
+            } else if indexPath.row % 6 == 3 {
                 
                 return .tealLight
-            } else if (indexPath.row % 6 == 2) {
+            } else if indexPath.row % 6 == 2 {
                 
                 return .rumpelLighterDarkGray
             }

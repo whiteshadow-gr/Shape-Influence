@@ -64,6 +64,7 @@
 		603D55C11E69962E00CCEBEB /* UIPageViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 603D55C01E69962E00CCEBEB /* UIPageViewController.swift */; };
 		603D55C41E69ADBB00CCEBEB /* NSAttributedStringExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 603D55C31E69ADBB00CCEBEB /* NSAttributedStringExtension.swift */; };
 		603FDD511E43E7840086559B /* InfoHatProvidersViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 603FDD501E43E7840086559B /* InfoHatProvidersViewController.swift */; };
+		6041474B1EE0554A008C9293 /* DataOfferDetailsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6041474A1EE0554A008C9293 /* DataOfferDetailsViewController.swift */; };
 		60415B8F1EC4663A00CC5EE0 /* ZXCVBNHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 60415B8E1EC4663A00CC5EE0 /* ZXCVBNHelper.swift */; };
 		60415B941EC4CA0A00CC5EE0 /* FBAnotationsExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 60415B931EC4CA0A00CC5EE0 /* FBAnotationsExtension.swift */; };
 		6041B2041E49CECA00534955 /* Launch Screen2.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 6041B2031E49CECA00534955 /* Launch Screen2.storyboard */; };
@@ -94,6 +95,7 @@
 		6050E2E31ED2E990002AD0C9 /* DataStoreNationalityTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6050E2E21ED2E990002AD0C9 /* DataStoreNationalityTableViewController.swift */; };
 		6050E2E51ED2E9A4002AD0C9 /* DataStoreRelationshipAndHouseholdTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6050E2E41ED2E9A4002AD0C9 /* DataStoreRelationshipAndHouseholdTableViewController.swift */; };
 		6050E2E71ED2E9B4002AD0C9 /* DataStoreEducationTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6050E2E61ED2E9B4002AD0C9 /* DataStoreEducationTableViewController.swift */; };
+		6054B35A1EF970D4004BD104 /* SelectedPhotosProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6054B3591EF970D4004BD104 /* SelectedPhotosProtocol.swift */; };
 		6055D9831EC9F16E00461C75 /* UITableViewExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6055D9821EC9F16E00461C75 /* UITableViewExtension.swift */; };
 		605EE0341E8DBF8600B265F6 /* UpdateLocationsDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 605EE0331E8DBF8600B265F6 /* UpdateLocationsDelegate.swift */; };
 		605EE0361E8DC02F00B265F6 /* UpdateLocations.swift in Sources */ = {isa = PBXBuildFile; fileRef = 605EE0351E8DC02F00B265F6 /* UpdateLocations.swift */; };
@@ -122,6 +124,10 @@
 		60AFA1E81E9F6CE100AFA28B /* SendLocationDataDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 60AFA1E71E9F6CE100AFA28B /* SendLocationDataDelegate.swift */; };
 		60B486251E1D341000914AD2 /* PurchaseModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 60B486241E1D341000914AD2 /* PurchaseModel.swift */; };
 		60B486311E1D6E7B00914AD2 /* UIImageViewExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 60B486301E1D6E7B00914AD2 /* UIImageViewExtension.swift */; };
+		60BAEEB31EE01C23001F8381 /* DataOffersViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 60BAEEB21EE01C23001F8381 /* DataOffersViewController.swift */; };
+		60BAEEB51EE01CB1001F8381 /* DataOffersCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 60BAEEB41EE01CB1001F8381 /* DataOffersCollectionViewCell.swift */; };
+		60CC29A81EE97A6B0083C6D8 /* PhotosHeaderCollectionReusableView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 60CC29A71EE97A6B0083C6D8 /* PhotosHeaderCollectionReusableView.swift */; };
+		60CC29AB1EEAEFEF0083C6D8 /* HATImagesRealmObject.swift in Sources */ = {isa = PBXBuildFile; fileRef = 60CC29AA1EEAEFEF0083C6D8 /* HATImagesRealmObject.swift */; };
 		60CDCBEA1EAACA9500035882 /* PhataTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 60CDCBE91EAACA9500035882 /* PhataTableViewController.swift */; };
 		60CDCBEC1EAAE92500035882 /* PhataTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 60CDCBEB1EAAE92500035882 /* PhataTableViewCell.swift */; };
 		60CDCBF11EAAEA5500035882 /* NameTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 60CDCBF01EAAEA5500035882 /* NameTableViewController.swift */; };
@@ -231,6 +237,7 @@
 		603D55C01E69962E00CCEBEB /* UIPageViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = UIPageViewController.swift; sourceTree = "<group>"; };
 		603D55C31E69ADBB00CCEBEB /* NSAttributedStringExtension.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NSAttributedStringExtension.swift; sourceTree = "<group>"; };
 		603FDD501E43E7840086559B /* InfoHatProvidersViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = InfoHatProvidersViewController.swift; sourceTree = "<group>"; };
+		6041474A1EE0554A008C9293 /* DataOfferDetailsViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = DataOfferDetailsViewController.swift; path = "Data Offers/DataOfferDetailsViewController.swift"; sourceTree = "<group>"; };
 		60415B8E1EC4663A00CC5EE0 /* ZXCVBNHelper.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ZXCVBNHelper.swift; sourceTree = "<group>"; };
 		60415B931EC4CA0A00CC5EE0 /* FBAnotationsExtension.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FBAnotationsExtension.swift; sourceTree = "<group>"; };
 		6041B2031E49CECA00534955 /* Launch Screen2.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; path = "Launch Screen2.storyboard"; sourceTree = "<group>"; };
@@ -262,6 +269,7 @@
 		6050E2E21ED2E990002AD0C9 /* DataStoreNationalityTableViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = DataStoreNationalityTableViewController.swift; path = DataStore/DataStoreNationalityTableViewController.swift; sourceTree = "<group>"; };
 		6050E2E41ED2E9A4002AD0C9 /* DataStoreRelationshipAndHouseholdTableViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = DataStoreRelationshipAndHouseholdTableViewController.swift; path = DataStore/DataStoreRelationshipAndHouseholdTableViewController.swift; sourceTree = "<group>"; };
 		6050E2E61ED2E9B4002AD0C9 /* DataStoreEducationTableViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = DataStoreEducationTableViewController.swift; path = DataStore/DataStoreEducationTableViewController.swift; sourceTree = "<group>"; };
+		6054B3591EF970D4004BD104 /* SelectedPhotosProtocol.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SelectedPhotosProtocol.swift; sourceTree = "<group>"; };
 		6055D9821EC9F16E00461C75 /* UITableViewExtension.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = UITableViewExtension.swift; sourceTree = "<group>"; };
 		605EE0331E8DBF8600B265F6 /* UpdateLocationsDelegate.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = UpdateLocationsDelegate.swift; sourceTree = "<group>"; };
 		605EE0351E8DC02F00B265F6 /* UpdateLocations.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = UpdateLocations.swift; sourceTree = "<group>"; };
@@ -290,6 +298,10 @@
 		60AFA1E71E9F6CE100AFA28B /* SendLocationDataDelegate.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SendLocationDataDelegate.swift; sourceTree = "<group>"; };
 		60B486241E1D341000914AD2 /* PurchaseModel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PurchaseModel.swift; sourceTree = "<group>"; };
 		60B486301E1D6E7B00914AD2 /* UIImageViewExtension.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = UIImageViewExtension.swift; sourceTree = "<group>"; };
+		60BAEEB21EE01C23001F8381 /* DataOffersViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = DataOffersViewController.swift; path = "Data Offers/DataOffersViewController.swift"; sourceTree = "<group>"; };
+		60BAEEB41EE01CB1001F8381 /* DataOffersCollectionViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DataOffersCollectionViewCell.swift; sourceTree = "<group>"; };
+		60CC29A71EE97A6B0083C6D8 /* PhotosHeaderCollectionReusableView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PhotosHeaderCollectionReusableView.swift; sourceTree = "<group>"; };
+		60CC29AA1EEAEFEF0083C6D8 /* HATImagesRealmObject.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = HATImagesRealmObject.swift; path = "Realm Objects/HATImagesRealmObject.swift"; sourceTree = "<group>"; };
 		60CD68431E47C71300E60429 /* SwiftyJSON.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SwiftyJSON.framework; path = "../../../../../../Library/Developer/Xcode/DerivedData/hat-mobile-ios-frfzhyzzkbkdtfefxyylmuufmmbq/Build/Products/Debug-iphonesimulator/SwiftyJSON/SwiftyJSON.framework"; sourceTree = "<group>"; };
 		60CDCBE91EAACA9500035882 /* PhataTableViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PhataTableViewController.swift; sourceTree = "<group>"; };
 		60CDCBEB1EAAE92500035882 /* PhataTableViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PhataTableViewCell.swift; sourceTree = "<group>"; };
@@ -442,6 +454,7 @@
 		60103FB41EB4A9A800BBA065 /* Tab Bar Controller */ = {
 			isa = PBXGroup;
 			children = (
+				60BAEEB11EE01BFC001F8381 /* Data Offers */,
 				604AC7B71ECF57490066414E /* DataStore */,
 				60103FB51EB4A9F000BBA065 /* Data Plugs */,
 				60103FB61EB4AA0100BBA065 /* Home View Controller */,
@@ -543,7 +556,6 @@
 			children = (
 				606435DA1E1B196F001A5D14 /* DateExtension.swift */,
 				60415B931EC4CA0A00CC5EE0 /* FBAnotationsExtension.swift */,
-				6055D9821EC9F16E00461C75 /* UITableViewExtension.swift */,
 				60113D321E856EB2000EAF89 /* HATAccountServiceExtension.swift */,
 				60113D2E1E856BBA000EAF89 /* HATDataplugsServiceExtension.swift */,
 				60AAA5B71E83D70A0080D0D5 /* HATProviderObjectExtension.swift */,
@@ -555,9 +567,10 @@
 				602CB4451E8BAF3B00903F33 /* UIAlertControllerExtension.swift */,
 				6044931A1DE9FE5C00B2FE7B /* UIButtonExtension.swift */,
 				604237DE1E114F2D00E19109 /* UIColorExtension.swift */,
-				60B486301E1D6E7B00914AD2 /* UIImageViewExtension.swift */,
 				60EA32F01ECDECCA008ABD41 /* UIImageExtension.swift */,
+				60B486301E1D6E7B00914AD2 /* UIImageViewExtension.swift */,
 				603D55C01E69962E00CCEBEB /* UIPageViewController.swift */,
+				6055D9821EC9F16E00461C75 /* UITableViewExtension.swift */,
 				603D55BC1E69861D00CCEBEB /* UIViewExtension.swift */,
 				608EAAA71DFEA8AD00234C60 /* ViewControllerExtension.swift */,
 			);
@@ -571,6 +584,15 @@
 				6097C0651E3273E9000E771A /* Rumpel Lite iOS Application Terms of Service.pdf */,
 			);
 			path = Assets;
+			sourceTree = "<group>";
+		};
+		60BAEEB11EE01BFC001F8381 /* Data Offers */ = {
+			isa = PBXGroup;
+			children = (
+				60BAEEB21EE01C23001F8381 /* DataOffersViewController.swift */,
+				6041474A1EE0554A008C9293 /* DataOfferDetailsViewController.swift */,
+			);
+			name = "Data Offers";
 			sourceTree = "<group>";
 		};
 		60BB8F051EB335BD007E8045 /* Pop up View Controllers */ = {
@@ -591,6 +613,15 @@
 				603CE74B1DF7091500421429 /* ParentPageViewController.swift */,
 			);
 			path = "Learn More View Controllers";
+			sourceTree = "<group>";
+		};
+		60CC29A91EEAED5C0083C6D8 /* Realm Objects */ = {
+			isa = PBXGroup;
+			children = (
+				B59136871D19DC2700E9EDD0 /* DataPoint.swift */,
+				60CC29AA1EEAEFEF0083C6D8 /* HATImagesRealmObject.swift */,
+			);
+			name = "Realm Objects";
 			sourceTree = "<group>";
 		};
 		60CDCBED1EAAEA0000035882 /* More View Controller */ = {
@@ -627,11 +658,13 @@
 		60DD7F6E1E27CEF3000C1B1E /* CollectionView */ = {
 			isa = PBXGroup;
 			children = (
+				60BAEEB41EE01CB1001F8381 /* DataOffersCollectionViewCell.swift */,
 				60FAC76A1E223AA700532C01 /* DataPlugCollectionViewCell.swift */,
 				601142781E5F967D00A9D982 /* HomeCollectionViewCell.swift */,
 				603926D31E604C3500DC1816 /* HomeHeaderCollectionReusableView.swift */,
 				607C107A1E1BB6DE001D1E8E /* OnboardingTileCollectionViewCell.swift */,
 				602CB4491E8BF3AB00903F33 /* PhotosCollectionViewCell.swift */,
+				60CC29A71EE97A6B0083C6D8 /* PhotosHeaderCollectionReusableView.swift */,
 				60938DBF1E9CE60E0058F6CC /* ShareOptionsSelectedImageCollectionViewCell.swift */,
 				60D317681E35FE52008E0A5F /* SocialFeedCollectionViewCell.swift */,
 				603D3A721DE879E600C973D8 /* SocialImageCollectionViewCell.swift */,
@@ -746,8 +779,8 @@
 		B59136861D19DBFE00E9EDD0 /* Objects */ = {
 			isa = PBXGroup;
 			children = (
+				60CC29A91EEAED5C0083C6D8 /* Realm Objects */,
 				603926D01E603D1600DC1816 /* Home */,
-				B59136871D19DC2700E9EDD0 /* DataPoint.swift */,
 				6090D4671E3140D4004FD1E2 /* FutureTimeIntervalObject.swift */,
 				B56E2FA21D22D1C400546C7E /* JSONDataSourceRequestField.swift */,
 				603CE74D1DF85E1600421429 /* LearnMoreObject.swift */,
@@ -764,6 +797,7 @@
 				60938DBB1E9BA4190058F6CC /* PhotoPickerDelegate.swift */,
 				60AFA1E71E9F6CE100AFA28B /* SendLocationDataDelegate.swift */,
 				605EE0331E8DBF8600B265F6 /* UpdateLocationsDelegate.swift */,
+				6054B3591EF970D4004BD104 /* SelectedPhotosProtocol.swift */,
 				604EAC101EB8C5F20084EEC8 /* UserCredentialsProtocol.swift */,
 			);
 			path = Protocols;
@@ -796,6 +830,7 @@
 				6076A5971DEFACA700D83D42 /* ShellScript */,
 				4E1B908D4617D7C03004F3E7 /* [CP] Embed Pods Frameworks */,
 				BE9985A57514D67E05B3091A /* [CP] Copy Pods Resources */,
+				604E45FE1EFBD4CC0071347E /* ShellScript */,
 			);
 			buildRules = (
 			);
@@ -870,8 +905,11 @@
 							com.apple.BackgroundModes = {
 								enabled = 1;
 							};
+							com.apple.InAppPurchase = {
+								enabled = 0;
+							};
 							com.apple.Keychain = {
-								enabled = 1;
+								enabled = 0;
 							};
 							com.apple.Maps.iOS = {
 								enabled = 1;
@@ -999,9 +1037,36 @@
 			files = (
 			);
 			inputPaths = (
+				"${SRCROOT}/Pods/Target Support Files/Pods-hat-mobile-iosTests/Pods-hat-mobile-iosTests-frameworks.sh",
+				"${BUILT_PRODUCTS_DIR}/Alamofire/Alamofire.framework",
+				"${BUILT_PRODUCTS_DIR}/BEMCheckBox/BEMCheckBox.framework",
+				"${BUILT_PRODUCTS_DIR}/FBAnnotationClusteringSwift/FBAnnotationClusteringSwift.framework",
+				"${BUILT_PRODUCTS_DIR}/HatForIOS/HatForIOS.framework",
+				"${BUILT_PRODUCTS_DIR}/JWTDecode/JWTDecode.framework",
+				"${BUILT_PRODUCTS_DIR}/KeychainSwift/KeychainSwift.framework",
+				"${BUILT_PRODUCTS_DIR}/Realm/Realm.framework",
+				"${BUILT_PRODUCTS_DIR}/RealmSwift/RealmSwift.framework",
+				"${BUILT_PRODUCTS_DIR}/SwiftyJSON/SwiftyJSON.framework",
+				"${BUILT_PRODUCTS_DIR}/SwiftyRSA/SwiftyRSA.framework",
+				"${BUILT_PRODUCTS_DIR}/Toaster/Toaster.framework",
+				"${BUILT_PRODUCTS_DIR}/Mockingjay/Mockingjay.framework",
+				"${BUILT_PRODUCTS_DIR}/URITemplate/URITemplate.framework",
 			);
 			name = "[CP] Embed Pods Frameworks";
 			outputPaths = (
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/Alamofire.framework",
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/BEMCheckBox.framework",
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/FBAnnotationClusteringSwift.framework",
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/HatForIOS.framework",
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/JWTDecode.framework",
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/KeychainSwift.framework",
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/Realm.framework",
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/RealmSwift.framework",
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/SwiftyJSON.framework",
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/SwiftyRSA.framework",
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/Toaster.framework",
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/Mockingjay.framework",
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/URITemplate.framework",
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
@@ -1014,13 +1079,16 @@
 			files = (
 			);
 			inputPaths = (
+				"${PODS_PODFILE_DIR_PATH}/Podfile.lock",
+				"${PODS_ROOT}/Manifest.lock",
 			);
 			name = "[CP] Check Pods Manifest.lock";
 			outputPaths = (
+				"$(DERIVED_FILE_DIR)/Pods-hat-mobile-iosTests-checkManifestLockResult.txt",
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n";
+			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
 			showEnvVarsInLog = 0;
 		};
 		4E1B908D4617D7C03004F3E7 /* [CP] Embed Pods Frameworks */ = {
@@ -1029,14 +1097,52 @@
 			files = (
 			);
 			inputPaths = (
+				"${SRCROOT}/Pods/Target Support Files/Pods-hat-mobile-ios/Pods-hat-mobile-ios-frameworks.sh",
+				"${BUILT_PRODUCTS_DIR}/Alamofire/Alamofire.framework",
+				"${BUILT_PRODUCTS_DIR}/BEMCheckBox/BEMCheckBox.framework",
+				"${BUILT_PRODUCTS_DIR}/FBAnnotationClusteringSwift/FBAnnotationClusteringSwift.framework",
+				"${BUILT_PRODUCTS_DIR}/HatForIOS/HatForIOS.framework",
+				"${BUILT_PRODUCTS_DIR}/JWTDecode/JWTDecode.framework",
+				"${BUILT_PRODUCTS_DIR}/KeychainSwift/KeychainSwift.framework",
+				"${BUILT_PRODUCTS_DIR}/Realm/Realm.framework",
+				"${BUILT_PRODUCTS_DIR}/RealmSwift/RealmSwift.framework",
+				"${BUILT_PRODUCTS_DIR}/SwiftyJSON/SwiftyJSON.framework",
+				"${BUILT_PRODUCTS_DIR}/SwiftyRSA/SwiftyRSA.framework",
+				"${BUILT_PRODUCTS_DIR}/Toaster/Toaster.framework",
+				"${BUILT_PRODUCTS_DIR}/zxcvbn-ios/zxcvbn_ios.framework",
 			);
 			name = "[CP] Embed Pods Frameworks";
 			outputPaths = (
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/Alamofire.framework",
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/BEMCheckBox.framework",
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/FBAnnotationClusteringSwift.framework",
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/HatForIOS.framework",
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/JWTDecode.framework",
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/KeychainSwift.framework",
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/Realm.framework",
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/RealmSwift.framework",
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/SwiftyJSON.framework",
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/SwiftyRSA.framework",
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/Toaster.framework",
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/zxcvbn_ios.framework",
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
 			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-hat-mobile-ios/Pods-hat-mobile-ios-frameworks.sh\"\n";
 			showEnvVarsInLog = 0;
+		};
+		604E45FE1EFBD4CC0071347E /* ShellScript */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${PODS_ROOT}/SwiftLint/swiftlint\"";
 		};
 		6076A5971DEFACA700D83D42 /* ShellScript */ = {
 			isa = PBXShellScriptBuildPhase;
@@ -1072,13 +1178,16 @@
 			files = (
 			);
 			inputPaths = (
+				"${PODS_PODFILE_DIR_PATH}/Podfile.lock",
+				"${PODS_ROOT}/Manifest.lock",
 			);
 			name = "[CP] Check Pods Manifest.lock";
 			outputPaths = (
+				"$(DERIVED_FILE_DIR)/Pods-hat-mobile-ios-checkManifestLockResult.txt",
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n";
+			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
 			showEnvVarsInLog = 0;
 		};
 		B7A88E34CFB8B0481FD46E0D /* [CP] Check Pods Manifest.lock */ = {
@@ -1087,13 +1196,16 @@
 			files = (
 			);
 			inputPaths = (
+				"${PODS_PODFILE_DIR_PATH}/Podfile.lock",
+				"${PODS_ROOT}/Manifest.lock",
 			);
 			name = "[CP] Check Pods Manifest.lock";
 			outputPaths = (
+				"$(DERIVED_FILE_DIR)/Pods-hat-mobile-iosUITests-checkManifestLockResult.txt",
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n";
+			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
 			showEnvVarsInLog = 0;
 		};
 		BE9985A57514D67E05B3091A /* [CP] Copy Pods Resources */ = {
@@ -1149,6 +1261,7 @@
 				6028B4F31EA616B800018D49 /* MoreTableViewController.swift in Sources */,
 				6041B20D1DD4AC040018CC31 /* NotablesViewController.swift in Sources */,
 				60938DBE1E9BD2750058F6CC /* PhotoFullScreenViewerViewController.swift in Sources */,
+				6041474B1EE0554A008C9293 /* DataOfferDetailsViewController.swift in Sources */,
 				60B486311E1D6E7B00914AD2 /* UIImageViewExtension.swift in Sources */,
 				60CDCC0F1EAB798A00035882 /* AddressTableViewController.swift in Sources */,
 				604D68DE1DFAD2B300D7FFED /* HATCapabilitiesPageViewController.swift in Sources */,
@@ -1170,7 +1283,9 @@
 				601FFD791E3A7E3600441EAD /* FirstOnboardingViewController.swift in Sources */,
 				6041DB0B1E2914EA00FF6D32 /* CustomSwitch.swift in Sources */,
 				604504D31EAE0DBB003B76C3 /* ProfileInfoTableViewController.swift in Sources */,
+				60CC29AB1EEAEFEF0083C6D8 /* HATImagesRealmObject.swift in Sources */,
 				603A10071E720FA0003B62D4 /* SafariViewControllerExtension.swift in Sources */,
+				6054B35A1EF970D4004BD104 /* SelectedPhotosProtocol.swift in Sources */,
 				60AFA1E81E9F6CE100AFA28B /* SendLocationDataDelegate.swift in Sources */,
 				6044B2181DDB3151003A1263 /* TabBarViewController.swift in Sources */,
 				6097C0691E327506000E771A /* TermsAndConditionsViewController.swift in Sources */,
@@ -1190,6 +1305,7 @@
 				605EE0341E8DBF8600B265F6 /* UpdateLocationsDelegate.swift in Sources */,
 				60CDCC0D1EAB760F00035882 /* PhoneTableViewController.swift in Sources */,
 				608EAAA81DFEA8AD00234C60 /* ViewControllerExtension.swift in Sources */,
+				60BAEEB51EE01CB1001F8381 /* DataOffersCollectionViewCell.swift in Sources */,
 				60A727BD1DDF47ED008AF409 /* FormatterHelper.swift in Sources */,
 				60CDCBEA1EAACA9500035882 /* PhataTableViewController.swift in Sources */,
 				60F1D7E71E6828DA0009CF1F /* AuthenticationHelper.swift in Sources */,
@@ -1205,6 +1321,7 @@
 				603D55BF1E69879300CCEBEB /* LabelExtension.swift in Sources */,
 				60FAC76B1E223AA700532C01 /* DataPlugCollectionViewCell.swift in Sources */,
 				B59136881D19DC2700E9EDD0 /* DataPoint.swift in Sources */,
+				60BAEEB31EE01C23001F8381 /* DataOffersViewController.swift in Sources */,
 				602CB44A1E8BF3AB00903F33 /* PhotosCollectionViewCell.swift in Sources */,
 				60B486251E1D341000914AD2 /* PurchaseModel.swift in Sources */,
 				6045FBBE1E2EDAE300086926 /* LearnMorePHATAViewController.swift in Sources */,
@@ -1221,6 +1338,7 @@
 				60275BA01E6DB3740098B66C /* TextPopUpViewController.swift in Sources */,
 				605EE03C1E92A5BF00B265F6 /* PhotosHelper.swift in Sources */,
 				B51CC9281D1D7895000C9E48 /* LoginViewController.swift in Sources */,
+				60CC29A81EE97A6B0083C6D8 /* PhotosHeaderCollectionReusableView.swift in Sources */,
 				6041B2101DD4AC190018CC31 /* NotablesTableViewCell.swift in Sources */,
 				60D317691E35FE52008E0A5F /* SocialFeedCollectionViewCell.swift in Sources */,
 				60415B8F1EC4663A00CC5EE0 /* ZXCVBNHelper.swift in Sources */,
@@ -1385,7 +1503,6 @@
 			buildSettings = {
 				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = "$(inherited)";
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
-				CODE_SIGN_ENTITLEMENTS = "hat-mobile-ios/hat-mobile-ios.entitlements";
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
@@ -1398,6 +1515,7 @@
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE = "";
 				PROVISIONING_PROFILE_SPECIFIER = "";
+				RUN_CLANG_STATIC_ANALYZER = NO;
 				SWIFT_VERSION = 3.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
 			};
@@ -1409,7 +1527,6 @@
 			buildSettings = {
 				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = "$(inherited)";
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
-				CODE_SIGN_ENTITLEMENTS = "hat-mobile-ios/hat-mobile-ios.entitlements";
 				CODE_SIGN_IDENTITY = "iPhone Distribution: HAT Data Exchange Ltd. (84XHE3A5BA)";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				DEVELOPMENT_TEAM = 84XHE3A5BA;
@@ -1421,6 +1538,7 @@
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE = "";
 				PROVISIONING_PROFILE_SPECIFIER = "";
+				RUN_CLANG_STATIC_ANALYZER = NO;
 				SWIFT_VERSION = 3.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
 			};

@@ -16,9 +16,9 @@ import SwiftyJSON
 
 /// A class representing the data plug dataset from data plug JSON file
 public struct HATDataPlugDataSetObject: Comparable {
-    
+
     // MARK: - Comparable protocol
-    
+
     /// Returns a Boolean value indicating whether two values are equal.
     ///
     /// Equality is the inverse of inequality. For any values `a` and `b`,
@@ -27,11 +27,11 @@ public struct HATDataPlugDataSetObject: Comparable {
     /// - Parameters:
     ///   - lhs: A value to compare.
     ///   - rhs: Another value to compare.
-    public static func ==(lhs: HATDataPlugDataSetObject, rhs: HATDataPlugDataSetObject) -> Bool {
-        
+    public static func == (lhs: HATDataPlugDataSetObject, rhs: HATDataPlugDataSetObject) -> Bool {
+
         return (lhs.name == rhs.name && lhs.description == rhs.description && lhs.fields == rhs.fields)
     }
-    
+
     /// Returns a Boolean value indicating whether the value of the first
     /// argument is less than that of the second argument.
     ///
@@ -42,48 +42,47 @@ public struct HATDataPlugDataSetObject: Comparable {
     /// - Parameters:
     ///   - lhs: A value to compare.
     ///   - rhs: Another value to compare.
-    public static func <(lhs: HATDataPlugDataSetObject, rhs: HATDataPlugDataSetObject) -> Bool {
-        
+    public static func < (lhs: HATDataPlugDataSetObject, rhs: HATDataPlugDataSetObject) -> Bool {
+
         return lhs.name < rhs.name
     }
-    
     // MARK: - Variables
 
     /// The name of the dataset
     public var name: String = ""
     /// The description of the dataset
     public var description: String = ""
-    
+
     /// The fields of the dataset
     public var fields: [HATDataPlugDataSetObject] = []
-    
+
     // MARK: - Initialiazers
-    
+
     /**
      The default initialiser. Initialises everything to default values.
      */
     public init() {
-        
+
         name = ""
         description = ""
         fields = []
     }
-    
+
     /**
      It initialises everything from the received JSON file from the HAT
      */
     public init(dict: Dictionary<String, JSON>) {
-                
+
         if let tempName = (dict["name"]?.stringValue) {
-            
+
             name = tempName
         }
         if let tempDescription = (dict["description"]?.stringValue) {
-            
+
             description = tempDescription
         }
         if let tempFields = (dict["fields"]?.dictionaryValue) {
-            
+
             fields = [HATDataPlugDataSetObject(dict: tempFields)]
         }
     }

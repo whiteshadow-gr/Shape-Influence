@@ -15,7 +15,7 @@ import HatForIOS
 // MARK: Class
 
 /// A class responsible for the social links UITableViewController of the PHATA section
-class SocialLinksTableViewController: UITableViewController, UserCredentialsProtocol {
+internal class SocialLinksTableViewController: UITableViewController, UserCredentialsProtocol {
     
     // MARK: - Variables
 
@@ -29,7 +29,7 @@ class SocialLinksTableViewController: UITableViewController, UserCredentialsProt
     private var darkView: UIView = UIView()
     
     /// User's profile passed on from previous view controller
-    var profile: HATProfileObject? = nil
+    var profile: HATProfileObject?
     
     // MARK: - IBActions
     
@@ -46,112 +46,125 @@ class SocialLinksTableViewController: UITableViewController, UserCredentialsProt
         
         self.view.addSubview(self.darkView)
         
-        self.loadingView = UIView.createLoadingView(with: CGRect(x: (self.view?.frame.midX)! - 70, y: (self.view?.frame.midY)! - 15, width: 140, height: 30), color: .teal, cornerRadius: 15, in: self.view, with: "Updating profile...", textColor: .white, font: UIFont(name: "OpenSans", size: 12)!)
+        self.loadingView = UIView.createLoadingView(with: CGRect(x: (self.view?.frame.midX)! - 70, y: (self.view?.frame.midY)! - 15, width: 140, height: 30), color: .teal, cornerRadius: 15, in: self.view, with: "Updating profile...", textColor: .white, font: UIFont(name: Constants.FontNames.openSans, size: 12)!)
         
-        for (index, _) in self.headers.enumerated() {
+        for index in self.headers.indices {
             
             var cell = self.tableView.cellForRow(at: IndexPath(row: 0, section: index)) as? PhataTableViewCell
             
             if cell == nil {
                 
                 let indexPath = IndexPath(row: 0, section: index)
-                cell = tableView.dequeueReusableCell(withIdentifier: "socialLinksCell", for: indexPath) as? PhataTableViewCell
+                cell = tableView.dequeueReusableCell(withIdentifier: Constants.CellReuseIDs.socialLinksCell, for: indexPath) as? PhataTableViewCell
                 cell = self.setUpCell(cell: cell!, indexPath: indexPath) as? PhataTableViewCell
             }
             
             // website
             if index == 0 {
                 
-                profile?.data.website.link = cell!.textField.text!
-                profile?.data.website.isPrivate = !((cell?.privateSwitch.isOn)!)
-                if (profile?.data.isPrivate)! && cell!.privateSwitch.isOn {
+                profile?.data.website.link = cell!.getTextFromTextField()
+                profile?.data.website.isPrivate = !cell!.getSwitchValue()
+                if (profile?.data.isPrivate)! && cell!.getSwitchValue() {
                     
                     profile?.data.isPrivate = false
                 }
             // blog
             } else if index == 1 {
                 
-                profile?.data.blog.link = cell!.textField.text!
-                profile?.data.blog.isPrivate = !((cell?.privateSwitch.isOn)!)
-                if (profile?.data.isPrivate)! && cell!.privateSwitch.isOn {
+                profile?.data.blog.link = cell!.getTextFromTextField()
+                profile?.data.blog.isPrivate = !cell!.getSwitchValue()
+                if (profile?.data.isPrivate)! && cell!.getSwitchValue() {
                     
                     profile?.data.isPrivate = false
                 }
             // facebook
             } else if index == 2 {
                 
-                profile?.data.facebook.link = cell!.textField.text!
-                profile?.data.facebook.isPrivate = !((cell?.privateSwitch.isOn)!)
-                if (profile?.data.isPrivate)! && cell!.privateSwitch.isOn {
+                profile?.data.facebook.link = cell!.getTextFromTextField()
+                profile?.data.facebook.isPrivate = !cell!.getSwitchValue()
+                if (profile?.data.isPrivate)! && cell!.getSwitchValue() {
                     
                     profile?.data.isPrivate = false
                 }
             // twitter
             } else if index == 3 {
                 
-                profile?.data.twitter.link = cell!.textField.text!
-                profile?.data.twitter.isPrivate = !((cell?.privateSwitch.isOn)!)
-                if (profile?.data.isPrivate)! && cell!.privateSwitch.isOn {
+                profile?.data.twitter.link = cell!.getTextFromTextField()
+                profile?.data.twitter.isPrivate = !cell!.getSwitchValue()
+                if (profile?.data.isPrivate)! && cell!.getSwitchValue() {
                     
                     profile?.data.isPrivate = false
                 }
             // google
             } else if index == 4 {
                 
-                profile?.data.google.link = cell!.textField.text!
-                profile?.data.google.isPrivate = !((cell?.privateSwitch.isOn)!)
-                if (profile?.data.isPrivate)! && cell!.privateSwitch.isOn {
+                profile?.data.google.link = cell!.getTextFromTextField()
+                profile?.data.google.isPrivate = !cell!.getSwitchValue()
+                if (profile?.data.isPrivate)! && cell!.getSwitchValue() {
                     
                     profile?.data.isPrivate = false
                 }
             // linked in
             } else if index == 5 {
                 
-                profile?.data.linkedIn.link = cell!.textField.text!
-                profile?.data.linkedIn.isPrivate = !((cell?.privateSwitch.isOn)!)
-                if (profile?.data.isPrivate)! && cell!.privateSwitch.isOn {
+                profile?.data.linkedIn.link = cell!.getTextFromTextField()
+                profile?.data.linkedIn.isPrivate = !cell!.getSwitchValue()
+                if (profile?.data.isPrivate)! && cell!.getSwitchValue() {
                     
                     profile?.data.isPrivate = false
                 }
             // youtube
             } else if index == 6 {
                 
-                profile?.data.youtube.link = cell!.textField.text!
-                profile?.data.youtube.isPrivate = !((cell?.privateSwitch.isOn)!)
-                if (profile?.data.isPrivate)! && cell!.privateSwitch.isOn {
+                profile?.data.youtube.link = cell!.getTextFromTextField()
+                profile?.data.youtube.isPrivate = !cell!.getSwitchValue()
+                if (profile?.data.isPrivate)! && cell!.getSwitchValue() {
                     
                     profile?.data.isPrivate = false
                 }
-            } 
+            }
         }
         
         func tableExists(dict: Dictionary<String, Any>, renewedUserToken: String?) {
             
-            HATPhataService.postProfile(userDomain: userDomain, userToken: userToken, hatProfile: self.profile!, successCallBack: {
+            HATPhataService.postProfile(
+                userDomain: userDomain,
+                userToken: userToken,
+                hatProfile: self.profile!,
+                successCallBack: {
                 
-                self.loadingView.removeFromSuperview()
-                self.darkView.removeFromSuperview()
+                    self.loadingView.removeFromSuperview()
+                    self.darkView.removeFromSuperview()
+                    
+                    _ = self.navigationController?.popViewController(animated: true)
+                },
+                errorCallback: { error in
                 
-                _ = self.navigationController?.popViewController(animated: true)
-            }, errorCallback: {error in
-                
-                self.loadingView.removeFromSuperview()
-                self.darkView.removeFromSuperview()
-                
-                self.createClassicOKAlertWith(alertMessage: "There was an error posting profile", alertTitle: "Error", okTitle: "OK", proceedCompletion: {})
-                _ = CrashLoggerHelper.hatTableErrorLog(error: error)
-            })
+                    self.loadingView.removeFromSuperview()
+                    self.darkView.removeFromSuperview()
+                    
+                    self.createClassicOKAlertWith(alertMessage: "There was an error posting profile", alertTitle: "Error", okTitle: "OK", proceedCompletion: {})
+                    _ = CrashLoggerHelper.hatTableErrorLog(error: error)
+                }
+            )
         }
         
-        HATAccountService.checkHatTableExistsForUploading(userDomain: userDomain, tableName: "profile", sourceName: "rumpel", authToken: userToken, successCallback: tableExists, errorCallback: {error in
+        HATAccountService.checkHatTableExistsForUploading(
+            userDomain: userDomain,
+            tableName: Constants.HATTableName.Profile.name,
+            sourceName: Constants.HATTableName.Profile.source,
+            authToken: userToken,
+            successCallback: tableExists,
+            errorCallback: { error in
             
-            self.loadingView.removeFromSuperview()
-            self.darkView.removeFromSuperview()
-            
-            self.createClassicOKAlertWith(alertMessage: "There was an error checking if it's possible to post the data", alertTitle: "Error", okTitle: "OK", proceedCompletion: {})
-            
-            _ = CrashLoggerHelper.hatTableErrorLog(error: error)
-        })
+                self.loadingView.removeFromSuperview()
+                self.darkView.removeFromSuperview()
+                
+                self.createClassicOKAlertWith(alertMessage: "There was an error checking if it's possible to post the data", alertTitle: "Error", okTitle: "OK", proceedCompletion: {})
+                
+                _ = CrashLoggerHelper.hatTableErrorLog(error: error)
+            }
+        )
     }
     
     // MARK: - View Controller methods
@@ -187,9 +200,12 @@ class SocialLinksTableViewController: UITableViewController, UserCredentialsProt
     
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         
-        let cell = tableView.dequeueReusableCell(withIdentifier: "socialLinksCell", for: indexPath) as! PhataTableViewCell
+        if let cell = tableView.dequeueReusableCell(withIdentifier: Constants.CellReuseIDs.socialLinksCell, for: indexPath) as? PhataTableViewCell {
+            
+            return self.setUpCell(cell: cell, indexPath: indexPath)
+        }
         
-        return self.setUpCell(cell: cell, indexPath: indexPath)
+        return tableView.dequeueReusableCell(withIdentifier: Constants.CellReuseIDs.socialLinksCell, for: indexPath)
     }
     
     override func tableView(_ tableView: UITableView, titleForHeaderInSection section: Int) -> String? {
@@ -209,41 +225,39 @@ class SocialLinksTableViewController: UITableViewController, UserCredentialsProt
      */
     private func setUpCell(cell: PhataTableViewCell, indexPath: IndexPath) -> UITableViewCell {
         
-        if indexPath.section == 0 {
+        if self.profile != nil {
             
-            cell.textField.text = self.profile?.data.website.link
-            cell.privateSwitch.isOn = !(self.profile?.data.website.isPrivate)!
-            cell.textField.keyboardType = .emailAddress
-        } else if indexPath.section == 1 {
+            if indexPath.section == 0 {
+                
+                cell.setTextToTextField(text: self.profile!.data.website.link)
+                cell.setSwitchValue(isOn: !self.profile!.data.website.isPrivate)
+            } else if indexPath.section == 1 {
+                
+                cell.setTextToTextField(text: self.profile!.data.blog.link)
+                cell.setSwitchValue(isOn: !self.profile!.data.blog.isPrivate)
+            } else if indexPath.section == 2 {
+                
+                cell.setTextToTextField(text: self.profile!.data.facebook.link)
+                cell.setSwitchValue(isOn: !self.profile!.data.facebook.isPrivate)
+            } else if indexPath.section == 3 {
+                
+                cell.setTextToTextField(text: self.profile!.data.twitter.link)
+                cell.setSwitchValue(isOn: !self.profile!.data.twitter.isPrivate)
+            } else if indexPath.section == 4 {
+                
+                cell.setTextToTextField(text: self.profile!.data.google.link)
+                cell.setSwitchValue(isOn: !self.profile!.data.google.isPrivate)
+            } else if indexPath.section == 5 {
+                
+                cell.setTextToTextField(text: self.profile!.data.linkedIn.link)
+                cell.setSwitchValue(isOn: !self.profile!.data.linkedIn.isPrivate)
+            } else if indexPath.section == 6 {
+                
+                cell.setTextToTextField(text: self.profile!.data.youtube.link)
+                cell.setSwitchValue(isOn: !self.profile!.data.youtube.isPrivate)
+            }
             
-            cell.textField.text = self.profile?.data.blog.link
-            cell.privateSwitch.isOn = !(self.profile?.data.blog.isPrivate)!
-            cell.textField.keyboardType = .emailAddress
-        } else if indexPath.section == 2 {
-            
-            cell.textField.text = self.profile?.data.facebook.link
-            cell.privateSwitch.isOn = !(self.profile?.data.facebook.isPrivate)!
-            cell.textField.keyboardType = .emailAddress
-        } else if indexPath.section == 3 {
-            
-            cell.textField.text = self.profile?.data.twitter.link
-            cell.privateSwitch.isOn = !(self.profile?.data.twitter.isPrivate)!
-            cell.textField.keyboardType = .emailAddress
-        } else if indexPath.section == 4 {
-            
-            cell.textField.text = self.profile?.data.google.link
-            cell.privateSwitch.isOn = !(self.profile?.data.google.isPrivate)!
-            cell.textField.keyboardType = .emailAddress
-        } else if indexPath.section == 5 {
-            
-            cell.textField.text = self.profile?.data.linkedIn.link
-            cell.privateSwitch.isOn = !(self.profile?.data.linkedIn.isPrivate)!
-            cell.textField.keyboardType = .emailAddress
-        } else if indexPath.section == 6 {
-            
-            cell.textField.text = self.profile?.data.youtube.link
-            cell.privateSwitch.isOn = !(self.profile?.data.youtube.isPrivate)!
-            cell.textField.keyboardType = .emailAddress
+            cell.setKeyboardType(.emailAddress)
         }
         
         return cell

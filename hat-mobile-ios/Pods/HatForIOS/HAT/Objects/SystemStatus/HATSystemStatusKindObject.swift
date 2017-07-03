@@ -16,9 +16,9 @@ import SwiftyJSON
 
 /// A class representing the system status kind object
 public struct HATSystemStatusKindObject: Comparable {
-    
+
     // MARK: - Comparable protocol
-    
+
     /// Returns a Boolean value indicating whether two values are equal.
     ///
     /// Equality is the inverse of inequality. For any values `a` and `b`,
@@ -27,11 +27,11 @@ public struct HATSystemStatusKindObject: Comparable {
     /// - Parameters:
     ///   - lhs: A value to compare.
     ///   - rhs: Another value to compare.
-    public static func ==(lhs: HATSystemStatusKindObject, rhs: HATSystemStatusKindObject) -> Bool {
-        
+    public static func == (lhs: HATSystemStatusKindObject, rhs: HATSystemStatusKindObject) -> Bool {
+
         return (lhs.metric == rhs.metric && lhs.kind == rhs.kind && lhs.units == rhs.units)
     }
-    
+
     /// Returns a Boolean value indicating whether the value of the first
     /// argument is less than that of the second argument.
     ///
@@ -42,11 +42,11 @@ public struct HATSystemStatusKindObject: Comparable {
     /// - Parameters:
     ///   - lhs: A value to compare.
     ///   - rhs: Another value to compare.
-    public static func <(lhs: HATSystemStatusKindObject, rhs: HATSystemStatusKindObject) -> Bool {
-        
+    public static func < (lhs: HATSystemStatusKindObject, rhs: HATSystemStatusKindObject) -> Bool {
+
         return lhs.metric < rhs.metric && lhs.kind == rhs.kind
     }
-    
+
     // MARK: - Variables
 
     /// The value of the object
@@ -54,37 +54,37 @@ public struct HATSystemStatusKindObject: Comparable {
     /// The kind of the value of the object
     public var kind: String = ""
     /// The unit type of the value of the object
-    public var units: String? = nil
-    
+    public var units: String?
+
     // MARK: - Initialisers
-    
+
     /**
      The default initialiser. Initialises everything to default values.
      */
     public init() {
-        
+
         metric = ""
         kind = ""
         units = nil
     }
-    
+
     /**
      It initialises everything from the received JSON file from the HAT
      */
     public init(from dictionary: Dictionary<String, JSON>) {
-        
+
         self.init()
-        
+
         if let tempMetric = dictionary["metric"]?.stringValue {
-            
+
             metric = tempMetric
         }
         if let tempKind = dictionary["kind"]?.stringValue {
-            
+
             kind = tempKind
         }
         if let tempUnits = dictionary["units"]?.stringValue {
-            
+
             units = tempUnits
         }
     }

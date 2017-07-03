@@ -24,7 +24,7 @@ extension UIButton {
      - parameter width: The width as a CGFloat
      - parameter color: The color of the border
      */
-    public func addBorderToButton(width: CGFloat, color: UIColor) -> Void {
+    public func addBorderToButton(width: CGFloat, color: UIColor) {
         
         self.layer.borderWidth = width
         self.layer.borderColor = color.cgColor

@@ -25,9 +25,10 @@ extension SFSafariViewController {
      - parameter viewController: The view controller to present the safari
      - parameter animated: A bool value to enable or disable the animated presentation
      - parameter completion: An optional completion handler to execute some code after presenting the safari
+     
      - returns: An optional SFSafariViewController. In case the string cannot be converted to URL return nil, else returns the SFSafariViewController
      */
-    class func openInSafari(url: String, on viewController: UIViewController, animated: Bool, completion: ((Void) -> Void)?) -> SFSafariViewController? {
+    class func openInSafari(url: String, on viewController: UIViewController, animated: Bool, completion: (() -> Void)?) -> SFSafariViewController? {
         
         if let authURL = URL(string: url) {
             
@@ -49,7 +50,7 @@ extension SFSafariViewController {
      - parameter animated: A Bool value to dermine if the presenting of the safari will be animated or not
      - parameter completion: An optional function of type (Void) -> Void)? to execute on completion
      */
-    func dismissSafari(animated: Bool, completion: ((Void) -> Void)?) {
+    func dismissSafari(animated: Bool, completion: (() -> Void)?) {
         
         self.dismiss(animated: animated, completion: completion)
         self.removeFromParentViewController()

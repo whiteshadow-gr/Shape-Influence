@@ -1,4 +1,4 @@
-    /**
+/**
  * Copyright (C) 2017 HAT Data Exchange Ltd
  *
  * SPDX-License-Identifier: MPL2
@@ -10,19 +10,19 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/
  */
 
-import Fabric
 import Crashlytics
+import Fabric
 import UIKit
 
 // MARK: Class
 
 @UIApplicationMain
-class AppDelegate: UIResponder, UIApplicationDelegate {
+internal class AppDelegate: UIResponder, UIApplicationDelegate {
     
     // MARK: - Variables
     
     var window: UIWindow?
-    let locationManager = UpdateLocations.shared
+    let locationManager: UpdateLocations = UpdateLocations.shared
     
     // MARK: - App Delegate methods
     
@@ -50,14 +50,14 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         let notificationSettings = UIUserNotificationSettings(types: [.alert, .sound], categories: nil)
         UIApplication.shared.registerUserNotificationSettings(notificationSettings)
         
-        self.window?.tintColor = Constants.Colours.AppBase
+        self.window?.tintColor = .appBase
         
         UINavigationBar.appearance().isOpaque = true
         UINavigationBar.appearance().barTintColor = .teal
         UINavigationBar.appearance().tintColor = .white
-        UINavigationBar.appearance().titleTextAttributes = [NSForegroundColorAttributeName: UIColor.white, NSFontAttributeName : UIFont(name: "OpenSans", size: 20)!]
+        UINavigationBar.appearance().titleTextAttributes = [NSForegroundColorAttributeName: UIColor.white, NSFontAttributeName: UIFont(name: "OpenSans", size: 20)!]
         UIBarButtonItem.appearance()
-            .setTitleTextAttributes([NSForegroundColorAttributeName: UIColor.white, NSFontAttributeName : UIFont(name: "OpenSans", size: 17)!], for: UIControlState.normal)
+            .setTitleTextAttributes([NSForegroundColorAttributeName: UIColor.white, NSFontAttributeName: UIFont(name: "OpenSans", size: 17)!], for: UIControlState.normal)
         
         return true
     }
@@ -66,7 +66,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         
         let taskID = beginBackgroundUpdateTask()
         let syncHelper = SyncDataHelper()
-        if syncHelper.CheckNextBlockToSync() == true {
+        if syncHelper.checkNextBlockToSync() == true {
             
             completionHandler(.newData)
         } else {
@@ -87,7 +87,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     }
     
     func applicationWillEnterForeground(_ application: UIApplication) {
-        // Called as part of the transition from the background to the inactive state; here you can undo many of the changes made on entering the background.        
+        // Called as part of the transition from the background to the inactive state; here you can undo many of the changes made on entering the background.
     }
     
     func applicationDidBecomeActive(_ application: UIApplication) {
@@ -113,17 +113,17 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         
         if let urlHost: String = url.host {
             
-            if urlHost == Constants.Auth.LocalAuthHost {
+            if urlHost == Constants.Auth.localAuthHost {
                 
-                let result = KeychainHelper.GetKeychainValue(key: "logedIn")
-                if (result == "expired") {
+                let result = KeychainHelper.getKeychainValue(key: "logedIn")
+                if result == "expired" {
                     
                     NotificationCenter.default.post(name: Notification.Name("reauthorisedUser"), object: url)
-                } else if (result == "false") {
+                } else if result == "false" {
                     
-                    let notification = Notification.Name(Constants.Auth.NotificationHandlerName)
+                    let notification = Notification.Name(Constants.Auth.notificationHandlerName)
                     NotificationCenter.default.post(name: notification, object: url)
-                    _ = KeychainHelper.SetKeychainValue(key: "logedIn", value: "true")
+                    _ = KeychainHelper.setKeychainValue(key: "logedIn", value: "true")
                 }
             } else if urlHost == "dataplugsapphost" {
                 
@@ -139,9 +139,9 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     /**
      Check if we need to purge old data. 7 Days
      */
-    private func purgeUsingPredicate() -> Void {
+    private func purgeUsingPredicate() {
         
-        let lastWeek = Date().addingTimeInterval(FutureTimeInterval.init(days: Constants.PurgeData.OlderThan, timeType: TimeType.past).interval)
+        let lastWeek = Date().addingTimeInterval(FutureTimeInterval.init(days: Constants.PurgeData.olderThan, timeType: TimeType.past).interval)
         let predicate = NSPredicate(format: "dateAdded <= %@", lastWeek as CVarArg)
         
         // use _ to get rid of result is unused warnings

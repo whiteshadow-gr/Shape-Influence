@@ -15,7 +15,7 @@ import HatForIOS
 // MARK: Class
 
 /// A class responsible for the profile contact info, in dataStore ViewController
-class DataStoreContactInfoTableViewController: UITableViewController, UserCredentialsProtocol {
+internal class DataStoreContactInfoTableViewController: UITableViewController, UserCredentialsProtocol {
     
     // MARK: - Variables
     
@@ -30,7 +30,7 @@ class DataStoreContactInfoTableViewController: UITableViewController, UserCreden
     private var darkView: UIView = UIView()
     
     /// The profile, used in PHATA table
-    var profile: HATProfileObject? = nil
+    var profile: HATProfileObject?
     
     // MARK: - IBAction
 
@@ -47,69 +47,82 @@ class DataStoreContactInfoTableViewController: UITableViewController, UserCreden
         
         self.view.addSubview(self.darkView)
         
-        self.loadingView = UIView.createLoadingView(with: CGRect(x: (self.view?.frame.midX)! - 70, y: (self.view?.frame.midY)! - 15, width: 140, height: 30), color: .teal, cornerRadius: 15, in: self.view, with: "Updating profile...", textColor: .white, font: UIFont(name: "OpenSans", size: 12)!)
+        self.loadingView = UIView.createLoadingView(with: CGRect(x: (self.view?.frame.midX)! - 70, y: (self.view?.frame.midY)! - 15, width: 140, height: 30), color: .teal, cornerRadius: 15, in: self.view, with: "Updating profile...", textColor: .white, font: UIFont(name: Constants.FontNames.openSans, size: 12)!)
         
-        for (index, _) in self.headers.enumerated() {
+        for index in self.headers.indices {
             
             var cell = self.tableView.cellForRow(at: IndexPath(row: 0, section: index)) as? PhataTableViewCell
             
             if cell == nil {
                 
                 let indexPath = IndexPath(row: 0, section: index)
-                cell = tableView.dequeueReusableCell(withIdentifier: "profileInfoCell", for: indexPath) as? PhataTableViewCell
+                cell = tableView.dequeueReusableCell(withIdentifier: Constants.CellReuseIDs.profileInfoCell, for: indexPath) as? PhataTableViewCell
                 cell = self.setUpCell(cell: cell!, indexPath: indexPath) as? PhataTableViewCell
             }
             
             // email
             if index == 0 {
                 
-                profile?.data.primaryEmail.value = cell!.textField.text!
+                profile?.data.primaryEmail.value = cell!.getTextFromTextField()
             // Mobile
             } else if index == 1 {
                 
-                profile?.data.mobile.number = cell!.textField.text!
+                profile?.data.mobile.number = cell!.getTextFromTextField()
             // street name
             } else if index == 2 {
                 
-                profile?.data.addressDetails.street = cell!.textField.text!
+                profile?.data.addressDetails.street = cell!.getTextFromTextField()
             // street number
             } else if index == 3 {
                 
-                profile?.data.addressDetails.number = cell!.textField.text!
+                profile?.data.addressDetails.number = cell!.getTextFromTextField()
             // postcode
             } else if index == 4 {
                 
-                profile?.data.addressDetails.postCode = cell!.textField.text!
+                profile?.data.addressDetails.postCode = cell!.getTextFromTextField()
             }
         }
         
         func tableExists(dict: Dictionary<String, Any>, renewedUserToken: String?) {
             
-            HATPhataService.postProfile(userDomain: userDomain, userToken: userToken, hatProfile: self.profile!, successCallBack: {
+            HATPhataService.postProfile(
+                userDomain: userDomain,
+                userToken: userToken,
+                hatProfile: self.profile!,
+                successCallBack: {
                 
-                self.loadingView.removeFromSuperview()
-                self.darkView.removeFromSuperview()
+                    self.loadingView.removeFromSuperview()
+                    self.darkView.removeFromSuperview()
+                    
+                    _ = self.navigationController?.popViewController(animated: true)
+                },
+                errorCallback: { error in
                 
-                _ = self.navigationController?.popViewController(animated: true)
-            }, errorCallback: {error in
-                
-                self.loadingView.removeFromSuperview()
-                self.darkView.removeFromSuperview()
-                
-                self.createClassicOKAlertWith(alertMessage: "There was an error posting profile", alertTitle: "Error", okTitle: "OK", proceedCompletion: {})
-                _ = CrashLoggerHelper.hatTableErrorLog(error: error)
-            })
+                    self.loadingView.removeFromSuperview()
+                    self.darkView.removeFromSuperview()
+                    
+                    self.createClassicOKAlertWith(alertMessage: "There was an error posting profile", alertTitle: "Error", okTitle: "OK", proceedCompletion: {})
+                    _ = CrashLoggerHelper.hatTableErrorLog(error: error)
+                }
+            )
         }
         
-        HATAccountService.checkHatTableExistsForUploading(userDomain: userDomain, tableName: "profile", sourceName: "rumpel", authToken: userToken, successCallback: tableExists, errorCallback: {error in
+        HATAccountService.checkHatTableExistsForUploading(
+            userDomain: userDomain,
+            tableName: Constants.HATTableName.Profile.name,
+            sourceName: Constants.HATTableName.Profile.source,
+            authToken: userToken,
+            successCallback: tableExists,
+            errorCallback: {error in
             
-            self.loadingView.removeFromSuperview()
-            self.darkView.removeFromSuperview()
-            
-            self.createClassicOKAlertWith(alertMessage: "There was an error checking if it's possible to post the data", alertTitle: "Error", okTitle: "OK", proceedCompletion: {})
-            
-            _ = CrashLoggerHelper.hatTableErrorLog(error: error)
-        })
+                self.loadingView.removeFromSuperview()
+                self.darkView.removeFromSuperview()
+                
+                self.createClassicOKAlertWith(alertMessage: "There was an error checking if it's possible to post the data", alertTitle: "Error", okTitle: "OK", proceedCompletion: {})
+                
+                _ = CrashLoggerHelper.hatTableErrorLog(error: error)
+            }
+        )
     }
     
     // MARK: - View Controller functions
@@ -140,9 +153,12 @@ class DataStoreContactInfoTableViewController: UITableViewController, UserCreden
     
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         
-        let cell = tableView.dequeueReusableCell(withIdentifier: "dataStoreContactInfoCell", for: indexPath) as! PhataTableViewCell
+        if let cell = tableView.dequeueReusableCell(withIdentifier: "dataStoreContactInfoCell", for: indexPath) as? PhataTableViewCell {
+            
+            return setUpCell(cell: cell, indexPath: indexPath)
+        }
         
-        return setUpCell(cell: cell, indexPath: indexPath)
+        return tableView.dequeueReusableCell(withIdentifier: "dataStoreContactInfoCell", for: indexPath)
     }
     
     override func tableView(_ tableView: UITableView, titleForHeaderInSection section: Int) -> String? {
@@ -162,35 +178,43 @@ class DataStoreContactInfoTableViewController: UITableViewController, UserCreden
      
      - parameter cell: The cell to set up
      - parameter indexPath: The index path of the cell
+     
      - returns: The set up cell
      */
     func setUpCell(cell: PhataTableViewCell, indexPath: IndexPath) -> UITableViewCell {
         
         cell.accessoryType = .none
 
-        // email
-        if indexPath.section == 0 {
+        if profile != nil {
             
-            cell.textField.text! = (profile?.data.primaryEmail.value)!
-            cell.textField.keyboardType = .emailAddress
-        // Mobile
-        } else if indexPath.section == 1 {
-            
-            cell.textField.text! = (profile?.data.mobile.number)!
-            cell.textField.keyboardType = .numberPad
-        // street name
-        } else if indexPath.section == 2 {
-            
-            cell.textField.text! = (profile?.data.addressDetails.street)!
-        // street number
-        } else if indexPath.section == 3 {
-            
-            cell.textField.text! = (profile?.data.addressDetails.number)!
-        // address postcode
-        } else if indexPath.section == 4 {
-            
-            cell.textField.text! = (profile?.data.addressDetails.postCode)!
+            // email
+            if indexPath.section == 0 {
+                
+                cell.setTextToTextField(text: self.profile!.data.primaryEmail.value)
+                cell.setKeyboardType(.emailAddress)
+                // Mobile
+            } else if indexPath.section == 1 {
+                
+                cell.setTextToTextField(text: self.profile!.data.mobile.number)
+                cell.setKeyboardType(.numberPad)
+                // street name
+            } else if indexPath.section == 2 {
+                
+                cell.setTextToTextField(text: self.profile!.data.addressDetails.street)
+                cell.setKeyboardType(.default)
+                // street number
+            } else if indexPath.section == 3 {
+                
+                cell.setTextToTextField(text: self.profile!.data.addressDetails.number)
+                cell.setKeyboardType(.default)
+                // address postcode
+            } else if indexPath.section == 4 {
+                
+                cell.setTextToTextField(text: self.profile!.data.addressDetails.postCode)
+                cell.setKeyboardType(.default)
+            }
         }
+
         return cell
     }
 

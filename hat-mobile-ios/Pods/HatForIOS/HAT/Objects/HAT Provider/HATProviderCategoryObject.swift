@@ -16,9 +16,9 @@ import SwiftyJSON
 
 /// A class representing the hat provider category object
 public struct HATProviderCategoryObject: Comparable {
-    
+
     // MARK: - Comparable protocol
-    
+
     /// Returns a Boolean value indicating whether two values are equal.
     ///
     /// Equality is the inverse of inequality. For any values `a` and `b`,
@@ -27,11 +27,11 @@ public struct HATProviderCategoryObject: Comparable {
     /// - Parameters:
     ///   - lhs: A value to compare.
     ///   - rhs: Another value to compare.
-    public static func ==(lhs: HATProviderCategoryObject, rhs: HATProviderCategoryObject) -> Bool {
-        
+    public static func == (lhs: HATProviderCategoryObject, rhs: HATProviderCategoryObject) -> Bool {
+
         return (lhs.categoryId == rhs.categoryId && lhs.title == rhs.title && lhs.description == rhs.description && lhs.illustration == rhs.illustration)
     }
-    
+
     /// Returns a Boolean value indicating whether the value of the first
     /// argument is less than that of the second argument.
     ///
@@ -42,59 +42,59 @@ public struct HATProviderCategoryObject: Comparable {
     /// - Parameters:
     ///   - lhs: A value to compare.
     ///   - rhs: Another value to compare.
-    public static func <(lhs: HATProviderCategoryObject, rhs: HATProviderCategoryObject) -> Bool {
-        
+    public static func < (lhs: HATProviderCategoryObject, rhs: HATProviderCategoryObject) -> Bool {
+
         return lhs.title < rhs.title
     }
-    
+
     /// MARK: - Variables
 
     /// The hat provider's category id
     public var categoryId: Int = 0
-    
+
     /// The hat provider's category title
     public var title: String = ""
     /// The hat provider's category description
     public var description: String = ""
     /// The hat provider's category illustration url
     public var illustration: String = ""
-    
+
     /// MARK: - Initialisers
-    
+
     /**
      The default initialiser. Initialises everything to default values.
      */
     public init() {
-        
+
         categoryId = 0
-        
+
         title = ""
         description = ""
         illustration = ""
     }
-    
+
     /**
      It initialises everything from the received JSON file from the HAT
      */
     public init(from dictionary: Dictionary<String, JSON>) {
-        
+
         self.init()
-        
+
         if let tempCategoryId = dictionary["categoryId"]?.intValue {
-            
+
             categoryId = tempCategoryId
         }
-        
+
         if let tempTitle = dictionary["title"]?.stringValue {
-            
+
             title = tempTitle
         }
         if let tempDescription = dictionary["description"]?.stringValue {
-            
+
             description = tempDescription
         }
         if let tempIllustration = dictionary["illustration"]?.stringValue {
-            
+
             illustration = tempIllustration
         }
     }

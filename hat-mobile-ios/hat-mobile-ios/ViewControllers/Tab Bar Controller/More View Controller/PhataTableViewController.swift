@@ -15,7 +15,7 @@ import HatForIOS
 // MARK: Class
 
 /// A class responsible for the phata UITableViewController of the more tab bar
-class PhataTableViewController: UITableViewController, UserCredentialsProtocol {
+internal class PhataTableViewController: UITableViewController, UserCredentialsProtocol {
     
     // MARK: - Variables
     
@@ -25,12 +25,17 @@ class PhataTableViewController: UITableViewController, UserCredentialsProtocol {
     private let headers: [String] = ["PHATA", "Contact Info", "Profile", "Emergency Contact", "About", "Social Links"]
     
     /// User's profile passed on from previous view controller
-    var profile: HATProfileObject? = nil
+    var profile: HATProfileObject?
     
     var isProfileDownloaded: Bool = false
     
     // MARK: - Update profile responses
     
+    /**
+     Gets profile from hat and saves it to a local variable
+     
+     - parameter receivedProfile: The received HATProfileObject from HAT
+     */
     private func getProfile(receivedProfile: HATProfileObject) {
         
         self.profile = receivedProfile
@@ -40,11 +45,22 @@ class PhataTableViewController: UITableViewController, UserCredentialsProtocol {
         self.tableView.reloadData()
     }
     
+    /**
+     If the profile table has been created get the profile values from HAT
+     
+     - parameter dictionary: The dictionary returned from hat
+     - parameter renewedToken: The new token returned from hat
+     */
     func tableCreated(dictionary: Dictionary<String, Any>, renewedToken: String?) {
         
         HATPhataService.getProfileFromHAT(userDomain: userDomain, userToken: userToken, successCallback: getProfile, failCallback: logError)
     }
     
+    /**
+     Logs the error occured
+     
+     - parameter error: The HATTableError occured
+     */
     private func logError(error: HATTableError) {
         
         self.profile = HATProfileObject()
@@ -58,7 +74,13 @@ class PhataTableViewController: UITableViewController, UserCredentialsProtocol {
                 _ = CrashLoggerHelper.hatTableErrorLog(error: error)
             })(
             
-                HATAccountService.checkHatTableExistsForUploading(userDomain: userDomain, tableName: "profile", sourceName: "rumpel", authToken: userToken, successCallback: tableCreated, errorCallback: logError)
+                HATAccountService.checkHatTableExistsForUploading(
+                    userDomain: userDomain,
+                    tableName: Constants.HATTableName.Profile.name,
+                    sourceName: Constants.HATTableName.Profile.source,
+                    authToken: userToken,
+                    successCallback: tableCreated,
+                    errorCallback: logError)
             )
         default:
             _ = CrashLoggerHelper.hatTableErrorLog(error: error)
@@ -109,7 +131,7 @@ class PhataTableViewController: UITableViewController, UserCredentialsProtocol {
 
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         
-        let cell = tableView.dequeueReusableCell(withIdentifier: "phataCell", for: indexPath)
+        let cell = tableView.dequeueReusableCell(withIdentifier: Constants.CellReuseIDs.phataCell, for: indexPath)
 
         return self.setUpCell(cell, indexPath: indexPath)
     }
@@ -127,38 +149,38 @@ class PhataTableViewController: UITableViewController, UserCredentialsProtocol {
                 
                 if indexPath.row == 0 {
                     
-                    self.performSegue(withIdentifier: "phataSettingsSegue", sender: self)
+                    self.performSegue(withIdentifier: Constants.Segue.phataSettingsSegue, sender: self)
                 }
             } else if indexPath.section == 1 {
                 
                 if indexPath.row == 0 {
                     
-                    self.performSegue(withIdentifier: "phataToEmailSegue", sender: self)
+                    self.performSegue(withIdentifier: Constants.Segue.phataToEmailSegue, sender: self)
                 } else if indexPath.row == 1 {
                     
-                    self.performSegue(withIdentifier: "phataToPhoneSegue", sender: self)
+                    self.performSegue(withIdentifier: Constants.Segue.phataToPhoneSegue, sender: self)
                 } else if indexPath.row == 2 {
                     
-                    self.performSegue(withIdentifier: "phataToAddressSegue", sender: self)
+                    self.performSegue(withIdentifier: Constants.Segue.phataToAddressSegue, sender: self)
                 }
             } else if indexPath.section == 2 {
                 
                 if indexPath.row == 0 {
                     
-                    self.performSegue(withIdentifier: "phataToNameSegue", sender: self)
+                    self.performSegue(withIdentifier: Constants.Segue.phataToNameSegue, sender: self)
                 } else if indexPath.row == 1 {
                     
-                    self.performSegue(withIdentifier: "phataToProfilePictureSegue", sender: self)
+                    self.performSegue(withIdentifier: Constants.Segue.phataToProfilePictureSegue, sender: self)
                 }
             } else if indexPath.section == 3 {
                 
-                self.performSegue(withIdentifier: "phataToEmergencyContactSegue", sender: self)
+                self.performSegue(withIdentifier: Constants.Segue.phataToEmergencyContactSegue, sender: self)
             } else if indexPath.section == 4 {
                 
-                self.performSegue(withIdentifier: "phataToAboutSegue", sender: self)
+                self.performSegue(withIdentifier: Constants.Segue.phataToAboutSegue, sender: self)
             } else if indexPath.section == 5 {
                 
-                self.performSegue(withIdentifier: "phataToSocialLinksSegue", sender: self)
+                self.performSegue(withIdentifier: Constants.Segue.phataToSocialLinksSegue, sender: self)
             }
         } else {
             
@@ -202,7 +224,7 @@ class PhataTableViewController: UITableViewController, UserCredentialsProtocol {
                 
                 weak var destinationVC = segue.destination as? NameTableViewController
                 
-                if segue.identifier == "phataToNameSegue" {
+                if segue.identifier == Constants.Segue.phataToNameSegue {
                     
                     destinationVC?.profile = self.profile
                 }
@@ -210,7 +232,7 @@ class PhataTableViewController: UITableViewController, UserCredentialsProtocol {
                 
                 weak var destinationVC = segue.destination as? ProfileInfoTableViewController
                 
-                if segue.identifier == "phataToProfileInfoSegue" {
+                if segue.identifier == Constants.Segue.phataToProfileInfoSegue {
                     
                     destinationVC?.profile = self.profile
                 }
@@ -218,7 +240,7 @@ class PhataTableViewController: UITableViewController, UserCredentialsProtocol {
                 
                 weak var destinationVC = segue.destination as? EmailTableViewController
                 
-                if segue.identifier == "phataToEmailSegue" {
+                if segue.identifier == Constants.Segue.phataToEmailSegue {
                     
                     destinationVC?.profile = self.profile
                 }
@@ -226,7 +248,7 @@ class PhataTableViewController: UITableViewController, UserCredentialsProtocol {
                 
                 weak var destinationVC = segue.destination as? PhoneTableViewController
                 
-                if segue.identifier == "phataToPhoneSegue" {
+                if segue.identifier == Constants.Segue.phataToPhoneSegue {
                     
                     destinationVC?.profile = self.profile
                 }
@@ -234,7 +256,7 @@ class PhataTableViewController: UITableViewController, UserCredentialsProtocol {
                 
                 weak var destinationVC = segue.destination as? AboutTableViewController
                 
-                if segue.identifier == "phataToAboutSegue" {
+                if segue.identifier == Constants.Segue.phataToAboutSegue {
                     
                     destinationVC?.profile = self.profile
                 }
@@ -242,7 +264,7 @@ class PhataTableViewController: UITableViewController, UserCredentialsProtocol {
                 
                 weak var destinationVC = segue.destination as? SocialLinksTableViewController
                 
-                if segue.identifier == "phataToSocialLinksSegue" {
+                if segue.identifier == Constants.Segue.phataToSocialLinksSegue {
                     
                     destinationVC?.profile = self.profile
                 }
@@ -250,7 +272,7 @@ class PhataTableViewController: UITableViewController, UserCredentialsProtocol {
                 
                 weak var destinationVC = segue.destination as? EmergencyContactTableViewController
                 
-                if segue.identifier == "phataToEmergencyContactSegue" {
+                if segue.identifier == Constants.Segue.phataToEmergencyContactSegue {
                     
                     destinationVC?.profile = self.profile
                 }
@@ -258,7 +280,7 @@ class PhataTableViewController: UITableViewController, UserCredentialsProtocol {
                 
                 weak var destinationVC = segue.destination as? PhataPictureViewController
                 
-                if segue.identifier == "phataToProfilePictureSegue" {
+                if segue.identifier == Constants.Segue.phataToProfilePictureSegue {
                     
                     destinationVC?.profile = self.profile
                 }
@@ -266,7 +288,7 @@ class PhataTableViewController: UITableViewController, UserCredentialsProtocol {
                 
                 weak var destinationVC = segue.destination as? PHATASettingsTableViewController
                 
-                if segue.identifier == "phataSettingsSegue" {
+                if segue.identifier == Constants.Segue.phataSettingsSegue {
                     
                     destinationVC?.profile = self.profile
                 }
@@ -274,7 +296,7 @@ class PhataTableViewController: UITableViewController, UserCredentialsProtocol {
                 
                 weak var destinationVC = segue.destination as? AddressTableViewController
                 
-                if segue.identifier == "phataToAddressSegue" {
+                if segue.identifier == Constants.Segue.phataToAddressSegue {
                     
                     destinationVC?.profile = self.profile
                 }

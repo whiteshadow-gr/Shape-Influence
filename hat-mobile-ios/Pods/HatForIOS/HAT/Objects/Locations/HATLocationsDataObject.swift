@@ -14,9 +14,9 @@ import SwiftyJSON
 
 /// A class representing the data of the locations object
 public struct HATLocationsDataObject: Equatable {
-    
+
     // MARK: - Equatable protocol
-    
+
     /// Returns a Boolean value indicating whether two values are equal.
     ///
     /// Equality is the inverse of inequality. For any values `a` and `b`,
@@ -25,36 +25,36 @@ public struct HATLocationsDataObject: Equatable {
     /// - Parameters:
     ///   - lhs: A value to compare.
     ///   - rhs: Another value to compare.
-    public static func ==(lhs: HATLocationsDataObject, rhs: HATLocationsDataObject) -> Bool {
-        
+    public static func == (lhs: HATLocationsDataObject, rhs: HATLocationsDataObject) -> Bool {
+
         return (lhs.locations == rhs.locations)
     }
-    
+
     // MARK: - Variables
 
     /// The locations
     public var locations: HATLocationsDataLocationsObject = HATLocationsDataLocationsObject()
-        
+
     // MARK: - Initialisers
-    
+
     /**
      The default initialiser. Initialises everything to default values.
      */
     public init() {
-    
+
         locations = HATLocationsDataLocationsObject()
     }
-    
+
     /**
      It initialises everything from the received JSON file from the HAT
      */
     public init(dict: Dictionary<String, JSON>) {
-        
+
         // init optional JSON fields to default values
         self.init()
-        
+
         if let tempFields = dict["locations"]?.dictionaryValue {
-            
+
             locations = HATLocationsDataLocationsObject(dict: tempFields)
         }
     }

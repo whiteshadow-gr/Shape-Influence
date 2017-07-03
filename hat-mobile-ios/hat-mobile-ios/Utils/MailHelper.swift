@@ -14,7 +14,7 @@ import MessageUI
 
 // MARK: Class
 
-class MailHelper: UIViewController, MFMailComposeViewControllerDelegate {
+internal class MailHelper: UIViewController, MFMailComposeViewControllerDelegate {
     
     // MARK: - Send email
     
@@ -24,12 +24,12 @@ class MailHelper: UIViewController, MFMailComposeViewControllerDelegate {
      - parameter at: The address to send the email to
      - parameter ofViewController: The view controller that will show the mail view controller
      */
-    func sendEmail(at: String, onBehalf ofViewController: UIViewController) {
+    func sendEmail(atAddress: String, onBehalf ofViewController: UIViewController) {
         
         if MFMailComposeViewController.canSendMail() {
             
             let mailVC = MFMailComposeViewController()
-            mailVC.setToRecipients([at])
+            mailVC.setToRecipients([atAddress])
             mailVC.mailComposeDelegate = self
 
             // present view controller

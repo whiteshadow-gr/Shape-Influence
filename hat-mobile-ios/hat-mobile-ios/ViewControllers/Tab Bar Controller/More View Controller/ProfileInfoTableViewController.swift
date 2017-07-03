@@ -15,7 +15,7 @@ import HatForIOS
 // MARK: Class
 
 /// A class responsible for the profile info UITableViewController of the PHATA section
-class ProfileInfoTableViewController: UITableViewController, UserCredentialsProtocol {
+internal class ProfileInfoTableViewController: UITableViewController, UserCredentialsProtocol {
     
     // MARK: - Variables
 
@@ -29,7 +29,7 @@ class ProfileInfoTableViewController: UITableViewController, UserCredentialsProt
     private var darkView: UIView = UIView()
     
     /// User's profile passed on from previous view controller
-    var profile: HATProfileObject? = nil
+    var profile: HATProfileObject?
     
     // MARK: - IBAction
     
@@ -46,52 +46,52 @@ class ProfileInfoTableViewController: UITableViewController, UserCredentialsProt
         
         self.view.addSubview(self.darkView)
         
-        self.loadingView = UIView.createLoadingView(with: CGRect(x: (self.view?.frame.midX)! - 70, y: (self.view?.frame.midY)! - 15, width: 140, height: 30), color: .teal, cornerRadius: 15, in: self.view, with: "Updating profile...", textColor: .white, font: UIFont(name: "OpenSans", size: 12)!)
+        self.loadingView = UIView.createLoadingView(with: CGRect(x: (self.view?.frame.midX)! - 70, y: (self.view?.frame.midY)! - 15, width: 140, height: 30), color: .teal, cornerRadius: 15, in: self.view, with: "Updating profile...", textColor: .white, font: UIFont(name: Constants.FontNames.openSans, size: 12)!)
         
-        for (index, _) in self.headers.enumerated() {
+        for index in self.headers.indices {
             
             var cell = self.tableView.cellForRow(at: IndexPath(row: 0, section: index)) as? PhataTableViewCell
             
             if cell == nil {
                 
                 let indexPath = IndexPath(row: 0, section: index)
-                cell = tableView.dequeueReusableCell(withIdentifier: "profileInfoCell", for: indexPath) as? PhataTableViewCell
+                cell = tableView.dequeueReusableCell(withIdentifier: Constants.CellReuseIDs.profileInfoCell, for: indexPath) as? PhataTableViewCell
                 cell = self.setUpCell(cell: cell!, indexPath: indexPath) as? PhataTableViewCell
             }
             
             // age
             if index == 0 {
                 
-                profile?.data.age.group = cell!.textField.text!
-                profile?.data.age.isPrivate = !((cell?.privateSwitch.isOn)!)
-                if (profile?.data.isPrivate)! && cell!.privateSwitch.isOn {
+                profile?.data.age.group = cell!.getTextFromTextField()
+                profile?.data.age.isPrivate = !cell!.getSwitchValue()
+                if (profile?.data.isPrivate)! && cell!.getSwitchValue() {
                     
                     profile?.data.isPrivate = false
                 }
             // gender
             } else if index == 1 {
                 
-                profile?.data.gender.type = cell!.textField.text!
-                profile?.data.gender.isPrivate = !((cell?.privateSwitch.isOn)!)
-                if (profile?.data.isPrivate)! && cell!.privateSwitch.isOn {
+                profile?.data.gender.type = cell!.getTextFromTextField()
+                profile?.data.gender.isPrivate = !cell!.getSwitchValue()
+                if (profile?.data.isPrivate)! && cell!.getSwitchValue() {
                     
                     profile?.data.isPrivate = false
                 }
             // birth
             } else if index == 2 {
                 
-                profile?.data.birth.date = cell!.textField.text!
-                profile?.data.birth.isPrivate = !((cell?.privateSwitch.isOn)!)
-                if (profile?.data.isPrivate)! && cell!.privateSwitch.isOn {
+                profile?.data.birth.date = cell!.getTextFromTextField()
+                profile?.data.birth.isPrivate = !cell!.getSwitchValue()
+                if (profile?.data.isPrivate)! && cell!.getSwitchValue() {
                     
                     profile?.data.isPrivate = false
                 }
             // nickname
             } else if index == 3 {
                 
-                profile?.data.nick.name = cell!.textField.text!
-                profile?.data.nick.isPrivate = !((cell?.privateSwitch.isOn)!)
-                if (profile?.data.isPrivate)! && cell!.privateSwitch.isOn {
+                profile?.data.nick.name = cell!.getTextFromTextField()
+                profile?.data.nick.isPrivate = !cell!.getSwitchValue()
+                if (profile?.data.isPrivate)! && cell!.getSwitchValue() {
                     
                     profile?.data.isPrivate = false
                 }
@@ -100,31 +100,44 @@ class ProfileInfoTableViewController: UITableViewController, UserCredentialsProt
         
         func tableExists(dict: Dictionary<String, Any>, renewedUserToken: String?) {
             
-            HATPhataService.postProfile(userDomain: userDomain, userToken: userToken, hatProfile: self.profile!, successCallBack: {
+            HATPhataService.postProfile(
+                userDomain: userDomain,
+                userToken: userToken,
+                hatProfile: self.profile!,
+                successCallBack: {
                 
-                self.loadingView.removeFromSuperview()
-                self.darkView.removeFromSuperview()
-                
-                _ = self.navigationController?.popViewController(animated: true)
-            }, errorCallback: {error in
-                
-                self.loadingView.removeFromSuperview()
-                self.darkView.removeFromSuperview()
-                
-                self.createClassicOKAlertWith(alertMessage: "There was an error posting profile", alertTitle: "Error", okTitle: "OK", proceedCompletion: {})
-                _ = CrashLoggerHelper.hatTableErrorLog(error: error)
-            })
+                    self.loadingView.removeFromSuperview()
+                    self.darkView.removeFromSuperview()
+                    
+                    _ = self.navigationController?.popViewController(animated: true)
+                },
+                errorCallback: {error in
+                    
+                    self.loadingView.removeFromSuperview()
+                    self.darkView.removeFromSuperview()
+                    
+                    self.createClassicOKAlertWith(alertMessage: "There was an error posting profile", alertTitle: "Error", okTitle: "OK", proceedCompletion: {})
+                    _ = CrashLoggerHelper.hatTableErrorLog(error: error)
+                }
+            )
         }
         
-        HATAccountService.checkHatTableExistsForUploading(userDomain: userDomain, tableName: "profile", sourceName: "rumpel", authToken: userToken, successCallback: tableExists, errorCallback: {error in
+        HATAccountService.checkHatTableExistsForUploading(
+            userDomain: userDomain,
+            tableName: Constants.HATTableName.Profile.name,
+            sourceName: Constants.HATTableName.Profile.source,
+            authToken: userToken,
+            successCallback: tableExists,
+            errorCallback: {error in
             
-            self.loadingView.removeFromSuperview()
-            self.darkView.removeFromSuperview()
-            
-            self.createClassicOKAlertWith(alertMessage: "There was an error checking if it's possible to post the data", alertTitle: "Error", okTitle: "OK", proceedCompletion: {})
-            
-            _ = CrashLoggerHelper.hatTableErrorLog(error: error)
-        })
+                self.loadingView.removeFromSuperview()
+                self.darkView.removeFromSuperview()
+                
+                self.createClassicOKAlertWith(alertMessage: "There was an error checking if it's possible to post the data", alertTitle: "Error", okTitle: "OK", proceedCompletion: {})
+                
+                _ = CrashLoggerHelper.hatTableErrorLog(error: error)
+            }
+        )
     }
     
     // MARK: - View controller methods
@@ -160,9 +173,12 @@ class ProfileInfoTableViewController: UITableViewController, UserCredentialsProt
     
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         
-        let cell = tableView.dequeueReusableCell(withIdentifier: "profileInfoCell", for: indexPath) as! PhataTableViewCell
+        if let cell = tableView.dequeueReusableCell(withIdentifier: Constants.CellReuseIDs.profileInfoCell, for: indexPath) as? PhataTableViewCell {
+            
+            return self.setUpCell(cell: cell, indexPath: indexPath)
+        }
         
-        return self.setUpCell(cell: cell, indexPath: indexPath)
+        return tableView.dequeueReusableCell(withIdentifier: Constants.CellReuseIDs.profileInfoCell, for: indexPath)
     }
     
     override func tableView(_ tableView: UITableView, titleForHeaderInSection section: Int) -> String? {
@@ -182,37 +198,43 @@ class ProfileInfoTableViewController: UITableViewController, UserCredentialsProt
      */
     private func setUpCell(cell: PhataTableViewCell, indexPath: IndexPath) -> UITableViewCell {
         
-        if indexPath.section == 0 {
+        if self.profile != nil {
             
-            var array: [String] = []
-            for i in 13...100 {
+            if indexPath.section == 0 {
                 
-                array.append(String(describing: i))
-            }
-            cell.dataSourceForPickerView = array
-            cell.textField.text = self.profile?.data.age.group
-            cell.privateSwitch.isOn = !(self.profile?.data.age.isPrivate)!
-            cell.textField.keyboardType = .numberPad
-            cell.tag = 10
-        } else if indexPath.section == 1 {
-            
-            let array: [String] = ["", "Male", "Female", "Other"]
-            cell.dataSourceForPickerView = array
-            cell.textField.text = self.profile?.data.gender.type
-            cell.privateSwitch.isOn = !(self.profile?.data.gender.isPrivate)!
-            cell.tag = 11
-        } else if indexPath.section == 2 {
-            
-            if self.profile?.data.birth.date != nil {
+                var array: [String] = []
+                for i in 13...100 {
+                    
+                    array.append(String(describing: i))
+                }
+                cell.dataSourceForPickerView = array
+                cell.setTextToTextField(text: self.profile!.data.age.group)
+                cell.setSwitchValue(isOn: !self.profile!.data.age.isPrivate)
+                cell.setKeyboardType(.numberPad)
+                cell.tag = 10
+            } else if indexPath.section == 1 {
                 
-                cell.textField.text = self.profile?.data.birth.date
+                let array: [String] = ["", "Male", "Female", "Other"]
+                cell.dataSourceForPickerView = array
+                cell.setTextToTextField(text: self.profile!.data.gender.type)
+                cell.setSwitchValue(isOn: !self.profile!.data.gender.isPrivate)
+                cell.setKeyboardType(.default)
+                cell.tag = 11
+            } else if indexPath.section == 2 {
+                
+                if self.profile?.data.birth.date != nil {
+                    
+                    cell.setTextToTextField(text: self.profile!.data.birth.date)
+                }
+                cell.setSwitchValue(isOn: !self.profile!.data.birth.isPrivate)
+                cell.setKeyboardType(.default)
+                cell.tag = 12
+            } else if indexPath.section == 3 {
+                
+                cell.setTextToTextField(text: self.profile!.data.nick.name)
+                cell.setSwitchValue(isOn: !self.profile!.data.nick.isPrivate)
+                cell.setKeyboardType(.default)
             }
-            cell.privateSwitch.isOn = !(self.profile?.data.birth.isPrivate)!
-            cell.tag = 12
-        } else if indexPath.section == 3 {
-            
-            cell.textField.text = self.profile?.data.nick.name
-            cell.privateSwitch.isOn = !(self.profile?.data.nick.isPrivate)!
         }
         
         return cell

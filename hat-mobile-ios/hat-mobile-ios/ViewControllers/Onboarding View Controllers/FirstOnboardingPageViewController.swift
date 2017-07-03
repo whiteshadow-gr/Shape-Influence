@@ -15,12 +15,12 @@ import UIKit
 // MARK: Class
 
 /// The first onboarding page view controller class
-class FirstOnboardingPageViewController: UIPageViewController, UIPageViewControllerDataSource {
+internal class FirstOnboardingPageViewController: UIPageViewController, UIPageViewControllerDataSource {
     
     // MARK: - Variables
 
     /// the number of pages array.
-    private let numberOfPages = [0, 1, 2]
+    private let numberOfPages: [Int] = [0, 1, 2]
     
     // MARK: - View controller methods
     
@@ -59,7 +59,7 @@ class FirstOnboardingPageViewController: UIPageViewController, UIPageViewControl
         self.dataSource = self
         
         // if we have pages to show init them and add them to the page view controller
-        if numberOfPages.count > 0 {
+        if !numberOfPages.isEmpty {
             
             if let firstController = getItemController(itemIndex: 0) {
                 
@@ -73,6 +73,7 @@ class FirstOnboardingPageViewController: UIPageViewController, UIPageViewControl
      Create the view controller to present
      
      - parameter itemIndex: The number of the page to create
+     
      - returns: An optional HATCapabilitiesViewController
      */
     private func getItemController(itemIndex: Int) -> FirstOnboardingViewController? {
@@ -97,12 +98,13 @@ class FirstOnboardingPageViewController: UIPageViewController, UIPageViewControl
     func pageViewController(_ pageViewController: UIPageViewController, viewControllerBefore viewController: UIViewController) -> UIViewController? {
         
         // create the view controller for the previous page
-        let itemController = viewController as! FirstOnboardingViewController
-        
-        // check if we are out of bounds and return the view controller
-        if itemController.pageIndex > 0 {
+        if let itemController = viewController as? FirstOnboardingViewController {
             
-            return getItemController(itemIndex: itemController.pageIndex - 1)
+            // check if we are out of bounds and return the view controller
+            if itemController.pageIndex > 0 {
+                
+                return getItemController(itemIndex: itemController.pageIndex - 1)
+            }
         }
         
         // reached first page return nil
@@ -112,12 +114,13 @@ class FirstOnboardingPageViewController: UIPageViewController, UIPageViewControl
     func pageViewController(_ pageViewController: UIPageViewController, viewControllerAfter viewController: UIViewController) -> UIViewController? {
         
         // create the view controller for the next page
-        let itemController = viewController as! FirstOnboardingViewController
-        
-        // check if we are out of bounds and return the view controller
-        if itemController.pageIndex + 1 < numberOfPages.count {
+        if let itemController = viewController as? FirstOnboardingViewController {
             
-            return getItemController(itemIndex: itemController.pageIndex + 1)
+            // check if we are out of bounds and return the view controller
+            if itemController.pageIndex + 1 < numberOfPages.count {
+                
+                return getItemController(itemIndex: itemController.pageIndex + 1)
+            }
         }
         
         // reached final page, return nil

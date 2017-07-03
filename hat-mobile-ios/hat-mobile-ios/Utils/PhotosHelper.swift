@@ -15,17 +15,17 @@ import Photos
 // MARK: Class
 
 /// A class responsible for all photo related methods such as saving a photo, creating an album etc.
-class PhotosHelper: NSObject {
+internal class PhotosHelper: NSObject {
     
     // MARK: - Variables
 
     /// The album name to create
-    private static let albumName = "HAT"
+    private static let albumName: String = "HAT"
     /// A signletone instance
-    static let sharedInstance = PhotosHelper()
+    static let sharedInstance: PhotosHelper = PhotosHelper()
     
     /// The asset collection
-    private var assetCollection: PHAssetCollection!
+    private var assetCollection: PHAssetCollection?
     
     // MARK: - Initialisers
     
@@ -43,7 +43,7 @@ class PhotosHelper: NSObject {
         // authorize
         if PHPhotoLibrary.authorizationStatus() != PHAuthorizationStatus.authorized {
             
-            PHPhotoLibrary.requestAuthorization({ (status: PHAuthorizationStatus) -> Void in
+            PHPhotoLibrary.requestAuthorization({ (_: PHAuthorizationStatus) -> Void in
                 
                 //status
             })
@@ -88,8 +88,8 @@ class PhotosHelper: NSObject {
         
         PHPhotoLibrary.shared().performChanges({
             
-            PHAssetCollectionChangeRequest.creationRequestForAssetCollection(withTitle: PhotosHelper.albumName)   // create an asset collection with the album name
-        }) { success, error in
+            PHAssetCollectionChangeRequest.creationRequestForAssetCollection(withTitle: PhotosHelper.albumName)})
+        { success, error in
             
             if success {
                 
@@ -116,7 +116,7 @@ class PhotosHelper: NSObject {
         
         if let firstObject: AnyObject = collection.firstObject {
             
-            return firstObject as! PHAssetCollection
+            return firstObject as? PHAssetCollection
         }
         return nil
     }
@@ -127,7 +127,6 @@ class PhotosHelper: NSObject {
      Saves the image to the photo library
      
      - parameter image: The image to save to the photo library
-     - parameter metadata: The metadata of the image to save
      */
     func saveImage(image: UIImage) {
         
@@ -140,8 +139,9 @@ class PhotosHelper: NSObject {
             
             let assetChangeRequest = PHAssetChangeRequest.creationRequestForAsset(from: image)
             let assetPlaceHolder = assetChangeRequest.placeholderForCreatedAsset
-            let albumChangeRequest = PHAssetCollectionChangeRequest(for: self.assetCollection)
+            let albumChangeRequest = PHAssetCollectionChangeRequest(for: self.assetCollection!)
             albumChangeRequest?.addAssets([assetPlaceHolder!] as NSArray)
-        }, completionHandler: nil)
+        },
+                                               completionHandler: nil)
     }
 }

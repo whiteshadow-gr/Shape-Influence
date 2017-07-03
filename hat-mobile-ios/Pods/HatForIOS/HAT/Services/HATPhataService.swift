@@ -10,15 +10,15 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/
  */
 
-import SwiftyJSON
 import Alamofire
+import SwiftyJSON
 
 // MARK: Class
 
 public class HATPhataService: NSObject {
 
     // MARK: - Get Phata
-    
+
     /**
      Searches for profile table and fetches the entries
      
@@ -27,39 +27,49 @@ public class HATPhataService: NSObject {
      - parameter successCallback: A function to call on success
      - parameter failCallback: A fuction to call on fail
      */
-    public class func getProfileFromHAT(userDomain: String, userToken: String, successCallback: @escaping (HATProfileObject) -> Void, failCallback: @escaping (HATTableError) -> Void) -> Void {
-        
+    public class func getProfileFromHAT(userDomain: String, userToken: String, successCallback: @escaping (HATProfileObject) -> Void, failCallback: @escaping (HATTableError) -> Void) {
+
         func tableFound (tableID: NSNumber, newToken: String?) {
-            
+
             func profileEntries(json: [JSON], renewedToken: String?) {
-                
+
                 // if we have values return them
-                if json.count > 0 {
-                    
+                if !json.isEmpty {
+
                     let array = HATProfileObject(from: json[0].dictionaryValue)
                     successCallback(array)
                     // in case no values have found then that means that the users hasn't entered anything yet so we have to get the structure from the ccheckHatTableExistsForUploading method in order to have the id's
                 } else {
-                    
-                    HATAccountService.checkHatTableExistsForUploading(userDomain: userDomain, tableName: "profile", sourceName: "rumpel", authToken: userToken, successCallback: {(dict) in
-                        
-                        let array = HATProfileObject(alternativeDictionary: dict.0 as! Dictionary<String, JSON>)
-                        successCallback(array)
-                    }, errorCallback: {(error) in
-                        
-                        failCallback(HATTableError.noValuesFound)
-                    })
+
+                    HATAccountService.checkHatTableExistsForUploading(
+                        userDomain: userDomain,
+                        tableName: "profile",
+                        sourceName: "rumpel",
+                        authToken: userToken,
+                        successCallback: { (dict) in
+
+                            if let unwrappedDictionary = dict.0 as? Dictionary<String, JSON> {
+                                
+                                let array = HATProfileObject(alternativeDictionary: unwrappedDictionary)
+                                successCallback(array)
+                            }
+                        },
+                        errorCallback: {(_) in
+
+                            failCallback(HATTableError.noValuesFound)
+                        }
+                    )
                 }
             }
-            
-            HATAccountService.getHatTableValuesWithOutPretty(token: userToken, userDomain: userDomain, tableID: tableID, parameters: ["starttime" : "0"], successCallback: profileEntries, errorCallback: failCallback)
+
+            HATAccountService.getHatTableValuesWithOutPretty(token: userToken, userDomain: userDomain, tableID: tableID, parameters: ["starttime": "0"], successCallback: profileEntries, errorCallback: failCallback)
         }
-        
+
         HATAccountService.checkHatTableExists(userDomain: userDomain, tableName: "profile", sourceName: "rumpel", authToken: userToken, successCallback: tableFound, errorCallback: failCallback)
     }
-    
+
     // MARK: - Post Profile
-    
+
     /**
      Posts the profile record to the hat
      
@@ -69,49 +79,49 @@ public class HATPhataService: NSObject {
      - parameter successCallBack: A Function to execute on success
      - parameter errorCallback: A Function to execute on error
      */
-    public class func postProfile(userDomain: String, userToken: String, hatProfile: HATProfileObject, successCallBack: @escaping () -> Void, errorCallback: @escaping (HATTableError) -> Void) -> Void {
-        
+    public class func postProfile(userDomain: String, userToken: String, hatProfile: HATProfileObject, successCallBack: @escaping () -> Void, errorCallback: @escaping (HATTableError) -> Void) {
+
         func posting(resultJSON: Dictionary<String, Any>, token: String?) {
-            
+
             // create the headers
             let headers = ["Accept": ContentType.JSON,
                            "Content-Type": ContentType.JSON,
                            "X-Auth-Token": userToken]
-            
+
             // create JSON file for posting with default values
             let hatDataStructure = HATJSONHelper.createJSONForPosting(hatTableStructure: resultJSON)
             // update JSON file with the values needed
             let hatData = HATJSONHelper.updateProfileJSONFile(file: hatDataStructure, profileFile: hatProfile)
-            
+
             // make async request
-            HATNetworkHelper.AsynchronousRequest("https://" + userDomain + "/data/record/values", method: HTTPMethod.post, encoding: Alamofire.JSONEncoding.default, contentType: ContentType.JSON, parameters: hatData, headers: headers, completion: { (r: HATNetworkHelper.ResultType) -> Void in
-                
+            HATNetworkHelper.asynchronousRequest("https://" + userDomain + "/data/record/values", method: HTTPMethod.post, encoding: Alamofire.JSONEncoding.default, contentType: ContentType.JSON, parameters: hatData, headers: headers, completion: { (response: HATNetworkHelper.ResultType) -> Void in
+
                 // handle result
-                switch r {
-                    
+                switch response {
+
                 case .isSuccess(let isSuccess, _, _, _):
-                    
+
                     if isSuccess {
-                        
+
                         // reload table
                         successCallBack()
-                        
-                        HATAccountService.triggerHatUpdate(userDomain: userDomain, completion: {()})
+
+                        HATAccountService.triggerHatUpdate(userDomain: userDomain, completion: { () })
                     }
-                    
+
                 case .error(let error, let statusCode):
-                    
+
                     let message = NSLocalizedString("Server responded with error", comment: "")
                     errorCallback(.generalError(message, statusCode, error))
                 }
             })
         }
-        
+
         func errorCall(error: HATTableError) {
-            
+
         }
-        
+
         HATAccountService.checkHatTableExistsForUploading(userDomain: userDomain, tableName: "profile", sourceName: "rumpel", authToken: userToken, successCallback: posting, errorCallback: errorCall)
     }
-    
+
 }

@@ -86,7 +86,7 @@ extension UIViewController {
      */
     func hideKeyboardInScrollView(_ scrollView: UIScrollView) {
         
-        let contentInset:UIEdgeInsets = UIEdgeInsets.zero
+        let contentInset: UIEdgeInsets = UIEdgeInsets.zero
         scrollView.contentInset = contentInset
     }
     
@@ -100,10 +100,10 @@ extension UIViewController {
     func showKeyboardInView(_ view: UIView, scrollView: UIScrollView, sender: NSNotification) {
         
         var userInfo = sender.userInfo!
-        var keyboardFrame:CGRect = (userInfo[UIKeyboardFrameBeginUserInfoKey] as! NSValue).cgRectValue
+        var keyboardFrame: CGRect = (userInfo[UIKeyboardFrameBeginUserInfoKey] as? NSValue)!.cgRectValue
         keyboardFrame = view.convert(keyboardFrame, from: nil)
         
-        var contentInset:UIEdgeInsets = scrollView.contentInset
+        var contentInset: UIEdgeInsets = scrollView.contentInset
         contentInset.bottom = keyboardFrame.size.height + 40
         scrollView.contentInset = contentInset
     }
@@ -114,6 +114,7 @@ extension UIViewController {
      Function executed when the return key is pressed in order to hide the keyboard
      
      - parameter textField: The textfield that confronts to this function
+     
      - returns: Bool
      */
     func textFieldShouldReturn(_ textField: UITextField) -> Bool {
@@ -144,11 +145,11 @@ extension UIViewController {
         let alert = UIAlertController(title: attrTitleString.string, message: attrMessageString.string, preferredStyle: .alert)
         
         // add the actions (buttons)
-        alert.addAction(UIAlertAction(title: proceedTitle, style: .default, handler: { (action: UIAlertAction) in
+        alert.addAction(UIAlertAction(title: proceedTitle, style: .default, handler: { (_: UIAlertAction) in
             
             proceedCompletion()
         }))
-        alert.addAction(UIAlertAction(title: cancelTitle, style: .cancel, handler: { (action: UIAlertAction) in
+        alert.addAction(UIAlertAction(title: cancelTitle, style: .cancel, handler: { (_: UIAlertAction) in
             
             cancelCompletion()
         }))
@@ -168,14 +169,14 @@ extension UIViewController {
     func createClassicOKAlertWith(alertMessage: String, alertTitle: String, okTitle: String, proceedCompletion: @escaping () -> Void) {
         
         //change font
-        let attrTitleString = NSAttributedString(string: alertTitle, attributes: [NSFontAttributeName: UIFont(name: "OpenSans", size: 32)!])
-        let attrMessageString = NSAttributedString(string: alertMessage, attributes: [NSFontAttributeName: UIFont(name: "OpenSans", size: 32)!])
+        let attrTitleString = NSAttributedString(string: alertTitle, attributes: [NSFontAttributeName: UIFont(name: Constants.FontNames.openSans, size: 32)!])
+        let attrMessageString = NSAttributedString(string: alertMessage, attributes: [NSFontAttributeName: UIFont(name: Constants.FontNames.openSans, size: 32)!])
         
         // create the alert
         let alert = UIAlertController(title: attrTitleString.string, message: attrMessageString.string, preferredStyle: .alert)
         
         // add the actions (buttons)
-        alert.addAction(UIAlertAction(title: okTitle, style: .default, handler: { (action: UIAlertAction) in
+        alert.addAction(UIAlertAction(title: okTitle, style: .default, handler: { (_: UIAlertAction) in
             
             proceedCompletion()
         }))

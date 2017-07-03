@@ -15,7 +15,8 @@ import UIKit
 // MARK: Class
 
 /// A custom UIView representing a UISwitch.
-@IBDesignable class CustomSwitch: UIControl {
+@IBDesignable
+internal class CustomSwitch: UIControl {
     
     // MARK: - Inspectable variables
 
@@ -29,7 +30,7 @@ import UIKit
     }
     
     /// The tint color of the UISwitch when on
-    @IBInspectable public var onTintColor: UIColor = UIColor(red: 144/255, green: 202/255, blue: 119/255, alpha: 1) {
+    @IBInspectable public var onTintColor: UIColor = .onSwitchTintColor {
         
         didSet {
             
@@ -111,16 +112,16 @@ import UIKit
     public var labelOn: UILabel = UILabel()
     
     /// The thumb. Base on a UIView
-    fileprivate var thumbView = UIView(frame: CGRect.zero)
+    fileprivate var thumbView: UIView = UIView(frame: CGRect.zero)
     
     /// The on point of the switch
-    fileprivate var onPoint = CGPoint.zero
+    fileprivate var onPoint: CGPoint = CGPoint.zero
     
     /// The off point of the switch
-    fileprivate var offPoint = CGPoint.zero
+    fileprivate var offPoint: CGPoint = CGPoint.zero
     
     /// A bool value indicatinf if the switch is animated or no
-    fileprivate var isAnimating = false
+    fileprivate var isAnimating: Bool = false
     
     // MARK: - Clear view
     
@@ -173,8 +174,9 @@ import UIKit
             self.backgroundColor = self.isOn ? self.onTintColor : self.offTintColor
             
             // thumb set up
-            let thumbSize = self.thumbSize != CGSize.zero ? self.thumbSize : CGSize(width:
-                self.bounds.size.height - 2, height: self.bounds.height - 2)
+            let thumbSize = self.thumbSize != CGSize.zero ? self.thumbSize : CGSize(
+                width: self.bounds.size.height - 2,
+                height: self.bounds.height - 2)
             let yPostition = (self.bounds.size.height - thumbSize.height) / 2
             
             // set the on and off point of the switch
@@ -252,22 +254,26 @@ import UIKit
         
         self.isAnimating = true
         
-        UIView.animate(withDuration: self.animationDuration,
-                       delay: 0, usingSpringWithDamping: 0.7,
-                       initialSpringVelocity: 0.5,
-                       options:
-                            [UIViewAnimationOptions.curveEaseOut,
-                            UIViewAnimationOptions.beginFromCurrentState],
-                            animations: {
-                                                                
-                                        self.thumbView.frame.origin.x = self.isOn ? self.onPoint.x : self.offPoint.x
-                                        self.backgroundColor = self.isOn ? self.onTintColor : self.offTintColor
-                                
-                            }, completion: { _ in
-            
-                                self.isAnimating = false
-                                self.sendActions(for: UIControlEvents.valueChanged)
-        })
+        UIView.animate(
+            withDuration: self.animationDuration,
+            delay: 0,
+            usingSpringWithDamping: 0.7,
+            initialSpringVelocity: 0.5,
+            options:
+                [UIViewAnimationOptions.curveEaseOut,
+                UIViewAnimationOptions.beginFromCurrentState],
+            animations: {
+                                                    
+                self.thumbView.frame.origin.x = self.isOn ? self.onPoint.x : self.offPoint.x
+                self.backgroundColor = self.isOn ? self.onTintColor : self.offTintColor
+                
+            },
+            completion: { _ in
+
+                self.isAnimating = false
+                self.sendActions(for: UIControlEvents.valueChanged)
+            }
+        )
     }
     
     // MARK: - Begin tracking

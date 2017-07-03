@@ -16,9 +16,9 @@ import SwiftyJSON
 
 /// A class representing the user's info of a tweet
 public struct HATTwitterDataTweetsUsersSocialFeedObject: Comparable {
-    
+
     // MARK: - Comparable protocol
-    
+
     /// Returns a Boolean value indicating whether two values are equal.
     ///
     /// Equality is the inverse of inequality. For any values `a` and `b`,
@@ -27,12 +27,11 @@ public struct HATTwitterDataTweetsUsersSocialFeedObject: Comparable {
     /// - Parameters:
     ///   - lhs: A value to compare.
     ///   - rhs: Another value to compare.
-    public static func ==(lhs: HATTwitterDataTweetsUsersSocialFeedObject, rhs: HATTwitterDataTweetsUsersSocialFeedObject) -> Bool {
-        
-        return (lhs.friendsCount == rhs.friendsCount && lhs.id == rhs.id && lhs.lang == rhs.lang
-            && lhs.listedCount == rhs.listedCount && lhs.favouritesCount == rhs.favouritesCount && lhs.statusesCount == rhs.statusesCount && lhs.screenName == rhs.screenName && lhs.name == rhs.name && lhs.followersCount == rhs.followersCount)
+    public static func == (lhs: HATTwitterDataTweetsUsersSocialFeedObject, rhs: HATTwitterDataTweetsUsersSocialFeedObject) -> Bool {
+
+        return (lhs.friendsCount == rhs.friendsCount && lhs.userID == rhs.userID && lhs.lang == rhs.lang && lhs.listedCount == rhs.listedCount && lhs.favouritesCount == rhs.favouritesCount && lhs.statusesCount == rhs.statusesCount && lhs.screenName == rhs.screenName && lhs.name == rhs.name && lhs.followersCount == rhs.followersCount)
     }
-    
+
     /// Returns a Boolean value indicating whether the value of the first
     /// argument is less than that of the second argument.
     ///
@@ -43,17 +42,17 @@ public struct HATTwitterDataTweetsUsersSocialFeedObject: Comparable {
     /// - Parameters:
     ///   - lhs: A value to compare.
     ///   - rhs: Another value to compare.
-    public static func <(lhs: HATTwitterDataTweetsUsersSocialFeedObject, rhs: HATTwitterDataTweetsUsersSocialFeedObject) -> Bool {
-        
+    public static func < (lhs: HATTwitterDataTweetsUsersSocialFeedObject, rhs: HATTwitterDataTweetsUsersSocialFeedObject) -> Bool {
+
         return lhs.name < rhs.name
     }
-    
+
     // MARK: - Variables
 
     /// The user's friend count
     public var friendsCount: String = ""
     /// The user's id
-    public var id: String = ""
+    public var userID: String = ""
     /// The user's language
     public var lang: String = ""
     /// The user's listed count
@@ -68,16 +67,16 @@ public struct HATTwitterDataTweetsUsersSocialFeedObject: Comparable {
     public var name: String = ""
     /// The user's followers count
     public var followersCount: String = ""
-    
+
     // MARK: - Initialisers
-    
+
     /**
      The default initialiser. Initialises everything to default values.
      */
     public init() {
-        
+
         friendsCount = ""
-        id = ""
+        userID = ""
         lang = ""
         listedCount = ""
         favouritesCount = ""
@@ -86,48 +85,48 @@ public struct HATTwitterDataTweetsUsersSocialFeedObject: Comparable {
         name = ""
         followersCount = ""
     }
-    
+
     /**
      It initialises everything from the received JSON file from the HAT
      */
     public init(from dictionary: Dictionary<String, JSON>) {
-        
+
         self.init()
-        
+
         if let tempFriendsCount = dictionary["friends_count"]?.stringValue {
-            
+
             friendsCount = tempFriendsCount
         }
         if let tempID = dictionary["id"]?.stringValue {
-            
-            id = tempID
+
+            userID = tempID
         }
         if let tempLang = dictionary["lang"]?.stringValue {
-            
+
             lang = tempLang
         }
         if let tempListedCount = dictionary["listed_count"]?.stringValue {
-            
+
             listedCount = tempListedCount
         }
         if let tempFavouritesCount = dictionary["favorites_count"]?.stringValue {
-            
+
             favouritesCount = tempFavouritesCount
         }
         if let tempStatusesCount = dictionary["statuses_count"]?.stringValue {
-            
+
             statusesCount = tempStatusesCount
         }
         if let tempScreenName = dictionary["screen_name"]?.stringValue {
-            
+
             screenName = tempScreenName
         }
         if let tempName = dictionary["name"]?.stringValue {
-            
+
             name = tempName
         }
         if let tempFollowersCount = dictionary["followers_count"]?.stringValue {
-            
+
             followersCount = tempFollowersCount
         }
     }

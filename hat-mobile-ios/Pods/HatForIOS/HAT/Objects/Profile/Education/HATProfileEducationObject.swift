@@ -15,9 +15,9 @@ import SwiftyJSON
 // MARK: Struct
 
 public struct HATProfileEducationObject: Comparable {
-    
+
     // MARK: - Comparable protocol
-    
+
     /// Returns a Boolean value indicating whether two values are equal.
     ///
     /// Equality is the inverse of inequality. For any values `a` and `b`,
@@ -26,11 +26,11 @@ public struct HATProfileEducationObject: Comparable {
     /// - Parameters:
     ///   - lhs: A value to compare.
     ///   - rhs: Another value to compare.
-    public static func ==(lhs: HATProfileEducationObject, rhs: HATProfileEducationObject) -> Bool {
-        
+    public static func == (lhs: HATProfileEducationObject, rhs: HATProfileEducationObject) -> Bool {
+
         return (lhs.highestAcademicQualification == rhs.highestAcademicQualification && lhs.unixTimeStamp == rhs.unixTimeStamp)
     }
-    
+
     /// Returns a Boolean value indicating whether the value of the first
     /// argument is less than that of the second argument.
     ///
@@ -41,61 +41,61 @@ public struct HATProfileEducationObject: Comparable {
     /// - Parameters:
     ///   - lhs: A value to compare.
     ///   - rhs: Another value to compare.
-    public static func <(lhs: HATProfileEducationObject, rhs: HATProfileEducationObject) -> Bool {
-        
+    public static func < (lhs: HATProfileEducationObject, rhs: HATProfileEducationObject) -> Bool {
+
         return lhs.unixTimeStamp! < rhs.unixTimeStamp!
     }
-    
+
     // MARK: - Variables
 
     public var highestAcademicQualification: String = ""
     public var recordID: String = ""
-    
-    public var unixTimeStamp: Int? = nil
-    
+
+    public var unixTimeStamp: Int?
+
     // MARK: - Initialisers
-    
+
     /**
      The default initialiser. Initialises everything to default values.
      */
     public init() {
-        
+
         highestAcademicQualification = ""
         recordID = ""
         unixTimeStamp = nil
     }
-    
+
     /**
      It initialises everything from the received JSON file from the HAT
      */
     public init(from dict: JSON) {
-        
+
         if let data = (dict["data"].dictionary) {
-            
+
             highestAcademicQualification = (data["highestAcademicQualification"]!.stringValue)
             if let time = (data["unixTimeStamp"]?.stringValue) {
-                
+
                 unixTimeStamp = Int(time)
             }
         }
-        
+
         recordID = (dict["recordId"].stringValue)
     }
-    
+
     // MARK: - JSON Mapper
-    
+
     /**
      Returns the object as Dictionary, JSON
      
      - returns: Dictionary<String, String>
      */
     public func toJSON() -> Dictionary<String, Any> {
-        
+
         return [
-            
-            "highestAcademicQualification" : self.highestAcademicQualification,
-            "unixTimeStamp" : Int(HATFormatterHelper.formatDateToEpoch(date: Date())!)!
+
+            "highestAcademicQualification": self.highestAcademicQualification,
+            "unixTimeStamp": Int(HATFormatterHelper.formatDateToEpoch(date: Date())!)!
         ]
-        
+
     }
 }

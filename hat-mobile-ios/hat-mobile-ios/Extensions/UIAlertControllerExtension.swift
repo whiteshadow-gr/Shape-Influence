@@ -70,19 +70,20 @@ extension UIAlertController {
      - parameter alertTitle: The desired alert title
      - parameter okTitle: The desired button title
      - parameter proceedCompletion: The desired function to execute on button press
+     
      - returns: A UIAlertController ready to be presented from the view
      */
     class func createOKAlert(alertMessage: String, alertTitle: String, okTitle: String, proceedCompletion: @escaping () -> Void) -> UIAlertController {
         
         //change font
-        let attrTitleString = NSAttributedString(string: alertTitle, attributes: [NSFontAttributeName: UIFont(name: "OpenSans", size: 32)!])
-        let attrMessageString = NSAttributedString(string: alertMessage, attributes: [NSFontAttributeName: UIFont(name: "OpenSans", size: 32)!])
+        let attrTitleString = NSAttributedString(string: alertTitle, attributes: [NSFontAttributeName: UIFont(name: Constants.FontNames.openSans, size: 32)!])
+        let attrMessageString = NSAttributedString(string: alertMessage, attributes: [NSFontAttributeName: UIFont(name: Constants.FontNames.openSans, size: 32)!])
         
         // create the alert
         let alert = UIAlertController(title: attrTitleString.string, message: attrMessageString.string, preferredStyle: .alert)
         
         // add the actions (buttons)
-        alert.addAction(UIAlertAction(title: okTitle, style: .default, handler: { (action: UIAlertAction) in
+        alert.addAction(UIAlertAction(title: okTitle, style: .default, handler: { (_: UIAlertAction) in
             
             proceedCompletion()
         }))

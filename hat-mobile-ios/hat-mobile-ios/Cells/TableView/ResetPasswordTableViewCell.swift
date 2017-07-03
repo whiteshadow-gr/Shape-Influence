@@ -10,17 +10,21 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/
  */
 
-import UIKit
+import zxcvbn_ios
 
 // MARK: Class
 
 /// The class responsible for the reset password table view cell
-class ResetPasswordTableViewCell: UITableViewCell {
+internal class ResetPasswordTableViewCell: UITableViewCell, UITextFieldDelegate {
+    
+    // MARK: - Variables
+    
+    private var score: Int = 0
     
     // MARK: - IBOutlets
 
     /// The textField that the user writes the old or new password
-    @IBOutlet weak var textField: UITextField!
+    @IBOutlet private weak var textField: UITextField!
     
     // MARK: - UITableViewCell methods
     
@@ -34,4 +38,52 @@ class ResetPasswordTableViewCell: UITableViewCell {
         super.setSelected(selected, animated: animated)
     }
 
+    // MARK: - Get Password
+    
+    /**
+     Returns the password value of the UITextField
+     
+     - returns: A string with the password value of the UITextField
+     */
+    func getPassword() -> String {
+        
+        let password = self.textField.text
+        if password != nil {
+            
+            return password!
+        }
+        return ""
+    }
+    
+    // MARK: - Set up cell
+    
+    /**
+     Updates and formats the cell accordingly
+     
+     - parameter cell: The ResetPasswordTableViewCell to update and format
+     - parameter indexPath: The indexPath of the cell
+     
+     - returns: A UITableViewCell cell already updated and formatted accordingly
+     */
+    func setUpCell(cell: ResetPasswordTableViewCell, indexPath: IndexPath) -> UITableViewCell {
+        
+        if indexPath.section == 0 {
+            
+            cell.textField.delegate = nil
+        } else if indexPath.section == 1 {
+            
+            cell.textField.delegate = self
+        }
+        
+        return cell
+    }
+    
+    // MARK: - Text field methods
+    
+    func textField(_ textField: UITextField, shouldChangeCharactersIn range: NSRange, replacementString string: String) -> Bool {
+        
+        self.score = ZXCVBNHelper.showPasswordMeterOn(textField: textField)
+        
+        return true
+    }
 }

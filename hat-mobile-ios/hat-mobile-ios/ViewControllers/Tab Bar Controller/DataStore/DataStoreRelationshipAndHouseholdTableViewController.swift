@@ -15,7 +15,7 @@ import HatForIOS
 // MARK: Class
 
 /// A class responsible for the profile relationship and household, in dataStore ViewController
-class DataStoreRelationshipAndHouseholdTableViewController: UITableViewController, UserCredentialsProtocol {
+internal class DataStoreRelationshipAndHouseholdTableViewController: UITableViewController, UserCredentialsProtocol {
     
     // MARK: - Variables
 
@@ -47,60 +47,82 @@ class DataStoreRelationshipAndHouseholdTableViewController: UITableViewControlle
         
         self.view.addSubview(self.darkView)
         
-        self.loadingView = UIView.createLoadingView(with: CGRect(x: (self.view?.frame.midX)! - 70, y: (self.view?.frame.midY)! - 15, width: 140, height: 30), color: .teal, cornerRadius: 15, in: self.view, with: "Updating profile...", textColor: .white, font: UIFont(name: "OpenSans", size: 12)!)
+        self.loadingView = UIView.createLoadingView(with: CGRect(x: (self.view?.frame.midX)! - 70, y: (self.view?.frame.midY)! - 15, width: 140, height: 30), color: .teal, cornerRadius: 15, in: self.view, with: "Updating profile...", textColor: .white, font: UIFont(name: Constants.FontNames.openSans, size: 12)!)
         
-        for (index, _) in self.headers.enumerated() {
+        for index in self.headers.indices {
             
             var cell = self.tableView.cellForRow(at: IndexPath(row: 0, section: index)) as? PhataTableViewCell
             
             if cell == nil {
                 
                 let indexPath = IndexPath(row: 0, section: index)
-                cell = tableView.dequeueReusableCell(withIdentifier: "dataStoreRelationshipCell", for: indexPath) as? PhataTableViewCell
+                cell = tableView.dequeueReusableCell(withIdentifier: Constants.CellReuseIDs.dataStoreRelationshipCell, for: indexPath) as? PhataTableViewCell
                 cell = self.setUpCell(cell: cell!, indexPath: indexPath, relationshipAndHousehold: self.relationshipAndHousehold) as? PhataTableViewCell
             }
             
             if index == 0 {
                 
-                self.relationshipAndHousehold.relationshipStatus = (cell?.textField.text)!
+                self.relationshipAndHousehold.relationshipStatus = cell!.getTextFromTextField()
             } else if index == 1 {
                 
-                self.relationshipAndHousehold.typeOfAccomodation = (cell?.textField.text)!
+                self.relationshipAndHousehold.typeOfAccomodation = cell!.getTextFromTextField()
             } else if index == 2 {
                 
-                self.relationshipAndHousehold.typeOfAccomodation = (cell?.textField.text)!
+                self.relationshipAndHousehold.livingSituation = cell!.getTextFromTextField()
             } else if index == 3 {
                 
-                self.relationshipAndHousehold.howManyUsuallyLiveInYourHousehold = (cell?.textField.text)!
+                self.relationshipAndHousehold.howManyUsuallyLiveInYourHousehold = cell!.getTextFromTextField()
             } else if index == 4 {
                 
-                self.relationshipAndHousehold.householdOwnership = (cell?.textField.text)!
+                self.relationshipAndHousehold.householdOwnership = cell!.getTextFromTextField()
             } else if index == 5 {
                 
-                self.relationshipAndHousehold.hasChildren = (cell?.textField.text)!
+                self.relationshipAndHousehold.hasChildren = cell!.getTextFromTextField()
             } else if index == 6 {
                 
-                self.relationshipAndHousehold.numberOfChildren = Int((cell?.textField.text)!)!
+                self.relationshipAndHousehold.numberOfChildren = Int(cell!.getTextFromTextField())!
             } else if index == 7 {
                 
-                self.relationshipAndHousehold.additionalDependents = (cell?.textField.text)!
+                self.relationshipAndHousehold.additionalDependents = cell!.getTextFromTextField()
             }
         }
         
-        HATProfileService.postRelationshipAndHouseholdToHAT(userDomain: userDomain, userToken: userToken, relationshipAndHouseholdObject: self.relationshipAndHousehold, successCallback: {_ in
+        func gotApplicationToken(appToken: String, newUserToken: String?) {
             
-            self.loadingView.removeFromSuperview()
-            self.darkView.removeFromSuperview()
+            HATProfileService.postRelationshipAndHouseholdToHAT(
+                userDomain: userDomain,
+                userToken: appToken,
+                relationshipAndHouseholdObject: self.relationshipAndHousehold,
+                successCallback: {_ in
+                    
+                    self.loadingView.removeFromSuperview()
+                    self.darkView.removeFromSuperview()
+                    
+                    _ = self.navigationController?.popViewController(animated: true)
+                },
+                failCallback: {error in
+                    
+                    self.loadingView.removeFromSuperview()
+                    self.darkView.removeFromSuperview()
+                    
+                    self.createClassicOKAlertWith(alertMessage: "There was an error posting profile", alertTitle: "Error", okTitle: "OK", proceedCompletion: {})
+                    _ = CrashLoggerHelper.hatTableErrorLog(error: error)
+                }
+            )
+        }
+        
+        func gotErrorWhenGettingApplicationToken(error: JSONParsingError) {
             
-            _ = self.navigationController?.popViewController(animated: true)
-        }, failCallback: {error in
-            
-            self.loadingView.removeFromSuperview()
-            self.darkView.removeFromSuperview()
-            
-            self.createClassicOKAlertWith(alertMessage: "There was an error posting profile", alertTitle: "Error", okTitle: "OK", proceedCompletion: {})
-            _ = CrashLoggerHelper.hatTableErrorLog(error: error)
-        })
+            CrashLoggerHelper.JSONParsingErrorLog(error: error)
+        }
+        
+        HATService.getApplicationTokenFor(
+            serviceName: "Rumpel",
+            userDomain: self.userDomain,
+            token: self.userToken,
+            resource: "https://rumpel.hubofallthings.com",
+            succesfulCallBack: gotApplicationToken,
+            failCallBack: gotErrorWhenGettingApplicationToken)
     }
     
     // MARK: - View Controller functions
@@ -163,9 +185,12 @@ class DataStoreRelationshipAndHouseholdTableViewController: UITableViewControlle
     
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         
-        let cell = tableView.dequeueReusableCell(withIdentifier: "dataStoreRelationshipCell", for: indexPath) as! PhataTableViewCell
+        if let cell = tableView.dequeueReusableCell(withIdentifier: Constants.CellReuseIDs.dataStoreRelationshipCell, for: indexPath) as? PhataTableViewCell {
+            
+            return setUpCell(cell: cell, indexPath: indexPath, relationshipAndHousehold: self.relationshipAndHousehold)
+        }
         
-        return setUpCell(cell: cell, indexPath: indexPath, relationshipAndHousehold: self.relationshipAndHousehold)
+        return tableView.dequeueReusableCell(withIdentifier: Constants.CellReuseIDs.dataStoreRelationshipCell, for: indexPath)
     }
     
     override func tableView(_ tableView: UITableView, titleForHeaderInSection section: Int) -> String? {
@@ -186,6 +211,7 @@ class DataStoreRelationshipAndHouseholdTableViewController: UITableViewControlle
      - parameter cell: The cell to set up
      - parameter indexPath: The index path of the cell
      - parameter nationality: The nationality object used to set up the cell
+     
      - returns: The set up cell
      */
     func setUpCell(cell: PhataTableViewCell, indexPath: IndexPath, relationshipAndHousehold: HATProfileRelationshipAndHouseholdObject) -> UITableViewCell {
@@ -194,28 +220,28 @@ class DataStoreRelationshipAndHouseholdTableViewController: UITableViewControlle
         
         if indexPath.section == 0 {
             
-            cell.textField.text = relationshipAndHousehold.relationshipStatus
+            cell.setTextToTextField(text: relationshipAndHousehold.relationshipStatus)
         } else if indexPath.section == 1 {
             
-            cell.textField.text = relationshipAndHousehold.typeOfAccomodation
+            cell.setTextToTextField(text: relationshipAndHousehold.typeOfAccomodation)
         } else if indexPath.section == 2 {
             
-            cell.textField.text = relationshipAndHousehold.livingSituation
+            cell.setTextToTextField(text: relationshipAndHousehold.livingSituation)
         } else if indexPath.section == 3 {
             
-            cell.textField.text = relationshipAndHousehold.howManyUsuallyLiveInYourHousehold
+            cell.setTextToTextField(text: relationshipAndHousehold.howManyUsuallyLiveInYourHousehold)
         } else if indexPath.section == 4 {
             
-            cell.textField.text = relationshipAndHousehold.householdOwnership
+            cell.setTextToTextField(text: relationshipAndHousehold.householdOwnership)
         } else if indexPath.section == 5 {
             
-            cell.textField.text = relationshipAndHousehold.hasChildren
+            cell.setTextToTextField(text: relationshipAndHousehold.hasChildren)
         } else if indexPath.section == 6 {
             
-            cell.textField.text = String(describing: relationshipAndHousehold.numberOfChildren)
+            cell.setTextToTextField(text: String(describing: relationshipAndHousehold.numberOfChildren))
         } else if indexPath.section == 7 {
             
-            cell.textField.text = relationshipAndHousehold.additionalDependents
+            cell.setTextToTextField(text: relationshipAndHousehold.additionalDependents)
         }
         
         return cell

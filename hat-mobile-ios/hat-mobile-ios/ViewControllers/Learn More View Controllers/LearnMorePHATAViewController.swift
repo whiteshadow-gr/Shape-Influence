@@ -15,12 +15,12 @@ import UIKit
 // MARK: Class
 
 /// A pop up view controller in ProfileViewController about PHATA
-class LearnMorePHATAViewController: UIViewController {
+internal class LearnMorePHATAViewController: UIViewController {
     
     // MARK: - IBOutlets
     
     /// An IBOutlet for controlling the label that has the info
-    @IBOutlet weak var details: UILabel!
+    @IBOutlet private weak var details: UILabel!
     
     // MARK: - IBActions
     
@@ -31,7 +31,7 @@ class LearnMorePHATAViewController: UIViewController {
      */
     @IBAction func cancelButtonAction(_ sender: Any) {
         
-        NotificationCenter.default.post(name: NSNotification.Name(Constants.NotificationNames.hideLearnMore.rawValue), object: nil)
+        NotificationCenter.default.post(name: NSNotification.Name(Constants.NotificationNames.hideLearnMore), object: nil)
     }
     
     // MARK: - View Controller methods

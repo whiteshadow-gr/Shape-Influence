@@ -10,10 +10,10 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/
  */
 
-import HatForIOS
-import RealmSwift
-import MapKit
 import FBAnnotationClusteringSwift
+import HatForIOS
+import MapKit
+import RealmSwift
 
 // MARK: Extension
 
@@ -27,8 +27,9 @@ extension FBClusteringManager {
      Fetch the DataPoints in a background thread and update the UI once complete
      
      - parameter predicate: The predicate to filter the data points with
+     - parameter mapView: The mapView to show the cluster points to
      */
-    func fetchAndClusterPoints(_ predicate: NSPredicate, mapView: MKMapView) -> Void {
+    func fetchAndClusterPoints(_ predicate: NSPredicate, mapView: MKMapView) {
         
         DispatchQueue.global().async { [weak self] () -> Void in
             
@@ -59,20 +60,22 @@ extension FBClusteringManager {
      Adds the pins to the map
      
      - parameter annottationArray: The anottations, pins, to add to the map
+     - parameter mapView: The mapView to show the cluster points to
      */
     func addPointsToMap(annottationArray: [FBAnnotation], mapView: MKMapView) {
         
         // we must set annotations to replace old ones
         self.removeAll()
         self.add(annotations: annottationArray)
-        // force map changed to refresh the map and any pins
-        //mapView(self.mapView, regionDidChangeAnimated: true)
         
         DispatchQueue.main.async(execute: { [weak self] () -> Void in
             
-            if(annottationArray.count > 0) {
+            if let weakSelf = self {
                 
-                self!.fitMapViewToAnnotaionList(annottationArray, mapView: mapView)
+                if !annottationArray.isEmpty {
+                    
+                    weakSelf.fitMapViewToAnnotaionList(annottationArray, mapView: mapView)
+                }
             }
         })
     }
@@ -83,6 +86,7 @@ extension FBClusteringManager {
      Converts the LocationsObjects to pins to add in the map later
      
      - parameter objects: The LocationsObjects to convert to FBAnnotation, pins
+     
      - returns: An array of FBAnnotation, pins
      */
     func createAnnotationsFrom(objects: [HATLocationsObject]) -> [FBAnnotation] {
@@ -105,8 +109,9 @@ extension FBClusteringManager {
      Updates map view with the annotations provided
      
      - parameter annotations: The annotations to add on the map in an array of FBAnnotation
+     - parameter mapView: The mapView to show the cluster points to
      */
-    func fitMapViewToAnnotaionList(_ annotations: [FBAnnotation], mapView: MKMapView) -> Void {
+    func fitMapViewToAnnotaionList(_ annotations: [FBAnnotation], mapView: MKMapView) {
         
         // calculate map padding and zoom
         let mapEdgePadding = UIEdgeInsets(top: 20, left: 20, bottom: 20, right: 20)

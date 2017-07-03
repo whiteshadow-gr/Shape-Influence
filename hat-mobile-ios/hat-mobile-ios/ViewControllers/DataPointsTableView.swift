@@ -15,14 +15,14 @@ import RealmSwift
 // MARK: Class
 
 /// Extends UITAbleView. Manage the rendering of DataPoints
-class DataPointsTableView: UITableView, UITableViewDelegate, UITableViewDataSource {
+internal class DataPointsTableView: UITableView, UITableViewDelegate, UITableViewDataSource {
     
     // MARK: - Variables
     
     /// the data points from Realm
     private var dataResults: Results<DataPoint>!
     /// the cell identifier
-    private let basicCellIdentifier = "DataPointTableViewCell"
+    private let basicCellIdentifier: String = "DataPointTableViewCell"
     
     // MARK: - View Controller delegate methods
 
@@ -30,6 +30,8 @@ class DataPointsTableView: UITableView, UITableViewDelegate, UITableViewDataSour
      Initialisation code when first constructed.
      */
     override func awakeFromNib() {
+        
+        super.awakeFromNib()
         
         delegate = self
         dataSource = self
@@ -49,29 +51,11 @@ class DataPointsTableView: UITableView, UITableViewDelegate, UITableViewDataSour
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         
-        var cell: DataPointTableViewCell? = tableView.dequeueReusableCell(withIdentifier: basicCellIdentifier) as! DataPointTableViewCell?
-        
-        if (cell == nil) {
+        if let cell = tableView.dequeueReusableCell(withIdentifier: basicCellIdentifier) as? DataPointTableViewCell {
             
-            cell = DataPointTableViewCell(style: UITableViewCellStyle.default, reuseIdentifier: basicCellIdentifier)
+            return cell.setUpCell(dataPoint: dataResults[indexPath.row], lastSynced: dataResults[indexPath.row].lastSynced)
         }
         
-        let dataPoint: DataPoint = dataResults[indexPath.row]
-        
-        cell!.labelLatitude.text = String(dataPoint.lat) + ", " + String(dataPoint.lng) + ", " + String(dataPoint.accuracy)
-        cell!.labelDateAdded.text = "Added " + FormatterHelper.getDateString(dataPoint.dateAdded)
-        
-        // last sync date
-        if let lastSynced:Date = dataPoint.lastSynced as Date? {
-            
-            cell!.labelSyncDate.text = "Synced " + FormatterHelper.getDateString(lastSynced)
-            cell!.labelSyncDate.textColor = Constants.Colours.AppBase
-        } else {
-            
-            cell?.labelSyncDate.text = NSLocalizedString("not_synced_label", comment:  "")
-            cell!.labelSyncDate.textColor = UIColor.red
-        }
-
-        return cell!
+        return DataPointTableViewCell(style: UITableViewCellStyle.default, reuseIdentifier: basicCellIdentifier)
     }
 }

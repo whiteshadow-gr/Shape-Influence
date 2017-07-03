@@ -15,7 +15,7 @@ import HatForIOS
 // MARK: Struct
 
 /// A class about the methods concerning marketsquare
-struct MarketSquareService {
+internal struct MarketSquareService: UserCredentialsProtocol {
     
     // MARK: - Methods
     
@@ -24,9 +24,9 @@ struct MarketSquareService {
      
      - returns: MarketAccessToken
      */
-    static func TheMarketAccessToken() -> Constants.MarketAccessTokenAlias {
+    static func theMarketAccessToken() -> Constants.MarketAccessTokenAlias {
         
-        return Constants.HATDataPlugCredentials.Market_AccessToken
+        return Constants.HATDataPlugCredentials.marketsquareAccessToken
     }
     
     /**
@@ -34,9 +34,9 @@ struct MarketSquareService {
      
      - returns: MarketDataPlugID
      */
-    static func TheMarketDataPlugID() -> Constants.MarketDataPlugIDAlias {
+    static func theMarketDataPlugID() -> Constants.MarketDataPlugIDAlias {
         
-        return Constants.HATDataPlugCredentials.Market_DataPlugID
+        return Constants.HATDataPlugCredentials.marketsquareDataPlugID
     }
     
     // MARK: - Get app token
@@ -47,16 +47,20 @@ struct MarketSquareService {
      - parameter successful: An @escaping (String) -> Void method executed on a successful response
      - parameter failed: An @escaping (Void) -> Void) method executed on a failed response
      */
-    static func getAppTokenForMarketsquare(successful: @escaping (String, String?) -> Void, failed: @escaping (Void) -> Void) {
+    static func getAppTokenForMarketsquare(successful: @escaping (String, String?) -> Void, failed: @escaping () -> Void) {
         
-        let userDomain = HATAccountService.TheUserHATDomain()
-        let userToken = HATAccountService.getUsersTokenFromKeychain()
-        
-        HATService.getApplicationTokenFor(serviceName: "MarketSquare", userDomain: userDomain, token: userToken, resource: "https://marketsquare.hubofallthings.com", succesfulCallBack: successful, failCallBack: {(error) in
+        HATService.getApplicationTokenFor(
+            serviceName: Constants.ApplicationToken.Marketsquare.name,
+            userDomain: userDomain,
+            token: userToken,
+            resource: Constants.ApplicationToken.Marketsquare.source,
+            succesfulCallBack: successful,
+            failCallBack: {(error) in
             
-            failed()
-            CrashLoggerHelper.JSONParsingErrorLogWithoutAlert(error: error)
-        })
+                failed()
+                CrashLoggerHelper.JSONParsingErrorLogWithoutAlert(error: error)
+            }
+        )
     }
     
 }

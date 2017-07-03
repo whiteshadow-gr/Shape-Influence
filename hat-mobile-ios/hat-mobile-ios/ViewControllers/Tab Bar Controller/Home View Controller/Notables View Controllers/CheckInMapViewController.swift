@@ -15,15 +15,15 @@ import MapKit
 // MARK: Class
 
 /// A class responsible for taging a note with a location
-class CheckInMapViewController: UIViewController, UpdateLocationsDelegate, UISearchBarDelegate, MKMapViewDelegate {
+internal class CheckInMapViewController: UIViewController, UpdateLocationsDelegate, UISearchBarDelegate, MKMapViewDelegate {
     
     // MARK: - Variables
     
     /// The location helper
-    private let locationHelper = UpdateLocations()
+    private let locationHelper: UpdateLocations = UpdateLocations()
 
     /// The results searchController, for searching for places nearby
-    private var resultSearchController: UISearchController? = nil
+    private var resultSearchController: UISearchController?
     
     /// A bool to determine if the map is focused on the user's location
     private var isFocusedToUsersPosition: Bool = false
@@ -41,9 +41,9 @@ class CheckInMapViewController: UIViewController, UpdateLocationsDelegate, UISea
     // MARK: - IBOutlets
 
     /// An IBOutler for the searchBar
-    @IBOutlet weak var searchBar: UISearchBar!
+    @IBOutlet private weak var searchBar: UISearchBar!
     /// An IBOutler for the mapview
-    @IBOutlet weak var mapView: MKMapView!
+    @IBOutlet private weak var mapView: MKMapView!
     
     // MARK: - IBActions
     
@@ -113,14 +113,21 @@ class CheckInMapViewController: UIViewController, UpdateLocationsDelegate, UISea
             
             if result.1 == .denied {
                 
-                self.createClassicOKAlertWith(alertMessage: "You seem to have denied access to your location so you cannot use this feature. You can go to settings and change the persimission for Rumpel Lite", alertTitle: "Permissions denied", okTitle: "OK", proceedCompletion: {})
+                self.createClassicOKAlertWith(
+                    alertMessage: "You seem to have denied access to your location so you cannot use this feature. You can go to settings and change the persimission for Rumpel Lite",
+                    alertTitle: "Permissions denied",
+                    okTitle: "OK",
+                    proceedCompletion: {})
             } else if result.1 == .notDetermined {
                 
                 self.locationHelper.requestAuthorisation()
             }
         } else {
             
-            self.createClassicOKAlertWith(alertMessage: "Location service is disabled. You have to enable location service in order to use this feature", alertTitle: "Location service is disabled", okTitle: "OK", proceedCompletion: {})
+            self.createClassicOKAlertWith(
+                alertMessage: "Location service is disabled. You have to enable location service in order to use this feature", alertTitle: "Location service is disabled",
+                okTitle: "OK",
+                proceedCompletion: {})
         }
     }
     
@@ -146,7 +153,7 @@ class CheckInMapViewController: UIViewController, UpdateLocationsDelegate, UISea
         dismiss(animated: true, completion: nil)
         
         // if any annotation are on map delete hem
-        if self.mapView.annotations.count != 0 {
+        if !self.mapView.annotations.isEmpty {
             
             for annotation in self.mapView.annotations {
                 
@@ -161,7 +168,7 @@ class CheckInMapViewController: UIViewController, UpdateLocationsDelegate, UISea
         
         // init the search request
         let localSearch = MKLocalSearch(request: localSearchRequest)
-        localSearch.start { (localSearchResponse, error) -> Void in
+        localSearch.start { (localSearchResponse, _) -> Void in
             
             // if no response show an alert
             if localSearchResponse == nil {
@@ -196,7 +203,7 @@ class CheckInMapViewController: UIViewController, UpdateLocationsDelegate, UISea
     func updateLocations(locations: [CLLocation]) {
         
         // if we have received locations
-        if locations.count > 0 {
+        if !locations.isEmpty {
             
             // get the last onee
             let lastLocation = locations.last

@@ -10,11 +10,11 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/
  */
 
+@testable import Pods_hat_mobile_ios
+@testable import SwiftyJSON
 import XCTest
 
-@testable import SwiftyJSON
-@testable import Pods_hat_mobile_ios
-class DataPlugCollectionViewCellTests: XCTestCase {
+internal class DataPlugCollectionViewCellTests: XCTestCase {
     
     override func setUp() {
         super.setUp()
@@ -67,7 +67,6 @@ class DataPlugCollectionViewCellTests: XCTestCase {
         note.data.shared = false
         
         _ = UITableViewCell()
-        
         
     }
     

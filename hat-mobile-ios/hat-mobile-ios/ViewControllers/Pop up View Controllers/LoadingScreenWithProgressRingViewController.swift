@@ -15,7 +15,7 @@ import UIKit
 // MARK: Class
 
 /// The class responsible for the loading ring progress bar pop up view controller
-class LoadingScreenWithProgressRingViewController: UIViewController {
+internal class LoadingScreenWithProgressRingViewController: UIViewController {
     
     // MARK: - Variables
     
@@ -25,13 +25,13 @@ class LoadingScreenWithProgressRingViewController: UIViewController {
     // MARK: - IBOutlets
 
     /// An IBOutlet for handling the RingProgressCircle
-    @IBOutlet weak var progressRing: RingProgressCircle!
+    @IBOutlet private weak var progressRing: RingProgressCircle!
     
     /// An IBOutlet for handling the percentage UILabel
-    @IBOutlet weak var percentageLabel: UILabel!
+    @IBOutlet private weak var percentageLabel: UILabel!
     
     /// An IBOutlet for handling the cancel UIButton
-    @IBOutlet weak var cancelButton: UIButton!
+    @IBOutlet private weak var cancelButton: UIButton!
     
     // MARK: - IBActions
 
@@ -94,7 +94,7 @@ class LoadingScreenWithProgressRingViewController: UIViewController {
         let currentRatio = String(describing: floor(end * 100))
         self.percentageLabel.text = currentRatio + " %"
 
-        self.progressRing.updateCircle(end: end, animate: animateFrom, to: Float(end), removePreviousLayer: removePreviousRingLayer)
+        self.progressRing.updateCircle(end: end, animate: animateFrom, removePreviousLayer: removePreviousRingLayer)
     }
 
     // MARK: - Init view
@@ -104,6 +104,7 @@ class LoadingScreenWithProgressRingViewController: UIViewController {
      
      - parameter stringToShow: The string to show to the pop up
      - parameter storyBoard: The storyboard to init the view from
+     
      - returns: An optional instance of TextPopUpViewController ready to present from a view controller
      */
     class func customInit(completion: Double, from storyBoard: UIStoryboard) -> LoadingScreenWithProgressRingViewController? {
@@ -113,5 +114,12 @@ class LoadingScreenWithProgressRingViewController: UIViewController {
         loadingViewController?.completionPercentage = completion
         
         return loadingViewController
+    }
+    
+    // MARK: Update ring
+    
+    func getRingEndPoint() -> CGFloat {
+        
+        return self.progressRing.endPoint
     }
 }

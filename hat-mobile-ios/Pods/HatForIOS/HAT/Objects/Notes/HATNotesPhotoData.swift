@@ -10,15 +10,15 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/
  */
 
-import UIKit
+import SwiftyJSON
 
 // MARK: Struct
 
 /// A struct representing the location table received from JSON
 public struct HATNotesPhotoData: Comparable {
-    
+
     // MARK: - Comparable protocol
-    
+
     /// Returns a Boolean value indicating whether two values are equal.
     ///
     /// Equality is the inverse of inequality. For any values `a` and `b`,
@@ -27,11 +27,11 @@ public struct HATNotesPhotoData: Comparable {
     /// - Parameters:
     ///   - lhs: A value to compare.
     ///   - rhs: Another value to compare.
-    public static func ==(lhs: HATNotesPhotoData, rhs: HATNotesPhotoData) -> Bool {
-        
+    public static func == (lhs: HATNotesPhotoData, rhs: HATNotesPhotoData) -> Bool {
+
         return (lhs.link == rhs.link && lhs.source == rhs.source && lhs.caption == rhs.caption && lhs.shared == rhs.shared)
     }
-    
+
     /// Returns a Boolean value indicating whether the value of the first
     /// argument is less than that of the second argument.
     ///
@@ -42,11 +42,11 @@ public struct HATNotesPhotoData: Comparable {
     /// - Parameters:
     ///   - lhs: A value to compare.
     ///   - rhs: Another value to compare.
-    public static func <(lhs: HATNotesPhotoData, rhs: HATNotesPhotoData) -> Bool {
-        
+    public static func < (lhs: HATNotesPhotoData, rhs: HATNotesPhotoData) -> Bool {
+
         return lhs.source < rhs.source
     }
-    
+
     // MARK: - Variables
 
     /// the link to the photo
@@ -55,53 +55,71 @@ public struct HATNotesPhotoData: Comparable {
     public var source: String = ""
     /// the caption of the photo
     public var caption: String = ""
-    
+
     /// the image downloaded from the link
-    public var image: UIImage? = nil
-    
+    public var image: UIImage?
+
     /// if photo is shared
     public var shared: Bool = false
-    
+
     // MARK: - Initialisers
-    
+
     /**
      The default initialiser. Initialises everything to default values.
      */
     public init() {
-        
+
         link = ""
         source = ""
         caption = ""
         shared = false
     }
-    
+
     /**
      It initialises everything from the received JSON file from the HAT
      */
-    public init(dict: Dictionary<String, String>) {
-        
+    public init(dict: Dictionary<String, JSON>) {
+
         // check if shared exists and if is empty
-        if let tempShared = dict["shared"] {
-            
+        if let tempShared = dict["shared"]?.string {
+
             if let boolResult = Bool(tempShared) {
-                
+
                shared = boolResult
             }
         }
-        
-        if let tempLink = dict["link"] {
-            
+
+        if let tempLink = dict["link"]?.string {
+
             link = tempLink
         }
-        
-        if let tempSource = dict["source"] {
-            
+
+        if let tempSource = dict["source"]?.string {
+
             source = tempSource
         }
-        
-        if let tempCaption = dict["caption"] {
-            
+
+        if let tempCaption = dict["caption"]?.string {
+
             caption = tempCaption
         }
+    }
+
+    // MARK: - JSON Mapper
+
+    /**
+     Returns the object as Dictionary, JSON
+     
+     - returns: Dictionary<String, String>
+     */
+    public func toJSON() -> Dictionary<String, Any> {
+
+        return [
+
+            "shared": String(describing: self.shared),
+            "link": self.link,
+            "source": self.source,
+            "caption": self.caption
+        ]
     }
 }

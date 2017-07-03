@@ -16,9 +16,9 @@ import Alamofire
 
 /// The location data plug service class
 public class HATLocationService: NSObject {
-    
+
     // MARK: - Create location plug URL
-    
+
     /**
      Register with HAT url
      
@@ -26,20 +26,20 @@ public class HATLocationService: NSObject {
      - returns: HATRegistrationURLAlias, can return empty string
      */
     public class func locationDataPlugURL(_ userHATDomain: String, dataPlugID: String) -> String {
-        
+
         if let escapedUserHATDomain: String = userHATDomain.addingPercentEncoding(withAllowedCharacters: CharacterSet.urlQueryAllowed) {
-            
+
             let url: String = "https://dex.hubofallthings.com/api/dataplugs/" +
                 dataPlugID + "/" + "connect?hat=" + escapedUserHATDomain
-            
+
             return url
         }
-        
+
         return ""
     }
-    
+
     // MARK: - Enable locations
-    
+
     /**
      Registers app to write on HAT
      
@@ -48,43 +48,43 @@ public class HATLocationService: NSObject {
      - parameter viewController: The UIViewController that calls this method
      */
    public class func enableLocationDataPlug(_ userDomain: String, _ HATDomainFromToken: String, success: @escaping (Bool) -> Void, failed: @escaping (JSONParsingError) -> Void) {
-        
+
         // parameters..
         let parameters: Dictionary<String, String> = [:]
-        
+
         // auth header
         let headers: [String : String] = ["Accept": ContentType.JSON,
                                           "Content-Type": ContentType.JSON,
-                                          RequestHeaders.xAuthToken: HATDataPlugCredentials.Market_AccessToken]
+                                          RequestHeaders.xAuthToken: HATDataPlugCredentials.locationDataPlugToken]
         // construct url
-        let url = HATLocationService.locationDataPlugURL(userDomain, dataPlugID: HATDataPlugCredentials.Market_DataPlugID)
-        
+        let url = HATLocationService.locationDataPlugURL(userDomain, dataPlugID: HATDataPlugCredentials.dataPlugID)
+
         // make asynchronous call
-        HATNetworkHelper.AsynchronousRequest(url, method: HTTPMethod.get, encoding: Alamofire.URLEncoding.default, contentType: "application/json", parameters: parameters, headers: headers) { (r: HATNetworkHelper.ResultType) -> Void in
-            
-            switch r {
+        HATNetworkHelper.asynchronousRequest(url, method: HTTPMethod.get, encoding: Alamofire.URLEncoding.default, contentType: "application/json", parameters: parameters, headers: headers) { (response: HATNetworkHelper.ResultType) -> Void in
+
+            switch response {
             case .isSuccess(let isSuccess, let statusCode, let result, _):
-                
+
                 if isSuccess {
-                    
+
                     // belt and braces.. check we have a message in the returned JSON
                     if result["message"].exists() {
-                        
+
                         // save the hatdomain from the token to the device Keychain
                         success(true)
-                        // No message field in JSON file
+                    // No message field in JSON file
                     } else {
-                        
+
                         failed(.expectedFieldNotFound)
                     }
-                    // general error
+                // general error
                 } else {
-                    
+
                     failed(.generalError(isSuccess.description, statusCode, nil))
                 }
-                
+
             case .error(let error, let statusCode):
-                
+
                 //show error
                 let message = NSLocalizedString("Server responded with error", comment: "")
                 failed(.generalError(message, statusCode, error))

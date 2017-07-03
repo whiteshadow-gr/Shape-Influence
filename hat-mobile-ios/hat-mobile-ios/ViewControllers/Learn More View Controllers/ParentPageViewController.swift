@@ -15,15 +15,15 @@ import UIKit
 // MARK: Class
 
 /// The first PageViewController in Learn More. Responsible for showing a view controller with info about the HAT
-class ParentPageViewController: UIPageViewController, UIPageViewControllerDataSource {
+internal class ParentPageViewController: UIPageViewController, UIPageViewControllerDataSource {
 
     // MARK: - Variables
     
     /// the number of pages for this page view controller
-    private let numberOfPages = [0, 1, 2, 3, 4, 5, 6]
+    private let numberOfPages: [Int] = [0, 1, 2, 3, 4, 5, 6]
     
     /// The current page index
-    private var currentIndex = 0
+    private var currentIndex: Int = 0
     
     // MARK: - PageViewController delegate methods
     
@@ -38,8 +38,8 @@ class ParentPageViewController: UIPageViewController, UIPageViewControllerDataSo
         self.changePaginationColors(pageTintColor: .teal, pageCurrentTintColor: .white)
         
         // add notification observers for disabling and enabling page controll
-        NotificationCenter.default.addObserver(self, selector: #selector(disablePageControll), name: Notification.Name(Constants.NotificationNames.disablePageControll.rawValue), object: nil)
-        NotificationCenter.default.addObserver(self, selector: #selector(enablePageControll), name: Notification.Name(Constants.NotificationNames.enablePageControll.rawValue), object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(disablePageControll), name: Notification.Name(Constants.NotificationNames.disablePageControll), object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(enablePageControll), name: Notification.Name(Constants.NotificationNames.enablePageControll), object: nil)
         
         // change background color
         self.view.backgroundColor = .teal
@@ -63,12 +63,13 @@ class ParentPageViewController: UIPageViewController, UIPageViewControllerDataSo
     func pageViewController(_ pageViewController: UIPageViewController, viewControllerBefore viewController: UIViewController) -> UIViewController? {
         
         // create the view controller for the previous page
-        let itemController = viewController as! PageViewController
-        
-        // check if we are out of bounds and return the view controller
-        if itemController.itemIndex > 0 {
+        if let itemController = viewController as? PageViewController {
             
-            return getItemController(itemIndex: itemController.itemIndex - 1)
+            // check if we are out of bounds and return the view controller
+            if itemController.itemIndex > 0 {
+                
+                return getItemController(itemIndex: itemController.itemIndex - 1)
+            }
         }
         
         // reached first page return nil
@@ -78,12 +79,13 @@ class ParentPageViewController: UIPageViewController, UIPageViewControllerDataSo
     func pageViewController(_ pageViewController: UIPageViewController, viewControllerAfter viewController: UIViewController) -> UIViewController? {
         
         // create the view controller for the next page
-        let itemController = viewController as! PageViewController
-        
-        // check if we are out of bounds and return the view controller
-        if itemController.itemIndex + 1 < numberOfPages.count {
+        if let itemController = viewController as? PageViewController {
             
-            return getItemController(itemIndex: itemController.itemIndex + 1)
+            // check if we are out of bounds and return the view controller
+            if itemController.itemIndex + 1 < numberOfPages.count {
+                
+                return getItemController(itemIndex: itemController.itemIndex + 1)
+            }
         }
         
         // reached final page return nil
@@ -107,7 +109,8 @@ class ParentPageViewController: UIPageViewController, UIPageViewControllerDataSo
      
      - parameter notification: The Notification object send with this notification
      */
-    @objc private func disablePageControll(notification: Notification) {
+    @objc
+    private func disablePageControll(notification: Notification) {
         
         self.dataSource = nil
     }
@@ -117,7 +120,8 @@ class ParentPageViewController: UIPageViewController, UIPageViewControllerDataSo
      
      - parameter notification: The Notification object send with this notification
      */
-    @objc private func enablePageControll(notification: Notification) {
+    @objc
+    private func enablePageControll(notification: Notification) {
         
         self.dataSource = self
         _ = self.getItemController(itemIndex: 6)
@@ -137,7 +141,7 @@ class ParentPageViewController: UIPageViewController, UIPageViewControllerDataSo
         self.dataSource = self
         
         // if we have pages to show init them and add them to the page view controller
-        if numberOfPages.count > 0 {
+        if !numberOfPages.isEmpty {
             
             let firstController = getItemController(itemIndex: 0)!
             let startingViewControllers = [firstController]
@@ -149,6 +153,7 @@ class ParentPageViewController: UIPageViewController, UIPageViewControllerDataSo
      Create the view controller to present
      
      - parameter itemIndex: The number of the page to create
+     
      - returns: An optional HATCapabilitiesViewController
      */
     private func getItemController(itemIndex: Int) -> PageViewController? {
@@ -157,12 +162,13 @@ class ParentPageViewController: UIPageViewController, UIPageViewControllerDataSo
         if itemIndex < numberOfPages.count {
             
             // create the view controller and return it
-            let pageItemController = self.storyboard!.instantiateViewController(withIdentifier: "ItemController") as! PageViewController
-            
-            pageItemController.itemIndex = itemIndex
-            self.currentIndex = itemIndex
-
-            return pageItemController
+            if let pageItemController = self.storyboard!.instantiateViewController(withIdentifier: "ItemController") as? PageViewController {
+                
+                pageItemController.itemIndex = itemIndex
+                self.currentIndex = itemIndex
+                
+                return pageItemController
+            }
         }
         
         return nil

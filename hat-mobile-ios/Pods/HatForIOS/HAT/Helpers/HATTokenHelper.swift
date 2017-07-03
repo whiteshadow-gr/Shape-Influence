@@ -12,35 +12,35 @@
 
 import JWTDecode
 
-// MARK: Class
+// MARK: Struct
 
-class HATTokenHelper: NSObject {
-    
+public struct HATTokenHelper {
+
     // MARK: - Check token scope
-    
+
     /**
      Checks if the token has owner scope and returns it, else returns nil
      
      - parameter token: The token to check for the scope
      - returns: Returns the token if the scope of it is owner else nil
      */
-    class func checkTokenScope(token: String?) -> String? {
-        
+    public static func checkTokenScope(token: String?) -> String? {
+
         if let unwrappedToken = token {
-            
+
             do {
-                
+
                 let jwt = try decode(jwt: unwrappedToken)
                 let scope = jwt.claim(name: "accessScope")
-                
+
                 if scope.string == "owner" {
-                    
+
                     return unwrappedToken
                 }
             } catch {
             }
         }
-        
+
         return nil
     }
 

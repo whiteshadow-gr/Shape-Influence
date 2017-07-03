@@ -15,7 +15,7 @@ import UIKit
 // MARK: Struct
 
 ///The animation controller struct
-struct AnimationHelper {
+internal struct AnimationHelper {
     
     // MARK: - Animations
     
@@ -30,7 +30,7 @@ struct AnimationHelper {
      - version: 1.0
      - copyright: Copyright © 2016 Marios-Andreas Tsekis. All rights reserved.
      */
-    static func animateCircle(from: Float, to: Float, duration: TimeInterval, arc: CAShapeLayer) {
+    static func animateCircle(from: Float, toValue: Float, duration: TimeInterval, arc: CAShapeLayer) {
         
         // We want to animate the strokeEnd property of the circleLayer
         let animation = CABasicAnimation(keyPath: "strokeEnd")
@@ -40,7 +40,7 @@ struct AnimationHelper {
         
         // Animate from 0 (no circle) to 1 (full circle)
         animation.fromValue = from
-        animation.toValue = to
+        animation.toValue = toValue
         
         // Do a linear animation (i.e. the speed of the animation stays the same)
         animation.timingFunction = CAMediaTimingFunction(name: kCAMediaTimingFunctionLinear)
@@ -57,14 +57,14 @@ struct AnimationHelper {
     }
     
     /**
-     Performs the specified animations for the specified duration. 
+     Performs the specified animations for the specified duration.
      
      - parameter view: The UIView to animate to
      - parameter duration: The duration of the animation
      - parameter animations: The animations to do
      - parameter completion: An optional function to execute after the animations have complete
      */
-    static func animateView(_ view: UIView?, duration: TimeInterval, animations: @escaping (Void) -> Void, completion: ((Bool) -> Void)?) {
+    static func animateView(_ view: UIView?, duration: TimeInterval, animations: @escaping () -> Void, completion: ((Bool) -> Void)?) {
         
         if view != nil {
             
@@ -76,7 +76,7 @@ struct AnimationHelper {
                         
                         animations()
                     },
-                    completion: {(bool: Bool) -> Void in
+                    completion: {(_: Bool) -> Void in
                         
                         completion?(true)
                 })
@@ -90,6 +90,7 @@ struct AnimationHelper {
      Adds a blured UIView to the view
      
      - parameter view: The view to show the blur to
+     
      - returns: A UIVisualEffectView
      */
     static func addBlurToView(_ view: UIView) -> UIVisualEffectView {

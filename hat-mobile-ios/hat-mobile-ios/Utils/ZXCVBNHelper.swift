@@ -14,15 +14,17 @@ import zxcvbn_ios
 
 // MARK: Class
 
-class ZXCVBNHelper: NSObject {
+/// A class to handle the zxcvbn meter
+internal class ZXCVBNHelper: NSObject {
     
     // MARK: - Show strength meter
     
     /**
-     <#Function Details#>
+     Sets up a zxcvbn meter of the textfield passed as a parameter and returns the score of the password
      
-     - parameter <#Parameter#>: <#Parameter description#>
-     - returns: <#Returns#>
+     - parameter textField: The textField to show the zxcvbn meter
+     
+     - returns: The score of the password entered
      */
     class func showPasswordMeterOn(textField: UITextField) -> Int {
         

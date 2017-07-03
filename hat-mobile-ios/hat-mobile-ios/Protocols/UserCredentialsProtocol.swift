@@ -15,7 +15,7 @@ import HatForIOS
 // MARK: Protocol
 
 /// provides the token and username of the user easily
-protocol UserCredentialsProtocol {
+internal protocol UserCredentialsProtocol {
     
     // MARK: - Protocol's variables
     
@@ -45,7 +45,7 @@ extension UserCredentialsProtocol {
     
     static var userDomain: String {
         
-        return HATAccountService.TheUserHATDomain()
+        return HATAccountService.theUserHATDomain()
     }
     
     var userToken: String {
@@ -55,6 +55,6 @@ extension UserCredentialsProtocol {
     
     var userDomain: String {
         
-        return HATAccountService.TheUserHATDomain()
+        return HATAccountService.theUserHATDomain()
     }
 }

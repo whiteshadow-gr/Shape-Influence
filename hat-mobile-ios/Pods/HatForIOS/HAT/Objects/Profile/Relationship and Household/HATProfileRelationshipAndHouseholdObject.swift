@@ -17,7 +17,7 @@ import SwiftyJSON
 public struct HATProfileRelationshipAndHouseholdObject: Comparable {
 
     // MARK: - Comparable protocol
-    
+
     /// Returns a Boolean value indicating whether two values are equal.
     ///
     /// Equality is the inverse of inequality. For any values `a` and `b`,
@@ -26,11 +26,11 @@ public struct HATProfileRelationshipAndHouseholdObject: Comparable {
     /// - Parameters:
     ///   - lhs: A value to compare.
     ///   - rhs: Another value to compare.
-    public static func ==(lhs: HATProfileRelationshipAndHouseholdObject, rhs: HATProfileRelationshipAndHouseholdObject) -> Bool {
-        
+    public static func == (lhs: HATProfileRelationshipAndHouseholdObject, rhs: HATProfileRelationshipAndHouseholdObject) -> Bool {
+
         return (lhs.relationshipStatus == rhs.relationshipStatus && lhs.typeOfAccomodation == rhs.typeOfAccomodation && lhs.livingSituation == rhs.livingSituation && lhs.livingSituation == rhs.livingSituation && lhs.howManyUsuallyLiveInYourHousehold == rhs.howManyUsuallyLiveInYourHousehold && lhs.householdOwnership == rhs.householdOwnership && lhs.hasChildren == rhs.hasChildren && lhs.additionalDependents == rhs.additionalDependents && lhs.numberOfChildren == rhs.numberOfChildren && lhs.unixTimeStamp == rhs.unixTimeStamp)
     }
-    
+
     /// Returns a Boolean value indicating whether the value of the first
     /// argument is less than that of the second argument.
     ///
@@ -41,13 +41,13 @@ public struct HATProfileRelationshipAndHouseholdObject: Comparable {
     /// - Parameters:
     ///   - lhs: A value to compare.
     ///   - rhs: Another value to compare.
-    public static func <(lhs: HATProfileRelationshipAndHouseholdObject, rhs: HATProfileRelationshipAndHouseholdObject) -> Bool {
-        
+    public static func < (lhs: HATProfileRelationshipAndHouseholdObject, rhs: HATProfileRelationshipAndHouseholdObject) -> Bool {
+
         return lhs.unixTimeStamp! < rhs.unixTimeStamp!
     }
-    
+
     // MARK: - Variables
-    
+
     public var relationshipStatus: String = ""
     public var typeOfAccomodation: String = ""
     public var livingSituation: String = ""
@@ -56,17 +56,17 @@ public struct HATProfileRelationshipAndHouseholdObject: Comparable {
     public var hasChildren: String = ""
     public var additionalDependents: String = ""
     public var recordID: String = ""
-    
-    public var unixTimeStamp: Int? = nil
+
+    public var unixTimeStamp: Int?
     public var numberOfChildren: Int = 0
 
     // MARK: - Initialisers
-    
+
     /**
      The default initialiser. Initialises everything to default values.
      */
     public init() {
-        
+
         relationshipStatus = ""
         typeOfAccomodation = ""
         livingSituation = ""
@@ -75,18 +75,18 @@ public struct HATProfileRelationshipAndHouseholdObject: Comparable {
         hasChildren = ""
         additionalDependents = ""
         recordID = ""
-        
+
         unixTimeStamp = nil
         numberOfChildren = 0
     }
-    
+
     /**
      It initialises everything from the received JSON file from the HAT
      */
     public init(from dict: JSON) {
-        
+
         if let data = (dict["data"].dictionary) {
-            
+
             relationshipStatus = (data["relationshipStatus"]!.stringValue)
             typeOfAccomodation = (data["typeOfAccomodation"]!.stringValue)
             livingSituation = (data["livingSituation"]!.stringValue)
@@ -95,37 +95,37 @@ public struct HATProfileRelationshipAndHouseholdObject: Comparable {
             hasChildren = (data["hasChildren"]!.stringValue)
             additionalDependents = (data["additionalDependents"]!.stringValue)
             numberOfChildren = (data["numberOfChildren"]!.intValue)
-            
+
             if let time = (data["unixTimeStamp"]?.stringValue) {
-                
+
                 unixTimeStamp = Int(time)
             }
         }
-        
+
         recordID = (dict["recordId"].stringValue)
     }
-    
+
     // MARK: - JSON Mapper
-    
+
     /**
      Returns the object as Dictionary, JSON
      
      - returns: Dictionary<String, String>
      */
     public func toJSON() -> Dictionary<String, Any> {
-        
+
         return [
-            
-            "relationshipStatus" : self.relationshipStatus,
-            "typeOfAccomodation" : self.typeOfAccomodation,
-            "livingSituation" : self.livingSituation,
-            "howManyUsuallyLiveInYourHousehold" : self.howManyUsuallyLiveInYourHousehold,
-            "householdOwnership" : self.householdOwnership,
-            "hasChildren" : self.hasChildren,
-            "additionalDependents" : self.additionalDependents,
-            "numberOfChildren" : self.numberOfChildren,
-            "unixTimeStamp" : Int(HATFormatterHelper.formatDateToEpoch(date: Date())!)!
+
+            "relationshipStatus": self.relationshipStatus,
+            "typeOfAccomodation": self.typeOfAccomodation,
+            "livingSituation": self.livingSituation,
+            "howManyUsuallyLiveInYourHousehold": self.howManyUsuallyLiveInYourHousehold,
+            "householdOwnership": self.householdOwnership,
+            "hasChildren": self.hasChildren,
+            "additionalDependents": self.additionalDependents,
+            "numberOfChildren": self.numberOfChildren,
+            "unixTimeStamp": Int(HATFormatterHelper.formatDateToEpoch(date: Date())!)!
         ]
     }
-    
+
 }

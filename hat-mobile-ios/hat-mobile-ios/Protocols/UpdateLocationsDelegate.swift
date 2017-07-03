@@ -15,7 +15,7 @@ import CoreLocation
 // MARK: Protocol
 
 /// Update the locations gathered
-protocol UpdateLocationsDelegate: class {
+internal protocol UpdateLocationsDelegate: class {
 
     // MARK: - Update locations
     

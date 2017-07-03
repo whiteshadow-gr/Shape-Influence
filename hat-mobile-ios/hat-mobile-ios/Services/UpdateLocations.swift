@@ -15,7 +15,7 @@ import CoreLocation
 // MARK: Class
 
 /// A class responsible for handling the gps tracking
-class UpdateLocations: NSObject, CLLocationManagerDelegate {
+internal class UpdateLocations: NSObject, CLLocationManagerDelegate {
     
     // MARK: - Variables
     
@@ -29,10 +29,10 @@ class UpdateLocations: NSObject, CLLocationManagerDelegate {
     var completion: ((CLLocation) -> Void)?
     
     // The region currently monitoring
-    private var region: CLCircularRegion? = nil
+    private var region: CLCircularRegion?
     
     /// The LocationManager responsible for the settings used for gps tracking
-    var locationManager: CLLocationManager! = CLLocationManager()
+    var locationManager: CLLocationManager? = CLLocationManager()
 
     // MARK: - Initialiser
     
@@ -45,11 +45,14 @@ class UpdateLocations: NSObject, CLLocationManagerDelegate {
         self.resumeLocationServices()
     }
     
+    /**
+     Inits locationManager to default values
+     */
     func initLocationManager() {
         
         self.locationManager = CLLocationManager()
-        self.locationManager?.desiredAccuracy = MapsHelper.GetUserPreferencesAccuracy()
-        self.locationManager?.distanceFilter = MapsHelper.GetUserPreferencesDistance()
+        self.locationManager?.desiredAccuracy = MapsHelper.getUserPreferencesAccuracy()
+        self.locationManager?.distanceFilter = MapsHelper.getUserPreferencesDistance()
         self.locationManager?.allowsBackgroundLocationUpdates = true
         self.locationManager?.disallowDeferredLocationUpdates()
         self.locationManager?.pausesLocationUpdatesAutomatically = false
@@ -57,21 +60,20 @@ class UpdateLocations: NSObject, CLLocationManagerDelegate {
         self.locationManager?.delegate = self
     }
     
+    /**
+     Sets up the location object properties and delegate
+     
+     - parameter locationObject: A location object that confronts to UpdateLocations protocol
+     - parameter delegate: A viewController that confronts to UpdateLocations protocol
+     */
     func setUpLocationObject(_ locationObject: UpdateLocations, delegate: UpdateLocations) {
         
         locationObject.initLocationManager()
-        locationObject.locationManager.delegate = delegate
+        locationObject.locationManager?.delegate = delegate
     }
     
     // MARK: - Location Manager Delegate Functions
     
-    /**
-     The CLLocationManagerDelegate delegate
-     Called when location update changes
-     
-     - parameter manager:   The CLLocation manager used
-     - parameter locations: Array of locations
-     */
     func locationManager(_ manager: CLLocationManager, didUpdateLocations locations: [CLLocation]) {
         
         // add locations gather to database
@@ -144,7 +146,7 @@ class UpdateLocations: NSObject, CLLocationManagerDelegate {
          */
         if let manager: CLLocationManager = locationManager {
             
-            if let result = KeychainHelper.GetKeychainValue(key: "trackDevice") {
+            if let result = KeychainHelper.getKeychainValue(key: Constants.Keychain.trackDeviceKey) {
                 
                 if result == "true" {
                     
@@ -152,7 +154,7 @@ class UpdateLocations: NSObject, CLLocationManagerDelegate {
                 }
             } else {
                 
-                _ = KeychainHelper.SetKeychainValue(key: "trackDevice", value: "true")
+                _ = KeychainHelper.setKeychainValue(key: Constants.Keychain.trackDeviceKey, value: Constants.Keychain.Values.setTrue)
                 self.stopMonitoringAllRegions()
                 self.locationManager?.stopUpdatingLocation()
                 self.locationManager = nil
@@ -214,7 +216,7 @@ class UpdateLocations: NSObject, CLLocationManagerDelegate {
      */
     public func resumeLocationServices() {
         
-        let result = KeychainHelper.GetKeychainValue(key: "trackDevice")
+        let result = KeychainHelper.getKeychainValue(key: Constants.Keychain.trackDeviceKey)
         
         if result == "true" {
             
@@ -233,7 +235,7 @@ class UpdateLocations: NSObject, CLLocationManagerDelegate {
             self.locationManager = nil
         } else {
             
-            _ = KeychainHelper.SetKeychainValue(key: "trackDevice", value: "true")
+            _ = KeychainHelper.setKeychainValue(key: Constants.Keychain.trackDeviceKey, value: Constants.Keychain.Values.setTrue)
             self.locationManager?.startUpdatingLocation()
             self.locationManager?.startMonitoringSignificantLocationChanges()
             self.locationManager?.requestLocation()
@@ -258,7 +260,7 @@ class UpdateLocations: NSObject, CLLocationManagerDelegate {
         
         if CLLocationManager.locationServicesEnabled() {
             
-            switch(CLLocationManager.authorizationStatus()) {
+            switch CLLocationManager.authorizationStatus() {
                 
             case .notDetermined:
                 

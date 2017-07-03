@@ -15,10 +15,26 @@ import UIKit
 // MARK: Class
 
 /// The reusable header view for the collection view cell class for home screen
-class HomeHeaderCollectionReusableView: UICollectionReusableView {
+internal class HomeHeaderCollectionReusableView: UICollectionReusableView {
     
     // MARK: - IBOutlets
     
     /// The header title
-    @IBOutlet weak var headerTitle: UILabel!
+    @IBOutlet private weak var headerTitle: UILabel!
+    
+    // MARK: - Set Up
+    
+    /**
+     Sets the desired title in the reusableView
+     
+     - parameter stringToShow: The string to show as title
+     
+     - returns: UICollectionReusableView
+     */
+    internal func setUp(stringToShow: String) -> UICollectionReusableView {
+        
+        self.headerTitle.text = stringToShow
+        
+        return self
+    }
 }

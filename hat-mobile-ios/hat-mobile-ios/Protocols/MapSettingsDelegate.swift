@@ -13,7 +13,7 @@
 // MARK: Protocol
 
 /// When data in settings has changed
-public protocol MapSettingsDelegate {
+public protocol MapSettingsDelegate: class {
     
     // MARK: - Protocol's functions
     

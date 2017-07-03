@@ -12,7 +12,7 @@
 
 import XCTest
 
-class hat_mobile_iosUITests: XCTestCase {
+internal class hat_mobile_iosUITests: XCTestCase {
         
     override func setUp() {
         super.setUp()

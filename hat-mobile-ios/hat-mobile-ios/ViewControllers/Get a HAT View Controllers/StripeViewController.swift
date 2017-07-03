@@ -17,7 +17,7 @@ import SwiftyJSON
 // MARK: Class
 
 /// The class responsible for buying stuff via Stripe
-class StripeViewController: UIViewController, UIPickerViewDelegate, UIPickerViewDataSource, UITextFieldDelegate {
+internal class StripeViewController: UIViewController, UIPickerViewDelegate, UIPickerViewDataSource, UITextFieldDelegate {
     
     // MARK: - Variables
     
@@ -31,57 +31,57 @@ class StripeViewController: UIViewController, UIPickerViewDelegate, UIPickerView
     private var fileURL: String = ""
     
     /// the image of the selected hat
-    var hatImage: UIImage? = nil
+    var hatImage: UIImage?
     
     /// The purchase model to work on and push to the hat later
     private var purchaseModel: PurchaseModel = PurchaseModel()
     /// An array with all the countries
     private let countriesArray: [String] = StripeViewController.getCountries()
     /// A picker view to show as inputView on keyboard later
-    private let privatePicker = UIPickerView()
+    private let privatePicker: UIPickerView = UIPickerView()
     
     /// The password strength score calculated with the help of zxcvbn
-    private var score = 0
+    private var score: Int = 0
     
     // MARK: - IBOutlets
     
     /// An IBOutlet for handling the arrow bar on top of the view
-    @IBOutlet weak var arrowBarImage: UIImageView!
+    @IBOutlet private weak var arrowBarImage: UIImageView!
     /// An IBOutlet for handling the hat provider image
-    @IBOutlet weak var hatProviderImage: UIImageView!
+    @IBOutlet private weak var hatProviderImage: UIImageView!
     
     /// An IBOutlet for handling the first name textField
-    @IBOutlet weak var firstNameTextField: UITextField!
+    @IBOutlet private weak var firstNameTextField: UITextField!
     /// An IBOutlet for handling the last name textField
-    @IBOutlet weak var lastNameTextField: UITextField!
+    @IBOutlet private weak var lastNameTextField: UITextField!
     /// An IBOutlet for handling the email textField
-    @IBOutlet weak var emailTextField: UITextField!
+    @IBOutlet private weak var emailTextField: UITextField!
     /// An IBOutlet for handling the personal HAT address textField
-    @IBOutlet weak var personalHATAddressTextField: UITextField!
+    @IBOutlet private weak var personalHATAddressTextField: UITextField!
     /// An IBOutlet for handling the password textField
-    @IBOutlet weak var passwordTextField: UITextField!
+    @IBOutlet private weak var passwordTextField: UITextField!
     /// An IBOutlet for handling the retype password textField
-    @IBOutlet weak var confirmPasswordTextField: UITextField!
+    @IBOutlet private weak var confirmPasswordTextField: UITextField!
     /// An IBOutlet for handling the country textField
-    @IBOutlet weak var countryTextField: UITextField!
+    @IBOutlet private weak var countryTextField: UITextField!
     
     /// An IBOutlet for handling the terms and conditions button
-    @IBOutlet weak var termsAndConditionsButton: UIButton!
+    @IBOutlet private weak var termsAndConditionsButton: UIButton!
     /// An IBOutlet for handling the terms and conditions of rumpel lite button
-    @IBOutlet weak var rumpelLiteTermsAndConditionsButton: UIButton!
+    @IBOutlet private weak var rumpelLiteTermsAndConditionsButton: UIButton!
     /// An IBOutlet for handling create hat button
-    @IBOutlet weak var createHatButton: UIButton!
+    @IBOutlet private weak var createHatButton: UIButton!
     
     /// An IBOutlet for handling the data view
-    @IBOutlet weak var dataView: UIView!
+    @IBOutlet private weak var dataView: UIView!
     
     /// An IBOutlet for handling the scrollView
-    @IBOutlet weak var scrollView: UIScrollView!
+    @IBOutlet private weak var scrollView: UIScrollView!
     
     /// An IBOutlet for handling the hat terms checkBox
-    @IBOutlet weak var hatTermsCheckBox: BEMCheckBox!
+    @IBOutlet private weak var hatTermsCheckBox: BEMCheckBox!
     /// An IBOutlet for handling the rumpel lite checkBox
-    @IBOutlet weak var rumpelLiteCheckBox: BEMCheckBox!
+    @IBOutlet private weak var rumpelLiteCheckBox: BEMCheckBox!
     
     // MARK: - IBActions
     
@@ -94,7 +94,7 @@ class StripeViewController: UIViewController, UIPickerViewDelegate, UIPickerView
         
         // get the file url to the pdf and show it to the terms and conditions view controller
         self.fileURL = (Bundle.main.url(forResource: "2.1 HATTermsofService v1.0", withExtension: "pdf", subdirectory: nil, localization: nil)?.absoluteString)!
-        self.performSegue(withIdentifier: "termsSegue", sender: self)
+        self.performSegue(withIdentifier: Constants.Segue.termsSegue, sender: self)
     }
     
     /**
@@ -106,7 +106,7 @@ class StripeViewController: UIViewController, UIPickerViewDelegate, UIPickerView
         
         // get the file url to the pdf and show it to the terms and conditions view controller
         self.fileURL = (Bundle.main.url(forResource: "Rumpel Lite iOS Application Terms of Service", withExtension: "pdf", subdirectory: nil, localization: nil)?.absoluteString)!
-        self.performSegue(withIdentifier: "termsSegue", sender: self)
+        self.performSegue(withIdentifier: Constants.Segue.termsSegue, sender: self)
     }
     
     /**
@@ -142,15 +142,12 @@ class StripeViewController: UIViewController, UIPickerViewDelegate, UIPickerView
             // create the json file based on the purchaseModel
             let json = JSONHelper.createPurchaseJSONFrom(purchaseModel: purchaseModel)
             
-            // url to make the request
-            let url = "https://hatters.hubofallthings.com/api/products/hat/purchase"
-            
             // request the creation of the hat
-            let _ = Alamofire.request(url, method: .post, parameters: json, encoding: Alamofire.JSONEncoding.default, headers: nil).responseJSON(completionHandler: { [weak self] response in
+            _ = Alamofire.request(Constants.HATEndpoints.purchaseHat, method: .post, parameters: json, encoding: Alamofire.JSONEncoding.default, headers: nil).responseJSON(completionHandler: { [weak self] response in
                 
                 if let status = response.response?.statusCode {
                     
-                    switch(status) {
+                    switch status {
                         
                     case 400:
                         
@@ -195,7 +192,7 @@ class StripeViewController: UIViewController, UIPickerViewDelegate, UIPickerView
                     case 200:
                         
                         // everything ok go to the next screen
-                        self?.performSegue(withIdentifier: "completePurchaseSegue", sender: nil)
+                        self?.performSegue(withIdentifier: Constants.Segue.completePurchaseSegue, sender: nil)
                     default:
                         
                         break
@@ -209,7 +206,7 @@ class StripeViewController: UIViewController, UIPickerViewDelegate, UIPickerView
         } else {
             
             // if something wrong show message
-            self.createClassicOKAlertWith(alertMessage: "Please check your information again", alertTitle: "Information missing", okTitle: "OK", proceedCompletion: {() -> Void in return})
+            self.createClassicOKAlertWith(alertMessage: "Please check your information again", alertTitle: "Information missing", okTitle: "OK", proceedCompletion: { () -> Void in return })
         }
     }
     
@@ -328,16 +325,18 @@ class StripeViewController: UIViewController, UIPickerViewDelegate, UIPickerView
     func keyboardHandling(sender: NSNotification) {
         
         let userInfo = sender.userInfo!
-        
-        let keyboardScreenEndFrame = (userInfo[UIKeyboardFrameEndUserInfoKey] as! NSValue).cgRectValue
-        let keyboardViewEndFrame = view.convert(keyboardScreenEndFrame, from: view.window)
-        
-        if sender.name == Notification.Name.UIKeyboardWillHide {
+        if let frame = userInfo[UIKeyboardFrameEndUserInfoKey] as? NSValue {
             
-            self.scrollView.contentInset = UIEdgeInsets.zero
-        } else {
+            let keyboardScreenEndFrame = frame.cgRectValue
+            let keyboardViewEndFrame = view.convert(keyboardScreenEndFrame, from: view.window)
             
-            self.scrollView.contentInset = UIEdgeInsets(top: 0, left: 0, bottom: keyboardViewEndFrame.height + 60, right: 0)
+            if sender.name == Notification.Name.UIKeyboardWillHide {
+                
+                self.scrollView.contentInset = UIEdgeInsets.zero
+            } else {
+                
+                self.scrollView.contentInset = UIEdgeInsets(top: 0, left: 0, bottom: keyboardViewEndFrame.height + 60, right: 0)
+            }
         }
     }
     
@@ -346,17 +345,17 @@ class StripeViewController: UIViewController, UIPickerViewDelegate, UIPickerView
     // In a storyboard-based application, you will often want to do a little preparation before navigation
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
         
-        if segue.identifier == "termsSegue" {
+        if segue.identifier == Constants.Segue.termsSegue {
             
             // pass data to next view
-            let termsVC = segue.destination as! TermsAndConditionsViewController
+            let termsVC = segue.destination as? TermsAndConditionsViewController
             
-            termsVC.filePathURL = self.fileURL
-        } else if segue.identifier == "completePurchaseSegue" {
+            termsVC?.filePathURL = self.fileURL
+        } else if segue.identifier == Constants.Segue.completePurchaseSegue {
             
-            let completeVC = segue.destination as! CompletePurchaseViewController
+            let completeVC = segue.destination as? CompletePurchaseViewController
             
-            completeVC.image = self.hatImage
+            completeVC?.image = self.hatImage
         }
     }
     

@@ -15,24 +15,24 @@ import HatForIOS
 // MARK: Class
 
 /// The social feed collection view cell class
-class SocialFeedCollectionViewCell: UICollectionViewCell {
+internal class SocialFeedCollectionViewCell: UICollectionViewCell, UserCredentialsProtocol {
     
     // MARK: - IBOutlets
     
     /// An IBOutlet for handling the profile image of the cell
-    @IBOutlet weak var profileImage: UIImageView!
+    @IBOutlet private weak var profileImage: UIImageView!
     /// An IBOutlet for handling the social network's image of the cell
-    @IBOutlet weak var socialNetworkImage: UIImageView!
+    @IBOutlet private weak var socialNetworkImage: UIImageView!
     
     /// An IBOutlet for handling the profile name label of the cell
-    @IBOutlet weak var profileNameLabel: UILabel!
+    @IBOutlet private weak var profileNameLabel: UILabel!
     /// An IBOutlet for handling the the post details label of the cell
-    @IBOutlet weak var postInfoLabel: UILabel!
+    @IBOutlet private weak var postInfoLabel: UILabel!
     /// An IBOutlet for handling the the post type, tweet, status, video etc of the cell
-    @IBOutlet weak var postTypeLabel: UILabel!
+    @IBOutlet private weak var postTypeLabel: UILabel!
     
     /// An IBOutlet for handling the message of the post of the cell
-    @IBOutlet weak var messageTextView: UITextView!
+    @IBOutlet private weak var messageTextView: UITextView!
     
     // MARK: - Set up cell
     
@@ -42,6 +42,7 @@ class SocialFeedCollectionViewCell: UICollectionViewCell {
      - parameter cell: The cell to set up
      - parameter indexPath: The index path of the currect cell
      - parameter posts: The post to display in this cell
+     
      - returns: A formatted social feed cell of type SocialFeedCollectionViewCell
      */
     class func setUpCell(cell: SocialFeedCollectionViewCell, indexPath: IndexPath, posts: Any) -> SocialFeedCollectionViewCell {
@@ -50,7 +51,10 @@ class SocialFeedCollectionViewCell: UICollectionViewCell {
         if posts is HATFacebookSocialFeedObject {
             
             // convert the post to FacebookSocialFeedObject
-            let post = posts as! HATFacebookSocialFeedObject
+            guard let post = posts as? HATFacebookSocialFeedObject else {
+                
+                return cell
+            }
             
             if let date = post.data.posts.updatedTime {
                 
@@ -61,8 +65,6 @@ class SocialFeedCollectionViewCell: UICollectionViewCell {
             if post.data.posts.type == "photo" {
                 
                 if let url = URL(string: post.data.posts.fullPicture) {
-                    
-                    let userToken = HATAccountService.getUsersTokenFromKeychain()
                     
                     cell.socialNetworkImage.downloadedFrom(url: url, userToken: userToken, progressUpdater: nil, completion: nil)
                 }
@@ -80,7 +82,10 @@ class SocialFeedCollectionViewCell: UICollectionViewCell {
         } else {
             
             // convert the post to TwitterSocialFeedObject
-            let post = posts as! HATTwitterSocialFeedObject
+            guard let post = posts as? HATTwitterSocialFeedObject else {
+                
+                return cell
+            }
             
             // assign the post values to cell values
             cell.profileNameLabel.text = post.data.tweets.user.name
@@ -94,7 +99,7 @@ class SocialFeedCollectionViewCell: UICollectionViewCell {
             }
             
             // assign the twitter image as profile image
-            cell.profileImage.image = UIImage(named: "Twitter")
+            cell.profileImage.image = UIImage(named: Constants.ImageNames.twitterImage)
                         
             return cell
         }
@@ -107,6 +112,7 @@ class SocialFeedCollectionViewCell: UICollectionViewCell {
      
      - parameter data: A FacebookDataPostsSocialFeedObject object that contains the data we need
      - parameter textView: The textview to setup
+     
      - returns: An already set up textview
      */
     private class func constructMessageLabelFrom(data: HATFacebookDataPostsSocialFeedObject, for textView: UITextView) -> UITextView {
@@ -130,5 +136,17 @@ class SocialFeedCollectionViewCell: UICollectionViewCell {
         }
         
         return textView
+    }
+    
+    // MARK: Set image
+    
+    /**
+     Sets an image to profileImage UIImageView
+     
+     - parameter image: The image to show in the profileImage UIImageView
+     */
+    func setCellImage(image: UIImage?) {
+        
+        self.profileImage.image = image
     }
 }

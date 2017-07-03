@@ -15,7 +15,7 @@ import HatForIOS
 // MARK: Class
 
 /// A class responsible for the profile education, in dataStore ViewController
-class DataStoreEducationTableViewController: UITableViewController, UserCredentialsProtocol {
+internal class DataStoreEducationTableViewController: UITableViewController, UserCredentialsProtocol {
     
     // MARK: - Variables
 
@@ -47,39 +47,61 @@ class DataStoreEducationTableViewController: UITableViewController, UserCredenti
         
         self.view.addSubview(self.darkView)
         
-        self.loadingView = UIView.createLoadingView(with: CGRect(x: (self.view?.frame.midX)! - 70, y: (self.view?.frame.midY)! - 15, width: 140, height: 30), color: .teal, cornerRadius: 15, in: self.view, with: "Updating profile...", textColor: .white, font: UIFont(name: "OpenSans", size: 12)!)
+        self.loadingView = UIView.createLoadingView(with: CGRect(x: (self.view?.frame.midX)! - 70, y: (self.view?.frame.midY)! - 15, width: 140, height: 30), color: .teal, cornerRadius: 15, in: self.view, with: "Updating profile...", textColor: .white, font: UIFont(name: Constants.FontNames.openSans, size: 12)!)
         
-        for (index, _) in self.headers.enumerated() {
+        for index in self.headers.indices {
             
             var cell = self.tableView.cellForRow(at: IndexPath(row: 0, section: index)) as? PhataTableViewCell
             
             if cell == nil {
                 
                 let indexPath = IndexPath(row: 0, section: index)
-                cell = tableView.dequeueReusableCell(withIdentifier: "dataStoreEducationCell", for: indexPath) as? PhataTableViewCell
+                cell = tableView.dequeueReusableCell(withIdentifier: Constants.CellReuseIDs.dataStoreEducationCell, for: indexPath) as? PhataTableViewCell
                 cell = self.setUpCell(cell: cell!, indexPath: indexPath, education: self.education) as? PhataTableViewCell
             }
             
             if index == 0 {
                 
-                self.education.highestAcademicQualification = (cell?.textField.text)!
+                self.education.highestAcademicQualification = cell!.getTextFromTextField()
             }
         }
         
-        HATProfileService.postEducationToHAT(userDomain: userDomain, userToken: userToken, education: self.education, successCallback: {_ in
+        func gotApplicationToken(appToken: String, newUserToken: String?) {
             
-            self.loadingView.removeFromSuperview()
-            self.darkView.removeFromSuperview()
+            HATProfileService.postEducationToHAT(
+                userDomain: userDomain,
+                userToken: userToken,
+                education: self.education,
+                successCallback: {_ in
+                    
+                    self.loadingView.removeFromSuperview()
+                    self.darkView.removeFromSuperview()
+                    
+                    _ = self.navigationController?.popViewController(animated: true)
+                },
+                failCallback: {error in
+                    
+                    self.loadingView.removeFromSuperview()
+                    self.darkView.removeFromSuperview()
+                    
+                    self.createClassicOKAlertWith(alertMessage: "There was an error posting profile", alertTitle: "Error", okTitle: "OK", proceedCompletion: {})
+                    _ = CrashLoggerHelper.hatTableErrorLog(error: error)
+                }
+            )
+        }
+        
+        func gotErrorWhenGettingApplicationToken(error: JSONParsingError) {
             
-            _ = self.navigationController?.popViewController(animated: true)
-        }, failCallback: {error in
-            
-            self.loadingView.removeFromSuperview()
-            self.darkView.removeFromSuperview()
-            
-            self.createClassicOKAlertWith(alertMessage: "There was an error posting profile", alertTitle: "Error", okTitle: "OK", proceedCompletion: {})
-            _ = CrashLoggerHelper.hatTableErrorLog(error: error)
-        })
+            CrashLoggerHelper.JSONParsingErrorLog(error: error)
+        }
+        
+        HATService.getApplicationTokenFor(
+            serviceName: "Rumpel",
+            userDomain: self.userDomain,
+            token: self.userToken,
+            resource: "https://rumpel.hubofallthings.com",
+            succesfulCallBack: gotApplicationToken,
+            failCallBack: gotErrorWhenGettingApplicationToken)
     }
     
     // MARK: - View Controller Function
@@ -142,9 +164,12 @@ class DataStoreEducationTableViewController: UITableViewController, UserCredenti
     
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         
-        let cell = tableView.dequeueReusableCell(withIdentifier: "dataStoreEducationCell", for: indexPath) as! PhataTableViewCell
+        if let cell = tableView.dequeueReusableCell(withIdentifier: Constants.CellReuseIDs.dataStoreEducationCell, for: indexPath) as? PhataTableViewCell {
+            
+            return setUpCell(cell: cell, indexPath: indexPath, education: self.education)
+        }
         
-        return setUpCell(cell: cell, indexPath: indexPath, education: self.education)
+        return tableView.dequeueReusableCell(withIdentifier: Constants.CellReuseIDs.dataStoreEducationCell, for: indexPath)
     }
     
     override func tableView(_ tableView: UITableView, titleForHeaderInSection section: Int) -> String? {
@@ -165,6 +190,7 @@ class DataStoreEducationTableViewController: UITableViewController, UserCredenti
      - parameter cell: The cell to set up
      - parameter indexPath: The index path of the cell
      - parameter nationality: The nationality object used to set up the cell
+     
      - returns: The set up cell
      */
     func setUpCell(cell: PhataTableViewCell, indexPath: IndexPath, education: HATProfileEducationObject) -> UITableViewCell {
@@ -173,7 +199,7 @@ class DataStoreEducationTableViewController: UITableViewController, UserCredenti
 
         if indexPath.section == 0 {
             
-            cell.textField.text = education.highestAcademicQualification
+            cell.setTextToTextField(text: education.highestAcademicQualification)
         }
         
         return cell

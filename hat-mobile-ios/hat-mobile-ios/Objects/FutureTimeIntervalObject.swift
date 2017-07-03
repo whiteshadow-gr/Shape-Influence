@@ -15,7 +15,7 @@ import Foundation
 // MARK: Struct
 
 /// A stuct to init a time interval in the future
-struct FutureTimeInterval {
+internal struct FutureTimeInterval {
     
     // MARK: - Variable
     
@@ -56,7 +56,7 @@ struct FutureTimeInterval {
  - future: Time interval in the future
  - past: Time interval in the past
  */
-enum TimeType {
+internal enum TimeType {
     
     /// Time interval in the future
     case future
@@ -72,7 +72,7 @@ enum TimeType {
  - today: Time period selected, today
  - lastWeek: Time period selected, last week
  */
-enum TimePeriodSelected {
+internal enum TimePeriodSelected {
     
     /// No time period selected
     case none

@@ -26,6 +26,7 @@ extension UILabel {
      - parameter textColor: The color of the text
      - parameter textAlignment: The alignment of the text
      - parameter font: The desired font for the text
+     
      - returns: A formatted UILabel according to the parameters passed
      */
     func createLabel(frame: CGRect, text: String, textColor: UIColor, textAlignment: NSTextAlignment, font: UIFont?) -> UILabel {

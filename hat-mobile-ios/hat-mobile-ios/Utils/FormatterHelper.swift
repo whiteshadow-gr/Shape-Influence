@@ -15,7 +15,7 @@ import Foundation
 // MARK: Struct
 
 /// A struct for everything that formats something
-struct FormatterHelper {
+internal struct FormatterHelper {
     
     // MARK: - Date to string formaters
     
@@ -23,13 +23,14 @@ struct FormatterHelper {
      Formats a date to ISO 8601 format
      
      - parameter date: The date to format
-     - returns: String
+     
+     - returns: The date as a String in ISO format
      */
     static func formatDateToISO(date: Date) -> String {
         
         let dateFormatter = DateFormatter()
-        dateFormatter.timeZone = TimeZone(abbreviation: "GMT")
-        dateFormatter.dateFormat = "yyyy-MM-dd'T'HH:mm:ssZZZZZ"
+        dateFormatter.timeZone = TimeZone(abbreviation: Constants.TimeZone.gmt)
+        dateFormatter.dateFormat = Constants.DateFormats.gmt
         
         return dateFormatter.string(from: date as Date)
     }
@@ -40,6 +41,7 @@ struct FormatterHelper {
      - parameter date: The date to localize
      - parameter dateStyle: The date style to return
      - parameter timeStyle: The time style to return
+     
      - returns: A String representing the formatted date
      */
     static func formatDateStringToUsersDefinedDate(date: Date, dateStyle: DateFormatter.Style, timeStyle: DateFormatter.Style) -> String {
@@ -51,14 +53,15 @@ struct FormatterHelper {
      Returns a string from UTC formatted date in with full date and medium time styles
      
      - parameter datetime: The date to convert to string
+     
      - returns: A String representing the date passed as a parameter
      */
-    static func getDateString(_ datetime : Date) -> String {
+    static func getDateString(_ datetime: Date) -> String {
         
         let formatter = DateFormatter()
         formatter.dateStyle = DateFormatter.Style.full
         formatter.timeStyle = DateFormatter.Style.medium
-        formatter.timeZone = TimeZone(abbreviation: "UTC")
+        formatter.timeZone = TimeZone(abbreviation: Constants.TimeZone.utc)
         
         return formatter.string(from: datetime)
     }
@@ -68,13 +71,14 @@ struct FormatterHelper {
      
      - parameter datetime: The date to convert to string
      - parameter format: The format of the date
+     
      - returns: A String representing the date passed as a parameter
      */
-    static func getDateString(_ datetime : Date, format: String) -> String {
+    static func getDateString(_ datetime: Date, format: String) -> String {
         
         let formatter = DateFormatter()
         formatter.dateFormat = format
-        formatter.timeZone = TimeZone(abbreviation: "UTC")
+        formatter.timeZone = TimeZone(abbreviation: Constants.TimeZone.utc)
         
         return formatter.string(from: datetime)
     }
@@ -85,7 +89,8 @@ struct FormatterHelper {
      Formats a string into a Date
      
      - parameter string: The string to format to a Date
-     - returns: Date
+     
+     - returns: The String passed in the function as an optional Date. The Date object is nil if the formatting fails
      */
     static func formatStringToDate(string: String) -> Date? {
         
@@ -96,21 +101,21 @@ struct FormatterHelper {
         }
         
         let dateFormatter = DateFormatter()
-        dateFormatter.locale = Locale(identifier: "en_US_POSIX")
-        dateFormatter.dateFormat = "yyyy-MM-dd'T'HH:mm:ss.SSSZ"
+        dateFormatter.locale = Locale(identifier: Constants.TimeZone.posix)
+        dateFormatter.dateFormat = Constants.DateFormats.posix
         var date = dateFormatter.date(from: string)
         
         // if date is nil try a different format and reformat
         if date == nil {
             
-            dateFormatter.dateFormat = "yyyy-MM-dd'T'HH:mm:ssZ"
+            dateFormatter.dateFormat = Constants.DateFormats.utc
             date = dateFormatter.date(from: string)
         }
         
         // if date is nil try a different format, for twitter format and reformat
         if date == nil {
             
-            dateFormatter.dateFormat = "E MMM dd HH:mm:ss Z yyyy"
+            dateFormatter.dateFormat = Constants.DateFormats.alternative
             date = dateFormatter.date(from: string)
         }
         
@@ -127,13 +132,14 @@ struct FormatterHelper {
      Returns a Date string from a string representing a UTC date
      
      - parameter dateString: The string to convert into date
+     
      - returns: The date that the string was representing
      */
-    static func getDateFromString(_ dateString : String) -> Date! {
+    static func getDateFromString(_ dateString: String) -> Date! {
         
         let formatter = DateFormatter()
-        formatter.dateFormat = Constants.DateFormats.UTC
-        formatter.timeZone = TimeZone(abbreviation: "UTC")
+        formatter.dateFormat = Constants.DateFormats.utc
+        formatter.timeZone = TimeZone(abbreviation: Constants.TimeZone.utc)
         
         return formatter.date(from: dateString)
     }

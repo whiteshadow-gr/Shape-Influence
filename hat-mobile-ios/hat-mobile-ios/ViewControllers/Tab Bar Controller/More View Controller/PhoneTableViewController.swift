@@ -15,7 +15,7 @@ import HatForIOS
 // MARK: Class
 
 /// A class responsible for the phone UITableViewController of the PHATA section
-class PhoneTableViewController: UITableViewController, UserCredentialsProtocol {
+internal class PhoneTableViewController: UITableViewController, UserCredentialsProtocol {
     
     // MARK: - Variables
 
@@ -29,7 +29,7 @@ class PhoneTableViewController: UITableViewController, UserCredentialsProtocol {
     private var darkView: UIView = UIView()
     
     /// User's profile passed on from previous view controller
-    var profile: HATProfileObject? = nil
+    var profile: HATProfileObject?
     
     // MARK: - IBAction
     
@@ -46,34 +46,34 @@ class PhoneTableViewController: UITableViewController, UserCredentialsProtocol {
         
         self.view.addSubview(self.darkView)
         
-        self.loadingView = UIView.createLoadingView(with: CGRect(x: (self.view?.frame.midX)! - 70, y: (self.view?.frame.midY)! - 15, width: 140, height: 30), color: .teal, cornerRadius: 15, in: self.view, with: "Updating profile...", textColor: .white, font: UIFont(name: "OpenSans", size: 12)!)
+        self.loadingView = UIView.createLoadingView(with: CGRect(x: (self.view?.frame.midX)! - 70, y: (self.view?.frame.midY)! - 15, width: 140, height: 30), color: .teal, cornerRadius: 15, in: self.view, with: "Updating profile...", textColor: .white, font: UIFont(name: Constants.FontNames.openSans, size: 12)!)
         
-        for (index, _) in self.headers.enumerated() {
+        for index in self.headers.indices {
             
             var cell = self.tableView.cellForRow(at: IndexPath(row: 0, section: index)) as? PhataTableViewCell
             
             if cell == nil {
                 
                 let indexPath = IndexPath(row: 0, section: index)
-                cell = tableView.dequeueReusableCell(withIdentifier: "phoneCell", for: indexPath) as? PhataTableViewCell
+                cell = tableView.dequeueReusableCell(withIdentifier: Constants.CellReuseIDs.phoneCell, for: indexPath) as? PhataTableViewCell
                 cell = self.setUpCell(cell: cell!, indexPath: indexPath) as? PhataTableViewCell
             }
             
             // mobile phone
             if index == 0 {
                 
-                profile?.data.mobile.number = cell!.textField.text!
-                profile?.data.mobile.isPrivate = !((cell?.privateSwitch.isOn)!)
-                if (profile?.data.isPrivate)! && cell!.privateSwitch.isOn {
+                profile?.data.mobile.number = cell!.getTextFromTextField()
+                profile?.data.mobile.isPrivate = !cell!.getSwitchValue()
+                if (profile?.data.isPrivate)! && cell!.getSwitchValue() {
                     
                     profile?.data.isPrivate = false
                 }
             // phone
             } else if index == 1 {
                 
-                profile?.data.homePhone.number = cell!.textField.text!
-                profile?.data.homePhone.isPrivate = !((cell?.privateSwitch.isOn)!)
-                if (profile?.data.isPrivate)! && cell!.privateSwitch.isOn {
+                profile?.data.homePhone.number = cell!.getTextFromTextField()
+                profile?.data.homePhone.isPrivate = !cell!.getSwitchValue()
+                if (profile?.data.isPrivate)! && cell!.getSwitchValue() {
                     
                     profile?.data.isPrivate = false
                 }
@@ -82,31 +82,44 @@ class PhoneTableViewController: UITableViewController, UserCredentialsProtocol {
         
         func tableExists(dict: Dictionary<String, Any>, renewedUserToken: String?) {
             
-            HATPhataService.postProfile(userDomain: userDomain, userToken: userToken, hatProfile: self.profile!, successCallBack: {
+            HATPhataService.postProfile(
+                userDomain: userDomain,
+                userToken: userToken,
+                hatProfile: self.profile!,
+                successCallBack: {
                 
-                self.loadingView.removeFromSuperview()
-                self.darkView.removeFromSuperview()
-                
-                _ = self.navigationController?.popViewController(animated: true)
-            }, errorCallback: {error in
-                
-                self.loadingView.removeFromSuperview()
-                self.darkView.removeFromSuperview()
-                
-                self.createClassicOKAlertWith(alertMessage: "There was an error posting profile", alertTitle: "Error", okTitle: "OK", proceedCompletion: {})
-                _ = CrashLoggerHelper.hatTableErrorLog(error: error)
-            })
+                    self.loadingView.removeFromSuperview()
+                    self.darkView.removeFromSuperview()
+                    
+                    _ = self.navigationController?.popViewController(animated: true)
+                },
+                errorCallback: {error in
+                    
+                    self.loadingView.removeFromSuperview()
+                    self.darkView.removeFromSuperview()
+                    
+                    self.createClassicOKAlertWith(alertMessage: "There was an error posting profile", alertTitle: "Error", okTitle: "OK", proceedCompletion: {})
+                    _ = CrashLoggerHelper.hatTableErrorLog(error: error)
+                }
+            )
         }
         
-        HATAccountService.checkHatTableExistsForUploading(userDomain: userDomain, tableName: "profile", sourceName: "rumpel", authToken: userToken, successCallback: tableExists, errorCallback: {error in
+        HATAccountService.checkHatTableExistsForUploading(
+            userDomain: userDomain,
+            tableName: Constants.HATTableName.Profile.name,
+            sourceName: Constants.HATTableName.Profile.source,
+            authToken: userToken,
+            successCallback: tableExists,
+            errorCallback: {error in
             
-            self.loadingView.removeFromSuperview()
-            self.darkView.removeFromSuperview()
-            
-            self.createClassicOKAlertWith(alertMessage: "There was an error checking if it's possible to post the data", alertTitle: "Error", okTitle: "OK", proceedCompletion: {})
-            
-            _ = CrashLoggerHelper.hatTableErrorLog(error: error)
-        })
+                self.loadingView.removeFromSuperview()
+                self.darkView.removeFromSuperview()
+                
+                self.createClassicOKAlertWith(alertMessage: "There was an error checking if it's possible to post the data", alertTitle: "Error", okTitle: "OK", proceedCompletion: {})
+                
+                _ = CrashLoggerHelper.hatTableErrorLog(error: error)
+            }
+        )
     }
     
     // MARK: - View Controller methods
@@ -142,9 +155,12 @@ class PhoneTableViewController: UITableViewController, UserCredentialsProtocol {
 
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         
-        let cell = tableView.dequeueReusableCell(withIdentifier: "phoneCell", for: indexPath) as! PhataTableViewCell
+        if let cell = tableView.dequeueReusableCell(withIdentifier: Constants.CellReuseIDs.phoneCell, for: indexPath) as? PhataTableViewCell {
+            
+            return self.setUpCell(cell: cell, indexPath: indexPath)
+        }
 
-        return self.setUpCell(cell: cell, indexPath: indexPath)
+        return tableView.dequeueReusableCell(withIdentifier: Constants.CellReuseIDs.phoneCell, for: indexPath)
     }
     
     override func tableView(_ tableView: UITableView, titleForHeaderInSection section: Int) -> String? {
@@ -164,16 +180,19 @@ class PhoneTableViewController: UITableViewController, UserCredentialsProtocol {
      */
     private func setUpCell(cell: PhataTableViewCell, indexPath: IndexPath) -> UITableViewCell {
         
-        if indexPath.section == 0 {
+        if self.profile != nil {
             
-            cell.textField.text = self.profile?.data.mobile.number
-            cell.textField.keyboardType = .phonePad
-            cell.privateSwitch.isOn = !(self.profile?.data.mobile.isPrivate)!
-        } else if indexPath.section == 1 {
+            if indexPath.section == 0 {
+                
+                cell.setTextToTextField(text: self.profile!.data.mobile.number)
+                cell.setSwitchValue(isOn: self.profile!.data.mobile.isPrivate)
+            } else if indexPath.section == 1 {
+                
+                cell.setTextToTextField(text: self.profile!.data.homePhone.number)
+                cell.setSwitchValue(isOn: self.profile!.data.homePhone.isPrivate)
+            }
             
-            cell.textField.text = self.profile?.data.homePhone.number
-            cell.textField.keyboardType = .phonePad
-            cell.privateSwitch.isOn = !(self.profile?.data.homePhone.isPrivate)!
+            cell.setKeyboardType(.phonePad)
         }
         
         return cell

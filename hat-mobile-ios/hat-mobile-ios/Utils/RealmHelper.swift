@@ -14,8 +14,9 @@ import RealmSwift
 
 // MARK: Class
 
+// swiftlint:disable force_try
 /// Static Realm Helper methods
-class RealmHelper {
+public class RealmHelper {
     
     // MARK: - Typealiases
     
@@ -50,7 +51,7 @@ class RealmHelper {
      - returns: current item count
      */
     class func addData(_ latitude: Latitude, longitude: Longitude, accuracy: Accuracy) -> Int {
-
+        
         // Get the default Realm
         let realm = self.getRealm()
         
@@ -67,14 +68,14 @@ class RealmHelper {
             realm.add(dataPoint)
         }
         
-        // get count    
+        // get count
         let dataPoints = realm.objects(DataPoint.self)
-
+        
         return dataPoints.count
     }
     
     // MARK: - Update realm
-
+    
     /**
      Takes an array of DataPoints and updates the lastUpdated field
      
@@ -103,13 +104,14 @@ class RealmHelper {
      Purge all data for a predicate
      
      - parameter predicate: The predicate used to filter the data
+     
      - returns: always true if sucessful
      */
     class func purge(_ predicate: NSPredicate?) -> Bool {
         
         // Get the default Realm
         let realm: Realm = self.getRealm()
-
+        
         try! realm.write {
             
             // check if predicate is nil, if it is delete everything
@@ -146,7 +148,7 @@ class RealmHelper {
         
         return realm.objects(DataPoint.self).filter(predicate).sorted(by: sortProperties)
     }
-
+    
     /**
      Gets the most recent DataPoint
      
@@ -159,4 +161,5 @@ class RealmHelper {
         
         return realm.objects(DataPoint.self).last
     }
+    // swiftlint:enable force_try
 }

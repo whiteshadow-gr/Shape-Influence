@@ -1,6 +1,6 @@
 /**
  * Copyright (C) 2017 HAT Data Exchange Ltd
- * 
+ *
  * SPDX-License-Identifier: MPL2
  *
  * This file is part of the Hub of All Things project (HAT).
@@ -15,7 +15,7 @@ import HatForIOS
 // MARK: Class
 
 /// the notables table view cell class
-class NotablesTableViewCell: UITableViewCell, UICollectionViewDataSource {
+internal class NotablesTableViewCell: UITableViewCell, UICollectionViewDataSource, UserCredentialsProtocol {
     
     // MARK: - Variables
     
@@ -23,29 +23,30 @@ class NotablesTableViewCell: UITableViewCell, UICollectionViewDataSource {
     private var sharedOn: [String] = []
     
     /// an UIImage to hold the full size image
-    var fullSizeImage: UIImage? = nil
+    var fullSizeImage: UIImage?
     
-    var notesDelegate: NotablesViewController? = nil
+    /// a delegate to update the value of the cell
+    weak var notesDelegate: NotablesViewController?
     
     // MARK: - IBOutlets
 
     /// An IBOutlet for handling the info of the post
-    @IBOutlet weak var postInfoLabel: UILabel!
+    @IBOutlet private weak var postInfoLabel: UILabel!
     /// An IBOutlet for handling the data of the post
-    @IBOutlet weak var postDataLabel: UILabel!
+    @IBOutlet private weak var postDataLabel: UILabel!
     /// An IBOutlet for handling the username of the post
-    @IBOutlet weak var usernameLabel: UILabel!
+    @IBOutlet private weak var usernameLabel: UILabel!
     
     /// An IBOutlet for the attached image of the note, if any
-    @IBOutlet weak var attachedImage: UIImageView!
+    @IBOutlet private weak var attachedImage: UIImageView!
     /// An IBOutlet for handling the profile image of the post
-    @IBOutlet weak var profileImage: UIImageView!
+    @IBOutlet private weak var profileImage: UIImageView!
     
     /// An IBOutlet for showing the download completion of the image
-    @IBOutlet weak var ringProgressBar: RingProgressCircle!
+    @IBOutlet private weak var ringProgressBar: RingProgressCircle!
     
     /// An IBOutlet for handling the collection view
-    @IBOutlet weak var collectionView: UICollectionView!
+    @IBOutlet private weak var collectionView: UICollectionView!
 
     // MARK: - Setup cell
     
@@ -55,12 +56,12 @@ class NotablesTableViewCell: UITableViewCell, UICollectionViewDataSource {
      - parameter cell: The cell to set up
      - parameter note: The data to show on the cell
      - parameter indexPath: The index path of the cell
+     
      - returns: NotablesTableViewCell
      */
     func setUpCell(_ cell: NotablesTableViewCell, note: HATNotesData, indexPath: IndexPath) -> NotablesTableViewCell {
         
         let newCell = self.initCellToNil(cell: cell)
-        let weakSelf = self
         
         if let url = URL(string: note.data.photoData.link) {
             
@@ -70,7 +71,7 @@ class NotablesTableViewCell: UITableViewCell, UICollectionViewDataSource {
                 newCell.attachedImage.cropImage(width: newCell.attachedImage.frame.width, height: newCell.attachedImage.frame.height)
             } else {
                 
-                self.downloadAttachedImage(cell: newCell, url: url, row: indexPath.row, note: note, weakSelf: weakSelf)
+                self.downloadAttachedImage(cell: newCell, url: url, row: indexPath.row, note: note, weakSelf: self)
             }
         }
         
@@ -96,7 +97,7 @@ class NotablesTableViewCell: UITableViewCell, UICollectionViewDataSource {
         let date = FormatterHelper.formatDateStringToUsersDefinedDate(date: note.data.createdTime, dateStyle: .short, timeStyle: .short)
                 
         // create this zebra like color based on the index of the cell
-        if (indexPath.row % 2 == 1) {
+        if indexPath.row % 2 == 1 {
             
             newCell.contentView.backgroundColor = .rumpelLightGray
         }
@@ -113,7 +114,7 @@ class NotablesTableViewCell: UITableViewCell, UICollectionViewDataSource {
         return newCell
     }
     
-    // MARK: - Download attached image 
+    // MARK: - Download attached image
     
     /**
      Download the attached image of the note
@@ -126,67 +127,55 @@ class NotablesTableViewCell: UITableViewCell, UICollectionViewDataSource {
      */
     func downloadAttachedImage(cell: NotablesTableViewCell, url: URL, row: Int, note: HATNotesData, weakSelf: NotablesTableViewCell) {
         
-        cell.attachedImage.image = UIImage(named: "Image Placeholder")
+        cell.attachedImage.image = UIImage(named: Constants.ImageNames.placeholderImage)
         
         cell.ringProgressBar.isHidden = false
         cell.ringProgressBar.ringRadius = 10
         cell.ringProgressBar.ringLineWidth = 4
         cell.ringProgressBar.ringColor = .white
         
-        let userToken = HATAccountService.getUsersTokenFromKeychain()
-        
-        cell.attachedImage.downloadedFrom(url: url, userToken: userToken, progressUpdater: { progress in
+        cell.attachedImage.downloadedFrom(
+            url: url,
+            userToken:
+            userToken,
+            progressUpdater: { progress in
             
-            let completion = Float(progress)
-            cell.ringProgressBar.updateCircle(end: CGFloat(completion), animate: Float(cell.ringProgressBar.endPoint), to: completion, removePreviousLayer: false)
-        }, completion: {
+                let completion = Float(progress)
+                cell.ringProgressBar.updateCircle(end: CGFloat(completion), animate: Float(cell.ringProgressBar.endPoint), removePreviousLayer: false)
+            },
+            completion: {
             
-            cell.ringProgressBar.isHidden = true
-            if cell.attachedImage.image != nil {
+                cell.ringProgressBar.isHidden = true
+                if cell.attachedImage.image != nil {
+                    
+                    cell.fullSizeImage = cell.attachedImage.image!
+                }
+                cell.attachedImage.cropImage(width: cell.attachedImage.frame.width, height: cell.attachedImage.frame.height)
                 
-                cell.fullSizeImage = cell.attachedImage.image!
+                var tempNote = note
+                tempNote.data.photoData.image = cell.attachedImage.image
+                weakSelf.notesDelegate?.updateNote(tempNote, at: row)
             }
-            cell.attachedImage.cropImage(width: cell.attachedImage.frame.width, height: cell.attachedImage.frame.height)
-            
-            var tempNote = note
-            tempNote.data.photoData.image = cell.attachedImage.image
-            weakSelf.notesDelegate?.updateNote(tempNote, at: row)
-        })
+        )
     }
     
     // MARK: - CollectionView datasource methods
     
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
         
-        // return the number of elements in the array
         return self.sharedOn.count
     }
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         
         // set up cell from the reuse identifier
-        let cell = collectionView.dequeueReusableCell(withReuseIdentifier: Constants.CellReuseIDs.socialCell.rawValue, for: indexPath) as!SocialImageCollectionViewCell
-        
-        // update the image of the cell accordingly
-        if self.sharedOn[indexPath.row] == "facebook" {
+        if let cell = collectionView.dequeueReusableCell(withReuseIdentifier: Constants.CellReuseIDs.socialCell, for: indexPath) as? SocialImageCollectionViewCell {
             
-            cell.socialImage.image = UIImage(named: "Facebook")
-        } else if self.sharedOn[indexPath.row] == "marketsquare" {
-            
-            cell.socialImage.image = UIImage(named: "Marketsquare")
-        } else if self.sharedOn[indexPath.row] == "twitter" {
-            
-            cell.socialImage.image = UIImage(named: "Twitter")
-        } else if self.sharedOn[indexPath.row] == "location" {
-            
-            cell.socialImage.image = UIImage(named: "gps filled")
+            //return the cell
+            return cell.setUpCell(self.sharedOn[indexPath.row])
         }
         
-        // flip the image to appear correctly
-        cell.socialImage.transform = CGAffineTransform(scaleX: -1, y: 1)
-        
-        //return the cell
-        return cell
+        return collectionView.dequeueReusableCell(withReuseIdentifier: Constants.CellReuseIDs.socialCell, for: indexPath)
     }
     
     // MARK: - Init Cell
@@ -195,6 +184,7 @@ class NotablesTableViewCell: UITableViewCell, UICollectionViewDataSource {
      Initialises a cell to the default values
      
      - parameter cell: The cell to init to the default values
+     
      - returns: NotablesTableViewCell with default values
      */
     private func initCellToNil(cell: NotablesTableViewCell) -> NotablesTableViewCell {
@@ -220,6 +210,8 @@ class NotablesTableViewCell: UITableViewCell, UICollectionViewDataSource {
      
      - parameter date: The date to add to the string
      - parameter shared: A bool value defining if the note is shared
+     - parameter publicUntil: An optional Date value defining the date that this note will turn to private
+     
      - returns: An NSAttributesString with 2 different colors
      */
     private func formatInfoLabel(date: String, shared: Bool, publicUntil: Date?) -> NSAttributedString {
@@ -239,10 +231,10 @@ class NotablesTableViewCell: UITableViewCell, UICollectionViewDataSource {
                 
                 shareString = " Expired"
             }
-        } 
+        }
         
         let partOne = NSAttributedString(string: string)
-        let partTwo = shareString.createTextAttributes(foregroundColor: .teal, strokeColor: .teal, font: UIFont(name: Constants.fontNames.openSans.rawValue, size: 11)!)
+        let partTwo = shareString.createTextAttributes(foregroundColor: .teal, strokeColor: .teal, font: UIFont(name: Constants.FontNames.openSans, size: 11)!)
         
         return partOne.combineWith(attributedText: partTwo)
     }

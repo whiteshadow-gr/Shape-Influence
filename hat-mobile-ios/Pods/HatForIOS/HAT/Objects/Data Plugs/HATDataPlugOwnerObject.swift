@@ -16,9 +16,9 @@ import SwiftyJSON
 
 /// A class representing the data plug owner from data plug JSON file
 public struct HATDataPlugOwnerObject: Comparable {
-    
+
     // MARK: - Comparable protocol
-    
+
     /// Returns a Boolean value indicating whether two values are equal.
     ///
     /// Equality is the inverse of inequality. For any values `a` and `b`,
@@ -27,11 +27,11 @@ public struct HATDataPlugOwnerObject: Comparable {
     /// - Parameters:
     ///   - lhs: A value to compare.
     ///   - rhs: Another value to compare.
-    public static func ==(lhs: HATDataPlugOwnerObject, rhs: HATDataPlugOwnerObject) -> Bool {
-        
-        return (lhs.id == rhs.id && lhs.email == rhs.email && lhs.nick == rhs.nick && lhs.firstName == rhs.firstName && lhs.lastName == rhs.lastName)
+    public static func == (lhs: HATDataPlugOwnerObject, rhs: HATDataPlugOwnerObject) -> Bool {
+
+        return (lhs.ownerID == rhs.ownerID && lhs.email == rhs.email && lhs.nick == rhs.nick && lhs.firstName == rhs.firstName && lhs.lastName == rhs.lastName)
     }
-    
+
     /// Returns a Boolean value indicating whether the value of the first
     /// argument is less than that of the second argument.
     ///
@@ -42,15 +42,15 @@ public struct HATDataPlugOwnerObject: Comparable {
     /// - Parameters:
     ///   - lhs: A value to compare.
     ///   - rhs: Another value to compare.
-    public static func <(lhs: HATDataPlugOwnerObject, rhs: HATDataPlugOwnerObject) -> Bool {
-        
+    public static func < (lhs: HATDataPlugOwnerObject, rhs: HATDataPlugOwnerObject) -> Bool {
+
         return lhs.lastName < rhs.lastName
     }
-    
+
     // MARK: - Variables
 
     /// The id of the owner
-    public var id: String = ""
+    public var ownerID: String = ""
     /// The email of the owner
     public var email: String = ""
     /// The nickname of the owner
@@ -59,44 +59,44 @@ public struct HATDataPlugOwnerObject: Comparable {
     public var firstName: String = ""
     /// The last name of the owner
     public var lastName: String = ""
-    
+
     // MARK: - Initializers
-    
+
     /**
      The default initialiser. Initialises everything to default values.
      */
     public init() {
-        
-        id = ""
+
+        ownerID = ""
         email = ""
         nick = ""
         firstName = ""
         lastName = ""
     }
-    
+
     /**
      It initialises everything from the received JSON file from the HAT
      */
     public init(dict: Dictionary<String, JSON>) {
-        
+
         if let tempID = (dict["id"]?.stringValue) {
-            
-            id = tempID
+
+            ownerID = tempID
         }
         if let tempEmail = (dict["email"]?.stringValue) {
-            
+
             email = tempEmail
         }
         if let tempNick = (dict["nick"]?.stringValue) {
-            
+
             nick = tempNick
         }
         if let tempFirstName = (dict["firstName"]?.stringValue) {
-            
+
             firstName = tempFirstName
         }
         if let tempLastName = (dict["lastName"]?.stringValue) {
-            
+
             lastName = tempLastName
         }
     }

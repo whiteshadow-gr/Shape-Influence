@@ -10,21 +10,21 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/
  */
 
-import SafariServices
 import HatForIOS
+import SafariServices
 
 // MARK: Class
 
 /// Authorise view controller, really a blank view controller needed to present the safari view controller
-class AuthoriseUserViewController: UIViewController, UserCredentialsProtocol {
+internal class AuthoriseUserViewController: UIViewController, UserCredentialsProtocol {
     
     // MARK: - Variables
     
     /// The func to execute after completing the authorisation
-    var completionFunc: ((String?) -> Void)? = nil
+    var completionFunc: ((String?) -> Void)?
 
     /// The safari view controller that opened to authorise user again
-    private var safari: SFSafariViewController? = nil
+    private var safari: SFSafariViewController?
     
     // MARK: - View Controller methods
     
@@ -33,7 +33,7 @@ class AuthoriseUserViewController: UIViewController, UserCredentialsProtocol {
         super.viewDidLoad()
     
         // add notif observer
-        NotificationCenter.default.addObserver(self, selector: #selector(dismissView), name: NSNotification.Name(Constants.NotificationNames.reauthorised.rawValue), object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(dismissView), name: NSNotification.Name(Constants.NotificationNames.reauthorised), object: nil)
     }
     
     override func viewDidAppear(_ animated: Bool) {
@@ -56,7 +56,8 @@ class AuthoriseUserViewController: UIViewController, UserCredentialsProtocol {
      
      - parameter notif: A Notification object that called this function
      */
-    @objc private func dismissView(notif: Notification) {
+    @objc
+    private func dismissView(notif: Notification) {
         
         // get the url form the auth callback
         if let url = notif.object as? NSURL {
@@ -65,15 +66,20 @@ class AuthoriseUserViewController: UIViewController, UserCredentialsProtocol {
             self.safari?.dismissSafari(animated: true, completion: nil)
             
             // authorize with hat
-            HATLoginService.loginToHATAuthorization(userDomain: userDomain, url: url, success: {token in
+            HATLoginService.loginToHATAuthorization(
+                userDomain: userDomain,
+                url: url,
+                success: {token in
             
-                self.completionFunc?(token)
-                
-                // remove authorise view controller, that means remove self and notify the view controllers listening
-                self.removeViewController()
-                
-                NotificationCenter.default.removeObserver(self, name: NSNotification.Name(Constants.NotificationNames.reauthorised.rawValue), object: nil)
-            }, failed: {(error: AuthenicationError) -> Void in return})
+                    self.completionFunc?(token)
+                    
+                    // remove authorise view controller, that means remove self and notify the view controllers listening
+                    self.removeViewController()
+                    
+                    NotificationCenter.default.removeObserver(self, name: NSNotification.Name(Constants.NotificationNames.reauthorised), object: nil)
+                },
+                failed: { (_: AuthenicationError) -> Void in return }
+            )
         }
     }
     
@@ -83,6 +89,7 @@ class AuthoriseUserViewController: UIViewController, UserCredentialsProtocol {
      Sets up a new AuthoriseUserViewController in order to present it to one UIView
      
      - parameter view: The UIView to show the view controller
+     
      - returns: A ready to use AuthoriseUserViewController
      */
     class func setupAuthoriseViewController(view: UIView) -> AuthoriseUserViewController {
@@ -103,11 +110,7 @@ class AuthoriseUserViewController: UIViewController, UserCredentialsProtocol {
      */
     private func launchSafari() {
         
-        // build up the hat domain auth url
-        let hatDomainURL = "https://" + userDomain + "/hatlogin?name=" + Constants.Auth.ServiceName + "&redirect=" +
-            Constants.Auth.URLScheme + "://" + Constants.Auth.LocalAuthHost
-        
-        self.safari = SFSafariViewController.openInSafari(url: hatDomainURL, on: self, animated: true, completion: nil)
+        self.safari = SFSafariViewController.openInSafari(url: Constants.HATEndpoints.hatLoginURL(userDomain: self.userDomain), on: self, animated: true, completion: nil)
     }
     
 }
