@@ -230,7 +230,7 @@ internal class PhotoViewerViewController: UIViewController, UICollectionViewData
             
             let cell = collectionView.cellForItem(at: indexPath)
             cell?.contentView.layer.borderWidth = 3.0
-            cell?.contentView.layer.borderColor = UIColor.teal.cgColor
+            cell?.contentView.layer.borderColor = UIColor.shapeInfluencePink.cgColor
             
             self.selectedFiles.append(self.files[indexPath.row])
         } else {

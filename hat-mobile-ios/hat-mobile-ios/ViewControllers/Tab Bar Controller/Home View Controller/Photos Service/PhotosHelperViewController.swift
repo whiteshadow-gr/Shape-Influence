@@ -96,7 +96,7 @@ internal class PhotosHelperViewController: UIViewController, UIImagePickerContro
         let storyboard = UIStoryboard(name: "Main", bundle: nil)
         self.loadingScr = LoadingScreenWithProgressRingViewController.customInit(completion: 0, from: storyboard)
         
-        self.loadingScr!.view.createFloatingView(frame:CGRect(x: self.view.frame.midX - 75, y: self.view.frame.midY - 80, width: 150, height: 160), color: .teal, cornerRadius: 15)
+        self.loadingScr!.view.createFloatingView(frame:CGRect(x: self.view.frame.midX - 75, y: self.view.frame.midY - 80, width: 150, height: 160), color: .shapeInfluencePink, cornerRadius: 15)
         
         self.addViewController(self.loadingScr!)
     }

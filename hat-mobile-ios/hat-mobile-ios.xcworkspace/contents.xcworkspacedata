@@ -5,7 +5,7 @@
       location = "group:mapstogpx20170220_154311.gpx">
    </FileRef>
    <FileRef
-      location = "group:hat-mobile-ios.xcodeproj">
+      location = "group:/Users/whiteshadow/Documents/Development/Xcode Projects/My Projects/Shape-Influence/hat-mobile-ios/Shape Influence.xcodeproj">
    </FileRef>
    <FileRef
       location = "group:Pods/Pods.xcodeproj">

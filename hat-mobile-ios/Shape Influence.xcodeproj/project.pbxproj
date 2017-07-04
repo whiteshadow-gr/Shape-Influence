@@ -328,12 +328,12 @@
 		B51CC9271D1D7895000C9E48 /* LoginViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LoginViewController.swift; sourceTree = "<group>"; };
 		B54EA6171D19F2750018EE47 /* DataPointsTableView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DataPointsTableView.swift; sourceTree = "<group>"; };
 		B54EA6191D19F5450018EE47 /* DataPointTableViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DataPointTableViewCell.swift; sourceTree = "<group>"; };
-		B564E9651D19717900EDB8F1 /* hat-mobile-ios.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "hat-mobile-ios.app"; sourceTree = BUILT_PRODUCTS_DIR; };
+		B564E9651D19717900EDB8F1 /* Shape Influence.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "Shape Influence.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		B564E96D1D19717900EDB8F1 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
-		B564E9791D19717900EDB8F1 /* hat-mobile-iosTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = "hat-mobile-iosTests.xctest"; sourceTree = BUILT_PRODUCTS_DIR; };
+		B564E9791D19717900EDB8F1 /* Shape InfluenceTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = "Shape InfluenceTests.xctest"; sourceTree = BUILT_PRODUCTS_DIR; };
 		B564E97D1D19717900EDB8F1 /* DataPlugCollectionViewCellTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DataPlugCollectionViewCellTests.swift; sourceTree = "<group>"; };
 		B564E97F1D19717900EDB8F1 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
-		B564E9841D19717900EDB8F1 /* hat-mobile-iosUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = "hat-mobile-iosUITests.xctest"; sourceTree = BUILT_PRODUCTS_DIR; };
+		B564E9841D19717900EDB8F1 /* Shape InfluenceUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = "Shape InfluenceUITests.xctest"; sourceTree = BUILT_PRODUCTS_DIR; };
 		B564E9881D19717900EDB8F1 /* hat_mobile_iosUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = hat_mobile_iosUITests.swift; sourceTree = "<group>"; };
 		B564E98A1D19717900EDB8F1 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		B564E9961D1984CF00EDB8F1 /* MapKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = MapKit.framework; path = System/Library/Frameworks/MapKit.framework; sourceTree = SDKROOT; };
@@ -693,9 +693,9 @@
 		B564E9661D19717900EDB8F1 /* Products */ = {
 			isa = PBXGroup;
 			children = (
-				B564E9651D19717900EDB8F1 /* hat-mobile-ios.app */,
-				B564E9791D19717900EDB8F1 /* hat-mobile-iosTests.xctest */,
-				B564E9841D19717900EDB8F1 /* hat-mobile-iosUITests.xctest */,
+				B564E9651D19717900EDB8F1 /* Shape Influence.app */,
+				B564E9791D19717900EDB8F1 /* Shape InfluenceTests.xctest */,
+				B564E9841D19717900EDB8F1 /* Shape InfluenceUITests.xctest */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -819,9 +819,9 @@
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
-		B564E9641D19717900EDB8F1 /* hat-mobile-ios */ = {
+		B564E9641D19717900EDB8F1 /* Shape Influence */ = {
 			isa = PBXNativeTarget;
-			buildConfigurationList = B564E98D1D19717900EDB8F1 /* Build configuration list for PBXNativeTarget "hat-mobile-ios" */;
+			buildConfigurationList = B564E98D1D19717900EDB8F1 /* Build configuration list for PBXNativeTarget "Shape Influence" */;
 			buildPhases = (
 				AC9A4B5A5005F2159FF38388 /* [CP] Check Pods Manifest.lock */,
 				B564E9611D19717900EDB8F1 /* Sources */,
@@ -836,14 +836,14 @@
 			);
 			dependencies = (
 			);
-			name = "hat-mobile-ios";
+			name = "Shape Influence";
 			productName = "hat-mobile-ios";
-			productReference = B564E9651D19717900EDB8F1 /* hat-mobile-ios.app */;
+			productReference = B564E9651D19717900EDB8F1 /* Shape Influence.app */;
 			productType = "com.apple.product-type.application";
 		};
-		B564E9781D19717900EDB8F1 /* hat-mobile-iosTests */ = {
+		B564E9781D19717900EDB8F1 /* Shape InfluenceTests */ = {
 			isa = PBXNativeTarget;
-			buildConfigurationList = B564E9901D19717900EDB8F1 /* Build configuration list for PBXNativeTarget "hat-mobile-iosTests" */;
+			buildConfigurationList = B564E9901D19717900EDB8F1 /* Build configuration list for PBXNativeTarget "Shape InfluenceTests" */;
 			buildPhases = (
 				4AFE367BDC8E7CB1B4B74AEB /* [CP] Check Pods Manifest.lock */,
 				B564E9751D19717900EDB8F1 /* Sources */,
@@ -857,14 +857,14 @@
 			dependencies = (
 				B564E97B1D19717900EDB8F1 /* PBXTargetDependency */,
 			);
-			name = "hat-mobile-iosTests";
+			name = "Shape InfluenceTests";
 			productName = "hat-mobile-iosTests";
-			productReference = B564E9791D19717900EDB8F1 /* hat-mobile-iosTests.xctest */;
+			productReference = B564E9791D19717900EDB8F1 /* Shape InfluenceTests.xctest */;
 			productType = "com.apple.product-type.bundle.unit-test";
 		};
-		B564E9831D19717900EDB8F1 /* hat-mobile-iosUITests */ = {
+		B564E9831D19717900EDB8F1 /* Shape InfluenceUITests */ = {
 			isa = PBXNativeTarget;
-			buildConfigurationList = B564E9931D19717900EDB8F1 /* Build configuration list for PBXNativeTarget "hat-mobile-iosUITests" */;
+			buildConfigurationList = B564E9931D19717900EDB8F1 /* Build configuration list for PBXNativeTarget "Shape InfluenceUITests" */;
 			buildPhases = (
 				B7A88E34CFB8B0481FD46E0D /* [CP] Check Pods Manifest.lock */,
 				B564E9801D19717900EDB8F1 /* Sources */,
@@ -878,9 +878,9 @@
 			dependencies = (
 				B564E9861D19717900EDB8F1 /* PBXTargetDependency */,
 			);
-			name = "hat-mobile-iosUITests";
+			name = "Shape InfluenceUITests";
 			productName = "hat-mobile-iosUITests";
-			productReference = B564E9841D19717900EDB8F1 /* hat-mobile-iosUITests.xctest */;
+			productReference = B564E9841D19717900EDB8F1 /* Shape InfluenceUITests.xctest */;
 			productType = "com.apple.product-type.bundle.ui-testing";
 		};
 /* End PBXNativeTarget section */
@@ -931,7 +931,7 @@
 					};
 				};
 			};
-			buildConfigurationList = B564E9601D19717900EDB8F1 /* Build configuration list for PBXProject "hat-mobile-ios" */;
+			buildConfigurationList = B564E9601D19717900EDB8F1 /* Build configuration list for PBXProject "Shape Influence" */;
 			compatibilityVersion = "Xcode 3.2";
 			developmentRegion = English;
 			hasScannedForEncodings = 0;
@@ -944,9 +944,9 @@
 			projectDirPath = "";
 			projectRoot = "";
 			targets = (
-				B564E9641D19717900EDB8F1 /* hat-mobile-ios */,
-				B564E9781D19717900EDB8F1 /* hat-mobile-iosTests */,
-				B564E9831D19717900EDB8F1 /* hat-mobile-iosUITests */,
+				B564E9641D19717900EDB8F1 /* Shape Influence */,
+				B564E9781D19717900EDB8F1 /* Shape InfluenceTests */,
+				B564E9831D19717900EDB8F1 /* Shape InfluenceUITests */,
 			);
 		};
 /* End PBXProject section */
@@ -1381,12 +1381,12 @@
 /* Begin PBXTargetDependency section */
 		B564E97B1D19717900EDB8F1 /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
-			target = B564E9641D19717900EDB8F1 /* hat-mobile-ios */;
+			target = B564E9641D19717900EDB8F1 /* Shape Influence */;
 			targetProxy = B564E97A1D19717900EDB8F1 /* PBXContainerItemProxy */;
 		};
 		B564E9861D19717900EDB8F1 /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
-			target = B564E9641D19717900EDB8F1 /* hat-mobile-ios */;
+			target = B564E9641D19717900EDB8F1 /* Shape Influence */;
 			targetProxy = B564E9851D19717900EDB8F1 /* PBXContainerItemProxy */;
 		};
 /* End PBXTargetDependency section */
@@ -1511,7 +1511,7 @@
 				INFOPLIST_FILE = "hat-mobile-ios/Info.plist";
 				IPHONEOS_DEPLOYMENT_TARGET = 9.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
-				PRODUCT_BUNDLE_IDENTIFIER = com.hubofallthings.rumpellocationtracker;
+				PRODUCT_BUNDLE_IDENTIFIER = com.hubofallthings.shapeInfluence;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE = "";
 				PROVISIONING_PROFILE_SPECIFIER = "";
@@ -1534,7 +1534,7 @@
 				INFOPLIST_FILE = "hat-mobile-ios/Info.plist";
 				IPHONEOS_DEPLOYMENT_TARGET = 9.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
-				PRODUCT_BUNDLE_IDENTIFIER = com.hubofallthings.rumpellocationtracker;
+				PRODUCT_BUNDLE_IDENTIFIER = com.hubofallthings.shapeInfluence;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE = "";
 				PROVISIONING_PROFILE_SPECIFIER = "";
@@ -1563,7 +1563,7 @@
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_OBJC_BRIDGING_HEADER = "hat-mobile-ios/HatMobile-Bridging-Header.h";
 				SWIFT_VERSION = 3.0;
-				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/hat-mobile-ios.app/hat-mobile-ios";
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/Shape Influence.app/Shape Influence";
 				VALID_ARCHS = "arm64 armv7 armv7s";
 			};
 			name = Debug;
@@ -1587,7 +1587,7 @@
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_OBJC_BRIDGING_HEADER = "hat-mobile-ios/HatMobile-Bridging-Header.h";
 				SWIFT_VERSION = 3.0;
-				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/hat-mobile-ios.app/hat-mobile-ios";
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/Shape Influence.app/Shape Influence";
 				VALID_ARCHS = "arm64 armv7 armv7s";
 			};
 			name = Release;
@@ -1623,7 +1623,7 @@
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
-		B564E9601D19717900EDB8F1 /* Build configuration list for PBXProject "hat-mobile-ios" */ = {
+		B564E9601D19717900EDB8F1 /* Build configuration list for PBXProject "Shape Influence" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				B564E98B1D19717900EDB8F1 /* Debug */,
@@ -1632,7 +1632,7 @@
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
-		B564E98D1D19717900EDB8F1 /* Build configuration list for PBXNativeTarget "hat-mobile-ios" */ = {
+		B564E98D1D19717900EDB8F1 /* Build configuration list for PBXNativeTarget "Shape Influence" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				B564E98E1D19717900EDB8F1 /* Debug */,
@@ -1641,7 +1641,7 @@
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
-		B564E9901D19717900EDB8F1 /* Build configuration list for PBXNativeTarget "hat-mobile-iosTests" */ = {
+		B564E9901D19717900EDB8F1 /* Build configuration list for PBXNativeTarget "Shape InfluenceTests" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				B564E9911D19717900EDB8F1 /* Debug */,
@@ -1650,7 +1650,7 @@
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
-		B564E9931D19717900EDB8F1 /* Build configuration list for PBXNativeTarget "hat-mobile-iosUITests" */ = {
+		B564E9931D19717900EDB8F1 /* Build configuration list for PBXNativeTarget "Shape InfluenceUITests" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				B564E9941D19717900EDB8F1 /* Debug */,

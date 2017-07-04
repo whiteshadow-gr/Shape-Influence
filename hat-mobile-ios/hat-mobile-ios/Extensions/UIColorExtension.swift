@@ -20,8 +20,11 @@ extension UIColor {
     
     // swiftlint:disable object_literal
     static let appBase: UIColor = UIColor.fromRGB(0x018675)
+    static let shapeInfluencePink: UIColor = UIColor(red: 195 / 255, green: 43 / 255, blue: 106 / 255, alpha: 1)
+    static let shapeInfluencePinkLight: UIColor = UIColor(red: 168 / 255, green: 64 / 255, blue: 97 / 255, alpha: 1)
+    static let shapeInfluencePinkLighter: UIColor = UIColor(red: 164 / 255, green: 45 / 255, blue: 93 / 255, alpha: 1)
     static let toolbarColor: UIColor = UIColor(red: 76 / 255, green: 217 / 255, blue: 100 / 255, alpha: 1)
-    static let teal: UIColor = UIColor(red: 0 / 255, green: 150 / 255, blue: 136 / 255, alpha: 1)
+    //static let teal: UIColor = UIColor(red: 0 / 255, green: 150 / 255, blue: 136 / 255, alpha: 1)
     static let tealDark: UIColor = UIColor(red: 2 / 255, green: 107 / 255, blue: 97 / 255, alpha: 1)
     static let tealLight: UIColor = UIColor(red: 21 / 255, green: 130 / 255, blue: 120 / 255, alpha: 1)
     static let rumpelLightGray: UIColor = UIColor(red: 51 / 255, green: 74 / 255, blue: 79 / 255, alpha: 1)

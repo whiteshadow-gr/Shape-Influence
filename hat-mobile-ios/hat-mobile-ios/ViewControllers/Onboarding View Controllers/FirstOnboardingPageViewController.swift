@@ -32,7 +32,7 @@ internal class FirstOnboardingPageViewController: UIPageViewController, UIPageVi
         self.createPageViewController()
         
         // change the color of the pagination dots at the bottom of the screen
-        self.changePaginationColors(pageTintColor: .rumpelLightGray, pageCurrentTintColor: .teal)
+        self.changePaginationColors(pageTintColor: .rumpelLightGray, pageCurrentTintColor: .shapeInfluencePink)
     }
 
     override func didReceiveMemoryWarning() {

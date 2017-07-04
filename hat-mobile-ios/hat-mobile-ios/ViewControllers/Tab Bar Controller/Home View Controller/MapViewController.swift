@@ -129,24 +129,24 @@ internal class MapViewController: UIViewController, MKMapViewDelegate, MapSettin
         datePicker!.addTarget(self, action: #selector(self.datePickerValueChanged(sender:)), for: .valueChanged)
         
         let doneButton = UIBarButtonItem(title: "Done", style: .done, target: self, action: #selector(self.donePickerButton(sender:)))
-        doneButton.setTitleTextAttributes([NSForegroundColorAttributeName: UIColor.teal], for: .normal)
+        doneButton.setTitleTextAttributes([NSForegroundColorAttributeName: UIColor.shapeInfluencePink], for: .normal)
         
         let spaceButton = UIBarButtonItem(barButtonSystemItem: UIBarButtonSystemItem.flexibleSpace, target: nil, action: nil)
-        spaceButton.setTitleTextAttributes([NSForegroundColorAttributeName: UIColor.teal], for: .normal)
+        spaceButton.setTitleTextAttributes([NSForegroundColorAttributeName: UIColor.shapeInfluencePink], for: .normal)
         
         self.segmentControl = UISegmentedControl(items: ["From", "To"])
-        self.segmentControl!.setTitleTextAttributes([NSForegroundColorAttributeName: UIColor.teal], for: .normal)
+        self.segmentControl!.setTitleTextAttributes([NSForegroundColorAttributeName: UIColor.shapeInfluencePink], for: .normal)
         self.segmentControl!.selectedSegmentIndex = 0
         self.segmentControl!.addTarget(self, action: #selector(segmentedControlDidChange(sender:)), for: UIControlEvents.valueChanged)
-        self.segmentControl!.tintColor = .teal
+        self.segmentControl!.tintColor = .shapeInfluencePink
         
         let barButtonSegmentedControll = UIBarButtonItem(customView: segmentControl!)
         
         let spaceButton2 = UIBarButtonItem(barButtonSystemItem: UIBarButtonSystemItem.flexibleSpace, target: nil, action: nil)
-        spaceButton2.setTitleTextAttributes([NSForegroundColorAttributeName: UIColor.teal], for: .normal)
+        spaceButton2.setTitleTextAttributes([NSForegroundColorAttributeName: UIColor.shapeInfluencePink], for: .normal)
         
         let cancelButton = UIBarButtonItem(title: "Cancel", style: .done, target: self, action: #selector(self.cancelPickerButton(sender:)))
-        cancelButton.setTitleTextAttributes([NSForegroundColorAttributeName: UIColor.teal], for: .normal)
+        cancelButton.setTitleTextAttributes([NSForegroundColorAttributeName: UIColor.shapeInfluencePink], for: .normal)
         
         let toolBar = UIToolbar()
         toolBar.barStyle = UIBarStyle.default
@@ -199,7 +199,7 @@ internal class MapViewController: UIViewController, MKMapViewDelegate, MapSettin
         let view = UIView()
         view.createFloatingView(
             frame: CGRect(x: self.view.frame.midX - 60, y: self.view.frame.midY - 15, width: 120, height: 30),
-            color: .teal,
+            color: .shapeInfluencePink,
             cornerRadius: 15)
         
         let label = UILabel().createLabel(

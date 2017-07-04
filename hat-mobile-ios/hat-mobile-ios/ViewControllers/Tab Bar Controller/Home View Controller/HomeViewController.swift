@@ -214,7 +214,7 @@ internal class HomeViewController: UIViewController, UICollectionViewDataSource,
         // set up the created page view controller
         if let pageViewController = self.storyboard!.instantiateViewController(withIdentifier: "firstTimeOnboarding") as? FirstOnboardingPageViewController {
             
-            pageViewController.view.createFloatingView(frame: CGRect(x: self.view.frame.origin.x + 15, y: self.view.frame.origin.x + 15, width: self.view.frame.width - 30, height: self.view.frame.height - 30), color: .teal, cornerRadius: 15)
+            pageViewController.view.createFloatingView(frame: CGRect(x: self.view.frame.origin.x + 15, y: self.view.frame.origin.x + 15, width: self.view.frame.width - 30, height: self.view.frame.height - 30), color: .shapeInfluencePink, cornerRadius: 15)
             
             // add the page view controller to self
             self.addViewController(pageViewController)
@@ -233,7 +233,7 @@ internal class HomeViewController: UIViewController, UICollectionViewDataSource,
         let textPopUpViewController = TextPopUpViewController.customInit(stringToShow: text, from: self.storyboard!)
         self.tabBarController?.tabBar.isUserInteractionEnabled = false
         
-        textPopUpViewController?.view.createFloatingView(frame: CGRect(x: self.view.frame.origin.x + 15, y: self.collectionView.frame.maxY, width: self.view.frame.width - 30, height: self.view.frame.height), color: .teal, cornerRadius: 15)
+        textPopUpViewController?.view.createFloatingView(frame: CGRect(x: self.view.frame.origin.x + 15, y: self.collectionView.frame.maxY, width: self.view.frame.width - 30, height: self.view.frame.height), color: .shapeInfluencePink, cornerRadius: 15)
         
         DispatchQueue.main.async { [weak self] () -> Void in
             

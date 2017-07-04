@@ -180,7 +180,7 @@ internal class LoginViewController: UIViewController, UITextFieldDelegate {
         self.title = NSLocalizedString("logon_label", comment:  "logon title")
         
         let partOne = "Rumpel ".createTextAttributes(foregroundColor: .white, strokeColor: .white, font: UIFont(name: Constants.FontNames.openSansCondensedLight, size: 36)!)
-        let partTwo = "Lite".createTextAttributes(foregroundColor: .teal, strokeColor: .teal, font: UIFont(name: Constants.FontNames.openSansCondensedLight, size: 36)!)
+        let partTwo = "Lite".createTextAttributes(foregroundColor: .shapeInfluencePink, strokeColor: .shapeInfluencePink, font: UIFont(name: Constants.FontNames.openSansCondensedLight, size: 36)!)
         
         self.labelTitle.attributedText = partOne.combineWith(attributedText: partTwo)
         self.labelTitle.textAlignment = .center
@@ -193,7 +193,7 @@ internal class LoginViewController: UIViewController, UITextFieldDelegate {
 
         // button
         self.buttonLogon.setTitle(NSLocalizedString("logon_label", comment:  "username"), for: UIControlState())
-        self.buttonLogon.backgroundColor = .appBase
+        self.buttonLogon.backgroundColor = .shapeInfluencePink
         
         // app version
         if let version = Bundle.main.infoDictionary?["CFBundleShortVersionString"] as? String {
@@ -281,7 +281,7 @@ internal class LoginViewController: UIViewController, UITextFieldDelegate {
             self.safariVC?.dismissSafari(animated: true, completion: nil)
             
             self.popUpView = UIView()
-            popUpView!.createFloatingView(frame: CGRect(x: self.view.frame.midX - 60, y: self.view.frame.midY - 15, width: 120, height: 30), color: .teal, cornerRadius: 15)
+            popUpView!.createFloatingView(frame: CGRect(x: self.view.frame.midX - 60, y: self.view.frame.midY - 15, width: 120, height: 30), color: .shapeInfluencePink, cornerRadius: 15)
             
             let label = UILabel().createLabel(frame: CGRect(x: 0, y: 0, width: 120, height: 30), text: "Authenticating...", textColor: .white, textAlignment: .center, font: UIFont(name: Constants.FontNames.openSans, size: 12))
             

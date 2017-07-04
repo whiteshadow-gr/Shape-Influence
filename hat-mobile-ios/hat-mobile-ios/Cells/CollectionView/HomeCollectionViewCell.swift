@@ -63,37 +63,36 @@ internal class HomeCollectionViewCell: UICollectionViewCell {
      */
     private class func backgroundColorOfCellForIndexPath(_ indexPath: IndexPath, in orientation: UIInterfaceOrientation) -> UIColor {
         
-        // check if device is in portrait mode, 3 tiles per row vs 2
         if orientation.isPortrait {
             
             // create this zebra like color based on the index of the cell
             if indexPath.row % 4 == 0 {
                 
-                return .rumpelDarkGray
-            } else if indexPath.row % 4 == 3 {
+                return .shapeInfluencePinkLight
+            } else if indexPath.row % 4 == 1 {
                 
-                return .rumpelLighterDarkGray
+                return .shapeInfluencePinkLighter
             } else if indexPath.row % 4 == 2 {
                 
-                return .tealLight
+                return .shapeInfluencePinkLighter
             }
             
-            return .tealDark
+            return .shapeInfluencePinkLight
         } else {
             
             // create this zebra like color based on the index of the cell
             if indexPath.row % 6 == 0 {
                 
-                return .rumpelDarkGray
+                return .shapeInfluencePinkLight
             } else if indexPath.row % 6 == 3 {
                 
-                return .tealLight
+                return .shapeInfluencePinkLighter
             } else if indexPath.row % 6 == 2 {
                 
-                return .rumpelLighterDarkGray
+                return .shapeInfluencePinkLight
             }
             
-            return .teal
+            return .shapeInfluencePinkLighter
         }
     }
 }

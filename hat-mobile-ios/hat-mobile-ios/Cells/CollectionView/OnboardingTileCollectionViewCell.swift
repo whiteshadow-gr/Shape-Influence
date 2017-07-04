@@ -65,7 +65,7 @@ internal class OnboardingTileCollectionViewCell: UICollectionViewCell, UserCrede
         // set cell's description
         cell.infoLabel.text = self.createInfoStringFromData(hatProvider: hatProvider)
         
-        cell.signUpButton.addBorderToButton(width: 1, color: .teal)
+        cell.signUpButton.addBorderToButton(width: 1, color: .shapeInfluencePink)
         
         // get image from url and set it to the image view
         if let url: URL = URL(string: "https://hatters.hubofallthings.com/assets" + hatProvider.illustration) {

@@ -67,7 +67,7 @@ internal class DataPlugsCollectionViewController: UICollectionViewController, UI
         }
         
         // create loading pop up screen
-        self.loadingView = UIView.createLoadingView(with: CGRect(x: (self.collectionView?.frame.midX)! - 70, y: (self.collectionView?.frame.midY)! - 15, width: 140, height: 30), color: .teal, cornerRadius: 15, in: self.view, with: "Getting data plugs...", textColor: .white, font: UIFont(name: Constants.FontNames.openSans, size: 12)!)
+        self.loadingView = UIView.createLoadingView(with: CGRect(x: (self.collectionView?.frame.midX)! - 70, y: (self.collectionView?.frame.midY)! - 15, width: 140, height: 30), color: .shapeInfluencePink, cornerRadius: 15, in: self.view, with: "Getting data plugs...", textColor: .white, font: UIFont(name: Constants.FontNames.openSans, size: 12)!)
         
         // get available data plugs from server
         HATDataPlugsService.getAvailableDataPlugs(succesfulCallBack: successfullCallBack, failCallBack: {(error) -> Void in

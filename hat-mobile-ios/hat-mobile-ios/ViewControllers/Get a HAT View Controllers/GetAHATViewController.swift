@@ -101,7 +101,7 @@ internal class GetAHATViewController: UIViewController, UICollectionViewDataSour
         self.arrowBarImage.image = self.arrowBarImage.image!.withRenderingMode(.alwaysTemplate)
         self.arrowBarImage.tintColor = .rumpelDarkGray
         
-        self.learnMoreButton.addBorderToButton(width: 1, color: .teal)
+        self.learnMoreButton.addBorderToButton(width: 1, color: .shapeInfluencePink)
         
         // add notification observers
         NotificationCenter.default.addObserver(self, selector: #selector(hidePopUpView), name: NSNotification.Name(Constants.NotificationNames.hideGetAHATPopUp), object: nil)

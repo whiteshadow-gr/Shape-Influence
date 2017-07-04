@@ -56,7 +56,7 @@ internal class PageViewController: UIViewController {
             // set up the created page view controller
             self.pageViewController = pageItemController
             self.darkView = AnimationHelper.addBlurToView(self.view)
-            pageItemController.view.createFloatingView(frame: CGRect(x: self.view.frame.origin.x + 15, y: self.view.frame.maxY, width: self.view.frame.width - 30, height: self.view.frame.height - 30), color: .teal, cornerRadius: 15)
+            pageItemController.view.createFloatingView(frame: CGRect(x: self.view.frame.origin.x + 15, y: self.view.frame.maxY, width: self.view.frame.width - 30, height: self.view.frame.height - 30), color: .shapeInfluencePink, cornerRadius: 15)
             AnimationHelper.animateView(
                 pageItemController.view,
                 duration: 0.2,
@@ -83,7 +83,7 @@ internal class PageViewController: UIViewController {
         var pageObject: LearnMoreObject = LearnMoreObject()
         
         // change the color of the pagination dots at the bottom of the screen
-        self.pageViewController?.changePaginationColors(pageTintColor: .white, pageCurrentTintColor: .teal)
+        self.pageViewController?.changePaginationColors(pageTintColor: .white, pageCurrentTintColor: .shapeInfluencePink)
         
         // check if we are out of bounds
         if itemIndex >= 0 && itemIndex <= 6 {
@@ -96,7 +96,7 @@ internal class PageViewController: UIViewController {
             
             // format main label
             let partOne = "Because we think YOU should be at the ".createTextAttributes(foregroundColor: .white, strokeColor: .white, font: UIFont(name: Constants.FontNames.openSansCondensedLight, size: 36)!)
-            let partTwo = "hub of all things".createTextAttributes(foregroundColor: .teal, strokeColor: .teal, font: UIFont(name: Constants.FontNames.openSans, size: 36)!)
+            let partTwo = "hub of all things".createTextAttributes(foregroundColor: .shapeInfluencePink, strokeColor: .shapeInfluencePink, font: UIFont(name: Constants.FontNames.openSans, size: 36)!)
             
             mainLabel.attributedText = partOne.combineWith(attributedText: partTwo)
         } else {

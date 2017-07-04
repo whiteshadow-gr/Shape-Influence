@@ -203,7 +203,7 @@ internal class MoreTableViewController: UIViewController, UITableViewDelegate, U
             
             if self.sections[indexPath.section][indexPath.row] == "Report Problem" {
                 
-                cell.textLabel?.textColor = .teal
+                cell.textLabel?.textColor = .shapeInfluencePink
             }
         } else if indexPath.section == 5 {
             

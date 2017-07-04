@@ -1038,7 +1038,7 @@ internal class ShareOptionsViewController: UIViewController, UITextViewDelegate,
         
         self.loadingScr = LoadingScreenWithProgressRingViewController.customInit(completion: 0, from: self.storyboard!)
         
-        self.loadingScr!.view.createFloatingView(frame:CGRect(x: self.view.frame.midX - 75, y: self.view.frame.midY - 160, width: 150, height: 160), color: .teal, cornerRadius: 15)
+        self.loadingScr!.view.createFloatingView(frame:CGRect(x: self.view.frame.midX - 75, y: self.view.frame.midY - 160, width: 150, height: 160), color: .shapeInfluencePink, cornerRadius: 15)
         
         self.addViewController(self.loadingScr!)
     }
@@ -1116,7 +1116,7 @@ internal class ShareOptionsViewController: UIViewController, UITextViewDelegate,
         self.durationSharedForLabel.isHidden = false
         
         // set teal color
-        let color: UIColor = .teal
+        let color: UIColor = .shapeInfluencePink
         
         // set the text of the public label
         self.publicLabel.text = "Shared"

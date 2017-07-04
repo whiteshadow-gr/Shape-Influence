@@ -16,7 +16,7 @@
 "error_label" = "Error";
 
 /* logon and register */
-"logon_label" = "Login with HAT";
+"logon_label" = "Login with Shape / Influence";
 "logout_label" = "Sign Out";
 "attempting_to_login" = "Checking privileges...";
 

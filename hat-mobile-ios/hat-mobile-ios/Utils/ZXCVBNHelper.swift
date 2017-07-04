@@ -29,7 +29,7 @@ internal class ZXCVBNHelper: NSObject {
     class func showPasswordMeterOn(textField: UITextField) -> Int {
         
         let zxcvbn = DBPasswordStrengthMeterView(frame: CGRect(x: 0, y: 0, width: 15, height: 30))
-        zxcvbn.setLightColor(.rumpelDarkGray, darkColor: .teal)
+        zxcvbn.setLightColor(.rumpelDarkGray, darkColor: .shapeInfluencePink)
         zxcvbn.scorePassword(textField.text)
         
         textField.rightViewMode = .always
