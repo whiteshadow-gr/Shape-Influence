@@ -1,9 +1,9 @@
 PODS:
   - Alamofire (4.5.0)
   - BEMCheckBox (1.4.1)
-  - Crashlytics (3.8.4):
+  - Crashlytics (3.8.5):
     - Fabric (~> 1.6.3)
-  - Fabric (1.6.11)
+  - Fabric (1.6.12)
   - FBAnnotationClusteringSwift (2.0)
   - HatForIOS (0.0.1):
     - Alamofire
@@ -68,8 +68,8 @@ CHECKOUT OPTIONS:
 SPEC CHECKSUMS:
   Alamofire: f28cdffd29de33a7bfa022cbd63ae95a27fae140
   BEMCheckBox: 5ba6e37ade3d3657b36caecc35c8b75c6c2b1a4e
-  Crashlytics: 79e236942ca1e7fc641df1feb9a275360a78ab6a
-  Fabric: 5911403591946b8228ab1c51d98f1d7137e863c6
+  Crashlytics: dfbae35ef22ca189240d230ad501feea4ee85d2d
+  Fabric: f050464eac45a2ce5a8e6e6a07e977c0df32fe28
   FBAnnotationClusteringSwift: 0698ddcee46d1c28f14336909b2b0af4906b213f
   HatForIOS: 741a6aa226fb96e93042b6b31d5429b89671f49e
   JWTDecode: 178e47e5d28d3abcff778bacced8342858cd6cb5
@@ -84,6 +84,6 @@ SPEC CHECKSUMS:
   URITemplate: 720b8a56a281494d7c2d31ee33183986eaed2c67
   zxcvbn-ios: fef98b7c80f1512ff0eec47ac1fa399fc00f7e3c
 
-PODFILE CHECKSUM: 89ef8e840b4f2b650569161bc5765c4b86c82bb9
+PODFILE CHECKSUM: d5e6fce38fc503c261ca932034f56100a0d2df7a
 
 COCOAPODS: 1.3.0.beta.2

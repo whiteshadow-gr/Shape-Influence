@@ -1,6 +1,0 @@
-framework module Pods_hat_mobile_ios {
-  umbrella header "Pods-hat-mobile-ios-umbrella.h"
-
-  export *
-  module * { export * }
-}

@@ -19,7 +19,6 @@ extension UIColor {
     // MARK: - Staticly defined colors
     
     // swiftlint:disable object_literal
-    static let appBase: UIColor = UIColor.fromRGB(0x018675)
     static let shapeInfluencePink: UIColor = UIColor(red: 195 / 255, green: 43 / 255, blue: 106 / 255, alpha: 1)
     static let shapeInfluencePinkLight: UIColor = UIColor(red: 168 / 255, green: 64 / 255, blue: 97 / 255, alpha: 1)
     static let shapeInfluencePinkLighter: UIColor = UIColor(red: 164 / 255, green: 45 / 255, blue: 93 / 255, alpha: 1)

@@ -45,7 +45,7 @@ internal class DataPointTableViewCell: UITableViewCell {
         if lastSynced != nil {
             
             self.labelSyncDate.text = "Synced " + FormatterHelper.getDateString(lastSynced!)
-            self.labelSyncDate.textColor = .appBase
+            self.labelSyncDate.textColor = .shapeInfluencePink
         } else {
             
             self.labelSyncDate.text = NSLocalizedString("not_synced_label", comment:  "")

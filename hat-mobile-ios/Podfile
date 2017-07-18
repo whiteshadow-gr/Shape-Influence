@@ -4,7 +4,7 @@ inhibit_all_warnings!
 # Uncomment this line if you're using Swift
 use_frameworks!
 
-target 'hat-mobile-ios' do
+target 'Shape Influence' do
     pod 'Alamofire'
     pod 'RealmSwift'
     pod 'SwiftyJSON'
@@ -22,7 +22,7 @@ target 'hat-mobile-ios' do
     
 end
 
-target 'hat-mobile-iosTests' do
+target 'Shape InfluenceTests' do
     
     inherit! :complete
     pod 'Alamofire'
@@ -40,7 +40,7 @@ target 'hat-mobile-iosTests' do
     pod 'Mockingjay'
 end
 
-target 'hat-mobile-iosUITests' do
+target 'Shape InfluenceUITests' do
 
 end
 

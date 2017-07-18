@@ -8,6 +8,7 @@
 
 /* Begin PBXBuildFile section */
 		0D5637F6A801923583665846 /* Pods_hat_mobile_iosTests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 77786464C54765E0CEAD1CF0 /* Pods_hat_mobile_iosTests.framework */; };
+		477F516E7671DF674E9067C9 /* Pods_Shape_Influence.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = BDB8312B92F83E83DB3EB3AF /* Pods_Shape_Influence.framework */; };
 		600015541EAE62AE000A084F /* ResetPasswordTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 600015531EAE62AE000A084F /* ResetPasswordTableViewController.swift */; };
 		600015561EAE63CD000A084F /* ResetPasswordTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 600015551EAE63CD000A084F /* ResetPasswordTableViewCell.swift */; };
 		6000CE5D1DE728580076E173 /* OpenSans-Bold.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 6000CE531DE728580076E173 /* OpenSans-Bold.ttf */; };
@@ -144,6 +145,7 @@
 		60F1D7E71E6828DA0009CF1F /* AuthenticationHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 60F1D7E61E6828DA0009CF1F /* AuthenticationHelper.swift */; };
 		60FAC7691E223A1D00532C01 /* DataPlugsCollectionViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 60FAC7681E223A1D00532C01 /* DataPlugsCollectionViewController.swift */; };
 		60FAC76B1E223AA700532C01 /* DataPlugCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 60FAC76A1E223AA700532C01 /* DataPlugCollectionViewCell.swift */; };
+		7243F21E2C5C23BEB93FDE51 /* Pods_Shape_InfluenceTests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E8EA0BDB499E1230F3B0FB0A /* Pods_Shape_InfluenceTests.framework */; };
 		80ECC806CA622621992D8329 /* Pods_hat_mobile_ios.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 38701F920BAE76DFF5463629 /* Pods_hat_mobile_ios.framework */; };
 		B5138ACE1D1ECA2C00CD1530 /* NetworkHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = B5138ACD1D1ECA2C00CD1530 /* NetworkHelper.swift */; };
 		B51CC9241D1D5749000C9E48 /* SettingsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B51CC9231D1D5749000C9E48 /* SettingsViewController.swift */; };
@@ -165,6 +167,7 @@
 		B591368A1D19DE6C00E9EDD0 /* RealmHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = B59136891D19DE6C00E9EDD0 /* RealmHelper.swift */; };
 		B591368C1D19F13500E9EDD0 /* DataViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B591368B1D19F13500E9EDD0 /* DataViewController.swift */; };
 		C9A7EBA6C445F9F68C86728A /* Pods_hat_mobile_iosUITests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 2632FB8B2553DD802A1D8E0E /* Pods_hat_mobile_iosUITests.framework */; };
+		F1E2A35D6E6EBD30D8EA7404 /* Pods_Shape_InfluenceUITests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D6E6192934FD09096BFC7F94 /* Pods_Shape_InfluenceUITests.framework */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -189,9 +192,11 @@
 		158113EFCF5B64B67322CA7A /* Pods-hat-mobile-ios.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-hat-mobile-ios.debug.xcconfig"; path = "Pods/Target Support Files/Pods-hat-mobile-ios/Pods-hat-mobile-ios.debug.xcconfig"; sourceTree = "<group>"; };
 		2632FB8B2553DD802A1D8E0E /* Pods_hat_mobile_iosUITests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_hat_mobile_iosUITests.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		28C6670E861A21AA5FCE1C0F /* Pods-hat-mobile-iosTests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-hat-mobile-iosTests.debug.xcconfig"; path = "Pods/Target Support Files/Pods-hat-mobile-iosTests/Pods-hat-mobile-iosTests.debug.xcconfig"; sourceTree = "<group>"; };
+		2E37446048FA921BCD6A0290 /* Pods-Shape Influence.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Shape Influence.debug.xcconfig"; path = "Pods/Target Support Files/Pods-Shape Influence/Pods-Shape Influence.debug.xcconfig"; sourceTree = "<group>"; };
 		38701F920BAE76DFF5463629 /* Pods_hat_mobile_ios.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_hat_mobile_ios.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		4B2D42BB42DCB166E7846D00 /* Pods-hat-mobile-iosTests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-hat-mobile-iosTests.release.xcconfig"; path = "Pods/Target Support Files/Pods-hat-mobile-iosTests/Pods-hat-mobile-iosTests.release.xcconfig"; sourceTree = "<group>"; };
 		58252B1549E6585555A90CEC /* Pods-hat-mobile-iosUITests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-hat-mobile-iosUITests.debug.xcconfig"; path = "Pods/Target Support Files/Pods-hat-mobile-iosUITests/Pods-hat-mobile-iosUITests.debug.xcconfig"; sourceTree = "<group>"; };
+		5A2C27E5F45FCB0269B8A119 /* Pods-Shape Influence.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Shape Influence.release.xcconfig"; path = "Pods/Target Support Files/Pods-Shape Influence/Pods-Shape Influence.release.xcconfig"; sourceTree = "<group>"; };
 		600015531EAE62AE000A084F /* ResetPasswordTableViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ResetPasswordTableViewController.swift; sourceTree = "<group>"; };
 		600015551EAE63CD000A084F /* ResetPasswordTableViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ResetPasswordTableViewCell.swift; sourceTree = "<group>"; };
 		6000CE531DE728580076E173 /* OpenSans-Bold.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "OpenSans-Bold.ttf"; sourceTree = "<group>"; };
@@ -320,8 +325,10 @@
 		60F1D7E61E6828DA0009CF1F /* AuthenticationHelper.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AuthenticationHelper.swift; sourceTree = "<group>"; };
 		60FAC7681E223A1D00532C01 /* DataPlugsCollectionViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DataPlugsCollectionViewController.swift; sourceTree = "<group>"; };
 		60FAC76A1E223AA700532C01 /* DataPlugCollectionViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DataPlugCollectionViewCell.swift; sourceTree = "<group>"; };
+		66D60A57A0938D1B3843D73F /* Pods-Shape InfluenceTests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Shape InfluenceTests.release.xcconfig"; path = "Pods/Target Support Files/Pods-Shape InfluenceTests/Pods-Shape InfluenceTests.release.xcconfig"; sourceTree = "<group>"; };
 		77786464C54765E0CEAD1CF0 /* Pods_hat_mobile_iosTests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_hat_mobile_iosTests.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		821CBD00C6F813421F149C7E /* Pods-hat-mobile-iosUITests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-hat-mobile-iosUITests.release.xcconfig"; path = "Pods/Target Support Files/Pods-hat-mobile-iosUITests/Pods-hat-mobile-iosUITests.release.xcconfig"; sourceTree = "<group>"; };
+		A23F4C268E053514F3ED135B /* Pods-Shape InfluenceUITests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Shape InfluenceUITests.debug.xcconfig"; path = "Pods/Target Support Files/Pods-Shape InfluenceUITests/Pods-Shape InfluenceUITests.debug.xcconfig"; sourceTree = "<group>"; };
 		B5138ACD1D1ECA2C00CD1530 /* NetworkHelper.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NetworkHelper.swift; sourceTree = "<group>"; };
 		B51CC9231D1D5749000C9E48 /* SettingsViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SettingsViewController.swift; sourceTree = "<group>"; };
 		B51CC9251D1D620C000C9E48 /* MapSettingsDelegate.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MapSettingsDelegate.swift; sourceTree = "<group>"; };
@@ -346,6 +353,11 @@
 		B59136871D19DC2700E9EDD0 /* DataPoint.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DataPoint.swift; sourceTree = "<group>"; };
 		B59136891D19DE6C00E9EDD0 /* RealmHelper.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RealmHelper.swift; sourceTree = "<group>"; };
 		B591368B1D19F13500E9EDD0 /* DataViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DataViewController.swift; sourceTree = "<group>"; };
+		BDB8312B92F83E83DB3EB3AF /* Pods_Shape_Influence.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_Shape_Influence.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		D6E6192934FD09096BFC7F94 /* Pods_Shape_InfluenceUITests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_Shape_InfluenceUITests.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		E8EA0BDB499E1230F3B0FB0A /* Pods_Shape_InfluenceTests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_Shape_InfluenceTests.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		F0962FBF5A5C314F97A28F41 /* Pods-Shape InfluenceUITests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Shape InfluenceUITests.release.xcconfig"; path = "Pods/Target Support Files/Pods-Shape InfluenceUITests/Pods-Shape InfluenceUITests.release.xcconfig"; sourceTree = "<group>"; };
+		FC7B5A7C6EFEF29359917DC7 /* Pods-Shape InfluenceTests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Shape InfluenceTests.debug.xcconfig"; path = "Pods/Target Support Files/Pods-Shape InfluenceTests/Pods-Shape InfluenceTests.debug.xcconfig"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -355,6 +367,7 @@
 			files = (
 				B564E9971D1984CF00EDB8F1 /* MapKit.framework in Frameworks */,
 				80ECC806CA622621992D8329 /* Pods_hat_mobile_ios.framework in Frameworks */,
+				477F516E7671DF674E9067C9 /* Pods_Shape_Influence.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -363,6 +376,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				0D5637F6A801923583665846 /* Pods_hat_mobile_iosTests.framework in Frameworks */,
+				7243F21E2C5C23BEB93FDE51 /* Pods_Shape_InfluenceTests.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -371,6 +385,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				C9A7EBA6C445F9F68C86728A /* Pods_hat_mobile_iosUITests.framework in Frameworks */,
+				F1E2A35D6E6EBD30D8EA7404 /* Pods_Shape_InfluenceUITests.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -385,6 +400,9 @@
 				38701F920BAE76DFF5463629 /* Pods_hat_mobile_ios.framework */,
 				77786464C54765E0CEAD1CF0 /* Pods_hat_mobile_iosTests.framework */,
 				2632FB8B2553DD802A1D8E0E /* Pods_hat_mobile_iosUITests.framework */,
+				BDB8312B92F83E83DB3EB3AF /* Pods_Shape_Influence.framework */,
+				E8EA0BDB499E1230F3B0FB0A /* Pods_Shape_InfluenceTests.framework */,
+				D6E6192934FD09096BFC7F94 /* Pods_Shape_InfluenceUITests.framework */,
 			);
 			name = Frameworks;
 			sourceTree = "<group>";
@@ -812,6 +830,12 @@
 				4B2D42BB42DCB166E7846D00 /* Pods-hat-mobile-iosTests.release.xcconfig */,
 				58252B1549E6585555A90CEC /* Pods-hat-mobile-iosUITests.debug.xcconfig */,
 				821CBD00C6F813421F149C7E /* Pods-hat-mobile-iosUITests.release.xcconfig */,
+				2E37446048FA921BCD6A0290 /* Pods-Shape Influence.debug.xcconfig */,
+				5A2C27E5F45FCB0269B8A119 /* Pods-Shape Influence.release.xcconfig */,
+				FC7B5A7C6EFEF29359917DC7 /* Pods-Shape InfluenceTests.debug.xcconfig */,
+				66D60A57A0938D1B3843D73F /* Pods-Shape InfluenceTests.release.xcconfig */,
+				A23F4C268E053514F3ED135B /* Pods-Shape InfluenceUITests.debug.xcconfig */,
+				F0962FBF5A5C314F97A28F41 /* Pods-Shape InfluenceUITests.release.xcconfig */,
 			);
 			name = Pods;
 			sourceTree = "<group>";
@@ -1013,7 +1037,7 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-hat-mobile-iosTests/Pods-hat-mobile-iosTests-resources.sh\"\n";
+			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-Shape InfluenceTests/Pods-Shape InfluenceTests-resources.sh\"\n";
 			showEnvVarsInLog = 0;
 		};
 		2751C775C9807AEFFE85B3AE /* [CP] Embed Pods Frameworks */ = {
@@ -1028,7 +1052,7 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-hat-mobile-iosUITests/Pods-hat-mobile-iosUITests-frameworks.sh\"\n";
+			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-Shape InfluenceUITests/Pods-Shape InfluenceUITests-frameworks.sh\"\n";
 			showEnvVarsInLog = 0;
 		};
 		4558951E55EC13DFDA91F601 /* [CP] Embed Pods Frameworks */ = {
@@ -1037,7 +1061,7 @@
 			files = (
 			);
 			inputPaths = (
-				"${SRCROOT}/Pods/Target Support Files/Pods-hat-mobile-iosTests/Pods-hat-mobile-iosTests-frameworks.sh",
+				"${SRCROOT}/Pods/Target Support Files/Pods-Shape InfluenceTests/Pods-Shape InfluenceTests-frameworks.sh",
 				"${BUILT_PRODUCTS_DIR}/Alamofire/Alamofire.framework",
 				"${BUILT_PRODUCTS_DIR}/BEMCheckBox/BEMCheckBox.framework",
 				"${BUILT_PRODUCTS_DIR}/FBAnnotationClusteringSwift/FBAnnotationClusteringSwift.framework",
@@ -1070,7 +1094,7 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-hat-mobile-iosTests/Pods-hat-mobile-iosTests-frameworks.sh\"\n";
+			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-Shape InfluenceTests/Pods-Shape InfluenceTests-frameworks.sh\"\n";
 			showEnvVarsInLog = 0;
 		};
 		4AFE367BDC8E7CB1B4B74AEB /* [CP] Check Pods Manifest.lock */ = {
@@ -1084,7 +1108,7 @@
 			);
 			name = "[CP] Check Pods Manifest.lock";
 			outputPaths = (
-				"$(DERIVED_FILE_DIR)/Pods-hat-mobile-iosTests-checkManifestLockResult.txt",
+				"$(DERIVED_FILE_DIR)/Pods-Shape InfluenceTests-checkManifestLockResult.txt",
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
@@ -1097,7 +1121,7 @@
 			files = (
 			);
 			inputPaths = (
-				"${SRCROOT}/Pods/Target Support Files/Pods-hat-mobile-ios/Pods-hat-mobile-ios-frameworks.sh",
+				"${SRCROOT}/Pods/Target Support Files/Pods-Shape Influence/Pods-Shape Influence-frameworks.sh",
 				"${BUILT_PRODUCTS_DIR}/Alamofire/Alamofire.framework",
 				"${BUILT_PRODUCTS_DIR}/BEMCheckBox/BEMCheckBox.framework",
 				"${BUILT_PRODUCTS_DIR}/FBAnnotationClusteringSwift/FBAnnotationClusteringSwift.framework",
@@ -1128,7 +1152,7 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-hat-mobile-ios/Pods-hat-mobile-ios-frameworks.sh\"\n";
+			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-Shape Influence/Pods-Shape Influence-frameworks.sh\"\n";
 			showEnvVarsInLog = 0;
 		};
 		604E45FE1EFBD4CC0071347E /* ShellScript */ = {
@@ -1169,7 +1193,7 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-hat-mobile-iosUITests/Pods-hat-mobile-iosUITests-resources.sh\"\n";
+			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-Shape InfluenceUITests/Pods-Shape InfluenceUITests-resources.sh\"\n";
 			showEnvVarsInLog = 0;
 		};
 		AC9A4B5A5005F2159FF38388 /* [CP] Check Pods Manifest.lock */ = {
@@ -1183,7 +1207,7 @@
 			);
 			name = "[CP] Check Pods Manifest.lock";
 			outputPaths = (
-				"$(DERIVED_FILE_DIR)/Pods-hat-mobile-ios-checkManifestLockResult.txt",
+				"$(DERIVED_FILE_DIR)/Pods-Shape Influence-checkManifestLockResult.txt",
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
@@ -1201,7 +1225,7 @@
 			);
 			name = "[CP] Check Pods Manifest.lock";
 			outputPaths = (
-				"$(DERIVED_FILE_DIR)/Pods-hat-mobile-iosUITests-checkManifestLockResult.txt",
+				"$(DERIVED_FILE_DIR)/Pods-Shape InfluenceUITests-checkManifestLockResult.txt",
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
@@ -1220,7 +1244,7 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-hat-mobile-ios/Pods-hat-mobile-ios-resources.sh\"\n";
+			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-Shape Influence/Pods-Shape Influence-resources.sh\"\n";
 			showEnvVarsInLog = 0;
 		};
 /* End PBXShellScriptBuildPhase section */
@@ -1499,7 +1523,7 @@
 		};
 		B564E98E1D19717900EDB8F1 /* Debug */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 158113EFCF5B64B67322CA7A /* Pods-hat-mobile-ios.debug.xcconfig */;
+			baseConfigurationReference = 2E37446048FA921BCD6A0290 /* Pods-Shape Influence.debug.xcconfig */;
 			buildSettings = {
 				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = "$(inherited)";
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
@@ -1523,7 +1547,7 @@
 		};
 		B564E98F1D19717900EDB8F1 /* Release */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 0AF64C75F28A29BAC48C6881 /* Pods-hat-mobile-ios.release.xcconfig */;
+			baseConfigurationReference = 5A2C27E5F45FCB0269B8A119 /* Pods-Shape Influence.release.xcconfig */;
 			buildSettings = {
 				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = "$(inherited)";
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
@@ -1546,7 +1570,7 @@
 		};
 		B564E9911D19717900EDB8F1 /* Debug */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 28C6670E861A21AA5FCE1C0F /* Pods-hat-mobile-iosTests.debug.xcconfig */;
+			baseConfigurationReference = FC7B5A7C6EFEF29359917DC7 /* Pods-Shape InfluenceTests.debug.xcconfig */;
 			buildSettings = {
 				BUNDLE_LOADER = "$(TEST_HOST)";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
@@ -1570,7 +1594,7 @@
 		};
 		B564E9921D19717900EDB8F1 /* Release */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 4B2D42BB42DCB166E7846D00 /* Pods-hat-mobile-iosTests.release.xcconfig */;
+			baseConfigurationReference = 66D60A57A0938D1B3843D73F /* Pods-Shape InfluenceTests.release.xcconfig */;
 			buildSettings = {
 				BUNDLE_LOADER = "$(TEST_HOST)";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
@@ -1594,7 +1618,7 @@
 		};
 		B564E9941D19717900EDB8F1 /* Debug */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 58252B1549E6585555A90CEC /* Pods-hat-mobile-iosUITests.debug.xcconfig */;
+			baseConfigurationReference = A23F4C268E053514F3ED135B /* Pods-Shape InfluenceUITests.debug.xcconfig */;
 			buildSettings = {
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				INFOPLIST_FILE = "hat-mobile-iosUITests/Info.plist";
@@ -1608,7 +1632,7 @@
 		};
 		B564E9951D19717900EDB8F1 /* Release */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 821CBD00C6F813421F149C7E /* Pods-hat-mobile-iosUITests.release.xcconfig */;
+			baseConfigurationReference = F0962FBF5A5C314F97A28F41 /* Pods-Shape InfluenceUITests.release.xcconfig */;
 			buildSettings = {
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				INFOPLIST_FILE = "hat-mobile-iosUITests/Info.plist";
