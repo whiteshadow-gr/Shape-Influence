@@ -82,7 +82,7 @@ public class RealmHelper {
      - parameter dataPoints:  Array of DataPoints
      - parameter lastUpdated: Date of last sync
      */
-    class func updateData(_ dataPoints: [DataPoint], lastUpdated: Date) -> Void {
+    class func updateData(_ dataPoints: [DataPoint], lastUpdated: Date) {
         
         // Get the default Realm
         let realm = self.getRealm()
@@ -91,7 +91,7 @@ public class RealmHelper {
         try! realm.write {
             
             // iterate over ResultSet and update
-            for dataPoint:DataPoint in dataPoints {
+            for dataPoint: DataPoint in dataPoints {
                 
                 dataPoint.lastSynced = lastUpdated
             }

@@ -23,7 +23,7 @@ internal class SyncDataHelper: UserCredentialsProtocol {
     // MARK: - Variables
     
     /// The data sync delegate variable
-    weak var dataSyncDelegate: DataSyncDelegate? = nil 
+    weak var dataSyncDelegate: DataSyncDelegate?
     
     // MARK: - Sync functions
     

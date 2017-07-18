@@ -29,5 +29,5 @@ internal class DataPoint: Object {
     /// The adhttps://www.facebook.com/rsrc.php/v3/y4/r/-PAXP-deijE.gifded point date of the point
     dynamic var dateAdded: Date = Date()
     /// The last sync date of the point
-    dynamic var lastSynced: Date? = nil // optional..can be nil
+    dynamic var lastSynced: Date?
 }
